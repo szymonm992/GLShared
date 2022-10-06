@@ -11,6 +11,7 @@ namespace GLShared
         {
             Debug.Log("sadsdf");
             Debug.Log("maciejka");
+            Debug.Log("szymczok");
         }
 
         // Update is called once per frame

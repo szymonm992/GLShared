@@ -16,7 +16,8 @@ namespace GLShared.Networking
 				sfs = value;
 			}
 		}
-		
+
+		public bool somethiing = true;
 		public bool IsInitialized
 		{
 			get

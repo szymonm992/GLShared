@@ -7,7 +7,10 @@ namespace GLShared.Networking
 {
 	public class SmartFoxConnection : MonoBehaviour
 	{
-		private SmartFox sfs;
+        public bool somethiing = true;
+        public bool somethiing33 = true;
+
+        private SmartFox sfs;
 		public SmartFox Connection 
 		{
 			get => sfs;	
@@ -17,7 +20,7 @@ namespace GLShared.Networking
 			}
 		}
 
-		public bool somethiing = true;
+		
 		public bool IsInitialized
 		{
 			get

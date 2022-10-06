@@ -7,9 +7,6 @@ namespace GLShared.Networking
 {
 	public class SmartFoxConnection : MonoBehaviour
 	{
-        public bool somethiing = true;
-        public bool somethiing33 = true;
-
         private SmartFox sfs;
 		public SmartFox Connection 
 		{

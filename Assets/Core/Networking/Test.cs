@@ -6,7 +6,7 @@ namespace GLShared.Test
 {
     public class Test : MonoBehaviour
     {
-        void Start()
+        private void Start()
         {
             Debug.Log("sadsdf");
         }

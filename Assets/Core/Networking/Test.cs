@@ -9,8 +9,6 @@ namespace GLShared.Test
         void Start()
         {
             Debug.Log("sadsdf");
-            Debug.Log("maciejka");
-            Debug.Log("szymczok");
         }
 
     }

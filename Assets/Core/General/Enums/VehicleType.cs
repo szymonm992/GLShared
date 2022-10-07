@@ -1,4 +1,4 @@
-namespace Frontend.Scripts.Enums
+namespace GLShared.General.Enums
 {
     public enum VehicleType
     {

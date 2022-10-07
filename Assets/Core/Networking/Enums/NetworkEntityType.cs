@@ -1,5 +1,5 @@
-namespace Frontend.Scripts.Enums
-{
+namespace GLShared.Networking.Enums
+{    
     public enum NetworkEntityType
     {
         Player,

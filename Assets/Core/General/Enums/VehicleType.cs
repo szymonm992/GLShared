@@ -4,6 +4,6 @@ namespace GLShared.General.Enums
     {
        None=0,
        Car=1,
-       Tank,
+       Tank=2,
     }
 }

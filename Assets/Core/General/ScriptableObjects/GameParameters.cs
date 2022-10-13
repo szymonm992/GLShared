@@ -7,6 +7,7 @@ namespace GLShared.General.ScriptableObjects
     {
         [Header("General parameters")][Range(3f, 5f)]
         [SerializeField] private float speedMultiplier = 4f;
+        [SerializeField] private float massMultiplier = 0.1f;
 
         [Header("Vehicles wheel parameters")]
         [SerializeField] private float maxWheelDetectionAngle = 75f;
@@ -16,8 +17,11 @@ namespace GLShared.General.ScriptableObjects
         [SerializeField] private float airControlForce = 5f;
 
         public float SpeedMultiplier => speedMultiplier;
+        public float MassMultiplier => massMultiplier;
+
 
         public float MaxWheelDetectionAngle => maxWheelDetectionAngle;
+
 
         public float AirControlAngleThreshold => airControlAngleThreshold;
         public float AirControlForce => airControlForce;

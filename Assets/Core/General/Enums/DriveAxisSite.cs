@@ -2,7 +2,7 @@ namespace GLShared.General.Enums
 {
     public enum DriveAxisSite
     {
-        Left,
-        Right
+        Left=-1,
+        Right=1
     }
 }

@@ -7,6 +7,7 @@ namespace GLShared.General.Models
 	{
 		public RaycastHit rayHit;
 		private float normalAndUpAngle;
+
 		public void CalculateNormalAndUpDifferenceAngle()
         {
 			this.normalAndUpAngle = Vector3.Angle(Vector3.up, rayHit.normal);
@@ -16,6 +17,7 @@ namespace GLShared.General.Models
 		{
 			get => rayHit.point;
 		}
+
 		public Vector3 Normal
 		{
 			get => rayHit.normal;

@@ -176,7 +176,7 @@ namespace GLShared.General.Models
             if (localRig.SweepTest(-transform.up, out hitInfo.rayHit, finalTravelLength))
             {
                 hitInfo.CalculateNormalAndUpDifferenceAngle();
-                isGrounded = (hitInfo.NormalAndUpAngle <= gameParameters.MaxWheelDetectionAngle);
+                isGrounded = (hitInfo.NormalAndUpAngle <= gameParameters?.MaxWheelDetectionAngle);
             }
             else
             {

@@ -12,30 +12,30 @@ namespace GLShared.General.Models
 {
     public abstract class UTWheelBase : MonoBehaviour, IInitializable, IPhysicsWheel
     {
-        private const float WHEEL_TURN_RATIO = 8f;
+        protected const float WHEEL_TURN_RATIO = 8f;
 
-        [Inject] private readonly GameParameters gameParameters;
-        [Inject(Id = "mainRig")] private Rigidbody rig;
-        //[Inject] private readonly IVehicleController vehicleController;
+        [Inject] protected readonly GameParameters gameParameters;
+        [Inject(Id = "mainRig")] protected Rigidbody rig;
+        [Inject] protected readonly IVehicleController vehicleController;
 
         [Header("Settings")]
         [Range(0.1f, 2f)]
-        [SerializeField] private float suspensionTravel = 0.5f;
-        [SerializeField] private float wheelRadius = 0.7f;
-        [SerializeField] private float tireMass = 60f;
+        [SerializeField] protected float suspensionTravel = 0.5f;
+        [SerializeField] protected float wheelRadius = 0.7f;
+        [SerializeField] protected float tireMass = 60f;
         [Range(0, 1f)]
-        [SerializeField] private float forwardTireGripFactor = 1f, sidewaysTireGripFactor = 1f;
+        [SerializeField] protected float forwardTireGripFactor = 1f, sidewaysTireGripFactor = 1f;
 
-        [SerializeField] private float spring = 20000f;
-        [SerializeField] private float damper = 3000f;
+        [SerializeField] protected float spring = 20000f;
+        [SerializeField] protected float damper = 3000f;
         [Range(-3f, 0)]
-        [SerializeField] private float hardPointOfTire = -0.7f;
-        [SerializeField] private Transform upperConstraintTransform;
-        [SerializeField] private Transform lowerConstraintTransform;
+        [SerializeField] protected float hardPointOfTire = -0.7f;
+        [SerializeField] protected Transform upperConstraintTransform;
+        [SerializeField] protected Transform lowerConstraintTransform;
 
 
         [SerializeField]
-        private UTWheelDebug debugSettings = new UTWheelDebug()
+        protected UTWheelDebug debugSettings = new UTWheelDebug()
         {
             DrawGizmos = true,
             DrawOnDisable = false,
@@ -46,25 +46,25 @@ namespace GLShared.General.Models
         };
 
         #region Telemetry/readonly
-        private HitInfo hitInfo = new HitInfo();
-        private bool isGrounded = false;
+        protected HitInfo hitInfo = new HitInfo();
+        protected bool isGrounded = false;
 
-        private float previousSuspensionDistance = 0f;
-        private float normalForce = 0f;
-        private float extension = 0f;
-        private float compressionRate = 0f;
-        private float steerAngle = 0f;
-        private float wheelAngle = 0f;
+        protected float previousSuspensionDistance = 0f;
+        protected float normalForce = 0f;
+        protected float extension = 0f;
+        protected float compressionRate = 0f;
+        protected float steerAngle = 0f;
+        protected float wheelAngle = 0f;
 
-        private float absGravity;
-        private float finalTravelLength;
-        private float hardPointAbs;
+        protected float absGravity;
+        protected float finalTravelLength;
+        protected float hardPointAbs;
 
-        private Vector3 suspensionForce;
-        private Vector3 tirePosition;
+        protected Vector3 suspensionForce;
+        protected Vector3 tirePosition;
 
-        private Rigidbody localRig;
-        private MeshCollider localCollider;
+        protected Rigidbody localRig;
+        protected MeshCollider localCollider;
 
         #endregion
 
@@ -87,7 +87,7 @@ namespace GLShared.General.Models
             set => this.steerAngle = value;
         }
 
-        public void Initialize()
+        public virtual void Initialize()
         {
             localRig = GetComponent<Rigidbody>();
             localCollider = GetComponent<MeshCollider>();
@@ -96,7 +96,7 @@ namespace GLShared.General.Models
             SetIgnoredColliders();
         }
 
-        private void AssignPrimaryParameters()
+        protected virtual void AssignPrimaryParameters()
         {
             if (extension == 0f)
             {
@@ -120,7 +120,7 @@ namespace GLShared.General.Models
             }
         }
 
-        private void SetIgnoredColliders()
+        protected virtual void SetIgnoredColliders()
         {
             var allColliders = transform.root.GetComponentsInChildren<Collider>();
 
@@ -129,6 +129,92 @@ namespace GLShared.General.Models
                 allColliders.ForEach(collider => Physics.IgnoreCollision(localCollider, collider, true));
             }
         }
+
+        protected virtual void Update()
+        {
+            if (wheelAngle != steerAngle)
+            {
+                wheelAngle = Mathf.Lerp(wheelAngle, steerAngle, Time.deltaTime * WHEEL_TURN_RATIO);
+                transform.localRotation = Quaternion.Euler(transform.localRotation.x,
+                    transform.localRotation.y + wheelAngle,
+                    transform.localRotation.z);
+            }
+        }
+
+        protected virtual void FixedUpdate()
+        {
+            Vector3 newPosition = GetTirePosition();
+
+            if (compressionRate == 1 && vehicleController.DoesGravityDamping)
+            {
+                GravityCounterforce();
+            }
+
+            tirePosition = newPosition;
+
+            normalForce = GetSuspensionForce(tirePosition) + tireMass * absGravity;
+            suspensionForce = normalForce * transform.up;
+
+            if (!isGrounded)
+            {
+                return;
+            }
+
+            rig.AddForceAtPosition(suspensionForce, tirePosition);
+        }
+
+        protected virtual void GravityCounterforce()
+        {
+            if (rig.velocity.y < -4f)
+            {
+                rig.AddForce(Vector3.up * Mathf.Min(-rig.velocity.y, 4f), ForceMode.VelocityChange);
+            }
+        }
+
+        protected virtual Vector3 GetTirePosition()
+        {
+            if (localRig.SweepTest(-transform.up, out hitInfo.rayHit, finalTravelLength))
+            {
+                hitInfo.CalculateNormalAndUpDifferenceAngle();
+                isGrounded = (hitInfo.NormalAndUpAngle <= gameParameters.MaxWheelDetectionAngle);
+            }
+            else
+            {
+                isGrounded = false;
+            }
+
+            Vector3 tirePos = transform.position - (transform.up * finalTravelLength);
+
+            if (isGrounded)
+            {
+                tirePos = transform.position - (transform.up * hitInfo.Distance);
+                extension = Vector3.Distance(upperConstraintTransform.position, tirePos) / suspensionTravel;
+                if (hardPointAbs < (tirePosition - transform.position).sqrMagnitude)
+                {
+                    compressionRate = 1 - extension;
+                }
+                else
+                {
+                    compressionRate = 1;
+                }
+            }
+            else
+            {
+                extension = 1;
+                compressionRate = 0;
+            }
+            return tirePos;
+        }
+
+        protected virtual float GetSuspensionForce(Vector3 tirePosition)
+        {
+            float distance = Vector3.Distance(lowerConstraintTransform.position, tirePosition);
+            float springForce = spring * distance;
+            float damperForce = damper * ((distance - previousSuspensionDistance) / Time.fixedDeltaTime);
+            previousSuspensionDistance = distance;
+            return springForce + damperForce;
+        }
+
 
     }
 }

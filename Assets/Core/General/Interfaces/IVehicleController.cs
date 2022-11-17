@@ -9,7 +9,7 @@ namespace GLShared.General.Interfaces
         VehicleType VehicleType { get; }
         bool HasAnyWheels { get; }
         bool DoesGravityDamping { get; }
-        //IEnumerable<UTAxle> AllAxles { get; }
+        IEnumerable<IVehicleAxle> AllAxles { get; }
         IEnumerable<IPhysicsWheel> AllWheels { get; }
         float AbsoluteInputY { get; }
         float AbsoluteInputX { get; }

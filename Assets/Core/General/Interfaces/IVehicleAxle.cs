@@ -14,5 +14,7 @@ namespace GLShared.General.Interfaces
         public bool InvertSteer { get; }
         public bool HasAnyWheelPair { get; }
         public bool HasAnyWheel { get; }
+
+        abstract void SetSteerAngle(float angleLeft, float angleRight);
     }
 }

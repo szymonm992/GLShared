@@ -149,8 +149,8 @@ namespace GLShared.General.Models
             {
                 GravityCounterforce();
             }
-
-            tirePosition = newPosition;
+             
+            tirePosition = Vector3.Lerp(tirePosition, newPosition, Time.deltaTime * 50f);
 
             normalForce = GetSuspensionForce(tirePosition) + tireMass * absGravity;
             suspensionForce = normalForce * transform.up;

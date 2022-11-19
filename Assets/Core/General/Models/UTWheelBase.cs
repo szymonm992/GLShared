@@ -198,6 +198,7 @@ namespace GLShared.General.Models
                 else
                 {
                     compressionRate = 1;
+                    extension = 0;
                 }
             }
             else

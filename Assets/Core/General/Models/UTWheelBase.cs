@@ -163,6 +163,22 @@ namespace GLShared.General.Models
             }
 
             rig.AddForceAtPosition(suspensionForce, tirePosition);
+            ApplyFriction();
+        }
+
+        protected virtual void ApplyFriction()
+        {
+            if(isGrounded)
+            {
+                Vector3 steeringDir = Transform.right;
+                Vector3 tireVel = rig.GetPointVelocity(UpperConstraintPoint);
+
+                float steeringVel = Vector3.Dot(steeringDir, tireVel);
+                float desiredVelChange = -steeringVel * sidewaysTireGripFactor;
+                float desiredAccel = desiredVelChange / Time.fixedDeltaTime;
+
+                rig.AddForceAtPosition(desiredAccel * tireMass * steeringDir, UpperConstraintPoint);
+            }
         }
 
         protected virtual void GravityCounterforce()

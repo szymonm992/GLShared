@@ -118,6 +118,8 @@ namespace GLShared.General.Models
                 Vector3 lowestPoint = transform.position + transform.up * -finalTravelLength;
                 lowerConstraintTransform.position = lowestPoint;
             }
+
+            tirePosition = GetTirePosition();
         }
 
         protected virtual void SetIgnoredColliders()

@@ -79,9 +79,15 @@ namespace GLShared.General.Models
         public float CompressionRate => compressionRate;
         public float HardPointAbs => hardPointAbs;
         public Vector3 TireWorldPosition => tirePosition;
-        public Vector3 UpperConstraintPoint => upperConstraintTransform?.position ?? Vector3.zero;
-        public Vector3 LowerConstraintPoint => lowerConstraintTransform?.position ?? Vector3.zero;
-        public Vector3 NotGroundedWheelPosition => notGroundedTransform?.position ?? Vector3.zero;
+        public Vector3 UpperConstraintPoint => upperConstraintTransform.position;
+        public Vector3 LowerConstraintPoint => lowerConstraintTransform.position;
+        public Vector3 NotGroundedWheelPosition 
+        {
+            get
+            {
+                return notGroundedTransform != null ? notGroundedTransform.position : Vector3.zero;
+            }
+        }
 
         public float SteerAngle
         {

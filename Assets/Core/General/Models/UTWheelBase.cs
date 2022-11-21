@@ -85,7 +85,8 @@ namespace GLShared.General.Models
         {
             get
             {
-                return notGroundedTransform != null ? notGroundedTransform.position : Vector3.zero;
+                return notGroundedTransform != null ? notGroundedTransform.position : 
+                    lowerConstraintTransform != null ? LowerConstraintPoint : Vector3.zero;
             }
         }
 

@@ -32,6 +32,7 @@ namespace GLShared.General.Models
         [SerializeField] protected float hardPointOfTire = -0.7f;
         [SerializeField] protected Transform upperConstraintTransform;
         [SerializeField] protected Transform lowerConstraintTransform;
+        [SerializeField] protected Transform notGroundedTransform;
 
 
         [SerializeField]
@@ -80,6 +81,7 @@ namespace GLShared.General.Models
         public Vector3 TireWorldPosition => tirePosition;
         public Vector3 UpperConstraintPoint => upperConstraintTransform.position;
         public Vector3 LowerConstraintPoint => lowerConstraintTransform.position;
+        public Vector3 NotGroundedWheelPosition => notGroundedTransform.position;
 
         public float SteerAngle
         {
@@ -219,6 +221,7 @@ namespace GLShared.General.Models
             }
             else
             {
+                tirePos = NotGroundedWheelPosition;
                 extension = 1;
                 compressionRate = 0;
             }
@@ -233,7 +236,5 @@ namespace GLShared.General.Models
             previousSuspensionDistance = distance;
             return springForce + damperForce;
         }
-
-
     }
 }

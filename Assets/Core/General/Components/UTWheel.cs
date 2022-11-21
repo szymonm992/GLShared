@@ -53,24 +53,26 @@ namespace GLShared.General.Components
                         if (upperConstraintTransform != null)
                         {
                             Handles.color = Color.white;
-                            //Gizmos.color = Color.yellow;
-                            Handles.DrawLine(upperConstraintTransform.position + transform.forward * 0.1f, upperConstraintTransform.position - transform.forward * 0.1f, 2f);
-                            //Gizmos.DrawSphere(highestPointTransform.position, .08f);
+                            Handles.DrawLine(upperConstraintTransform.position + transform.forward * 0.1f,
+                                upperConstraintTransform.position - transform.forward * 0.1f, 2f);
                         }
 
                         if (lowerConstraintTransform != null)
                         {
                             Handles.color = Color.white;
-                            //Gizmos.color = Color.yellow;
-                            Handles.DrawLine(lowerConstraintTransform.position + transform.forward * 0.1f, lowerConstraintTransform.position - transform.forward * 0.1f, 2f);
+                            Handles.DrawLine(lowerConstraintTransform.position + transform.forward * 0.1f, 
+                                lowerConstraintTransform.position - transform.forward * 0.1f, 2f);
+                        }
 
-                            //Gizmos.DrawSphere(lowestPointTransform.position, .08f);
+                        if(notGroundedTransform != null)
+                        {
+                            Handles.color = Color.white;
+                            Handles.DrawLine(notGroundedTransform.position + transform.forward * 0.1f, 
+                                notGroundedTransform.position - transform.forward * 0.1f, 2f);
                         }
 
                         Handles.color = Color.white;
-                        //Gizmos.DrawSphere(tirePosition, .08f);
                         Handles.DrawLine(tirePosition + transform.forward * 0.05f, tirePosition - transform.forward * 0.05f, 4f);
-
                     }
 
                     if (isGrounded)

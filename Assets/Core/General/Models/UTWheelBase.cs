@@ -209,7 +209,7 @@ namespace GLShared.General.Models
                 isGrounded = false;
             }
 
-            Vector3 tirePos = transform.position - (transform.up * finalTravelLength);
+            Vector3 tirePos = NotGroundedWheelPosition;
 
             if (isGrounded)
             {
@@ -227,7 +227,6 @@ namespace GLShared.General.Models
             }
             else
             {
-                tirePos = NotGroundedWheelPosition;
                 extension = 1;
                 compressionRate = 0;
             }

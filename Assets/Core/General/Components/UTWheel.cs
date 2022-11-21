@@ -13,7 +13,7 @@ namespace GLShared.General.Components
     public class UTWheel : UTWheelBase, IInitializable, IPhysicsWheel
     {
 
-#if UNITY_EDITOR
+        #if UNITY_EDITOR
         #region DEBUG
         private void OnValidate()
         {
@@ -66,9 +66,8 @@ namespace GLShared.General.Components
 
                         if(notGroundedTransform != null)
                         {
-                            Handles.color = Color.white;
-                            Handles.DrawLine(notGroundedTransform.position + transform.forward * 0.1f, 
-                                notGroundedTransform.position - transform.forward * 0.1f, 2f);
+                            Gizmos.color = Color.red;
+                            Handles.DrawWireCube(notGroundedTransform.position, new Vector3(0.06f, 0.06f, 0.06f));
                         }
 
                         Handles.color = Color.white;
@@ -101,6 +100,6 @@ namespace GLShared.General.Components
         }
 
         #endregion
-#endif
+        #endif
     }
 }

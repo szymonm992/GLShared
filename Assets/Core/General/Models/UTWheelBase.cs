@@ -27,13 +27,14 @@ namespace GLShared.General.Models
         protected Vector3 tirePosition;
         protected Vector3 suspensionForce;
         protected MeshCollider localCollider;
+        protected HitInfo hitInfo = new HitInfo();
         #endregion
 
         public Transform Transform => transform;
         public bool IsGrounded => isGrounded;
         public float WheelRadius => wheelRadius;
 
-        public virtual HitInfo HitInfo => null;
+        public virtual HitInfo HitInfo => hitInfo;
         public virtual float TireMass => 0f;
         public virtual float ForwardTireGripFactor => 0f;
         public virtual float SidewaysTireGripFactor => 0f;
@@ -109,6 +110,7 @@ namespace GLShared.General.Models
         {
 
         }
+
         protected virtual Vector3 GetTirePosition()
         {
             return Vector3.zero;

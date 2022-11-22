@@ -48,12 +48,9 @@ namespace GLShared.General.Components
         protected float absGravity;
         protected float finalTravelLength;
         protected float hardPointAbs;
-
-        protected HitInfo hitInfo = new HitInfo();
         protected Rigidbody localRig;
         #endregion
 
-        public override HitInfo HitInfo => hitInfo;
         public override float TireMass => tireMass;
         public override float CompressionRate => compressionRate;
         public override float ForwardTireGripFactor => forwardTireGripFactor;

@@ -14,6 +14,7 @@ namespace GLShared.General.Components
 
         private Vector3 idlerForcePoint;
 
+        public override HitInfo HitInfo => base.HitInfo;
         [SerializeField]
         protected UTWheelDebug debugSettings = new UTWheelDebug()
         {
@@ -43,6 +44,15 @@ namespace GLShared.General.Components
         {
             isGrounded = Physics.CheckSphere(transform.position, wheelRadius, terrainMask);
             idlerForcePoint = isGrounded ? transform.position + (transform.forward * wheelRadius) : transform.position;
+            hitInfo = new HitInfo()
+            {
+                rayHit = new RaycastHit()
+                {
+                    point = idlerForcePoint,
+                    distance = wheelRadius,
+                    normal = -Transform.forward
+                },
+            };
             return transform.position;
         }
 

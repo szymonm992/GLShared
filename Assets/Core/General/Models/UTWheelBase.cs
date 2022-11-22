@@ -79,8 +79,21 @@ namespace GLShared.General.Models
         public float CompressionRate => compressionRate;
         public float HardPointAbs => hardPointAbs;
         public Vector3 TireWorldPosition => tirePosition;
-        public Vector3 UpperConstraintPoint => upperConstraintTransform.position;
-        public Vector3 LowerConstraintPoint => lowerConstraintTransform.position;
+        public Vector3 UpperConstraintPoint
+        {
+            get
+            {
+                return upperConstraintTransform != null ? upperConstraintTransform.position : transform.position;
+            }
+        }
+        public Vector3 LowerConstraintPoint
+        {
+            get
+            {
+                return lowerConstraintTransform != null ? lowerConstraintTransform.position : transform.position;
+            }
+        }
+
         public Vector3 NotGroundedWheelPosition 
         {
             get
@@ -98,37 +111,12 @@ namespace GLShared.General.Models
 
         public virtual void Initialize()
         {
-            localRig = GetComponent<Rigidbody>();
-            localCollider = GetComponent<MeshCollider>();
-
-            AssignPrimaryParameters();
-            SetIgnoredColliders();
+            
         }
 
         protected virtual void AssignPrimaryParameters()
         {
-            if (extension == 0f)
-            {
-                extension = suspensionTravel;
-            }
-
-            absGravity = Mathf.Abs(Physics.gravity.y);
-            hardPointAbs = Mathf.Abs(hardPointOfTire);
-            finalTravelLength = suspensionTravel + hardPointAbs;
-
-            if (upperConstraintTransform != null)
-            {
-                Vector3 highestPoint = transform.position + transform.up * hardPointOfTire;
-                upperConstraintTransform.position = highestPoint;
-            }
-
-            if (lowerConstraintTransform != null)
-            {
-                Vector3 lowestPoint = transform.position + transform.up * -finalTravelLength;
-                lowerConstraintTransform.position = lowestPoint;
-            }
-
-            tirePosition = GetTirePosition();
+            
         }
 
         protected virtual void SetIgnoredColliders()
@@ -154,93 +142,20 @@ namespace GLShared.General.Models
 
         protected virtual void FixedUpdate()
         {
-            Vector3 newPosition = GetTirePosition();
-
-            if (compressionRate == 1 && vehicleController.DoesGravityDamping)
-            {
-                GravityCounterforce();
-            }
             
-            tirePosition = Vector3.Lerp(tirePosition, newPosition, Time.deltaTime * Mathf.Max(50f, 100f * vehicleController.CurrentSpeedRatio));
-
-            normalForce = GetSuspensionForce(tirePosition) + tireMass * absGravity;
-            suspensionForce = normalForce * transform.up;
-
-            if (!isGrounded)
-            {
-                return;
-            }
-
-            rig.AddForceAtPosition(suspensionForce, tirePosition);
-            ApplyFriction();
         }
 
         protected virtual void ApplyFriction()
         {
-            if(isGrounded)
-            {
-                Vector3 steeringDir = Transform.right;
-                Vector3 tireVel = rig.GetPointVelocity(UpperConstraintPoint);
 
-                float steeringVel = Vector3.Dot(steeringDir, tireVel);
-                float desiredVelChange = -steeringVel * sidewaysTireGripFactor;
-                float desiredAccel = desiredVelChange / Time.fixedDeltaTime;
-
-                rig.AddForceAtPosition(desiredAccel * tireMass * steeringDir, UpperConstraintPoint);
-            }
         }
 
-        protected virtual void GravityCounterforce()
-        {
-            if (rig.velocity.y < -4f)
-            {
-                rig.AddForce(Vector3.up * Mathf.Min(-rig.velocity.y, 4f), ForceMode.VelocityChange);
-            }
-        }
-
+        
         protected virtual Vector3 GetTirePosition()
         {
-            if (localRig.SweepTest(-transform.up, out hitInfo.rayHit, finalTravelLength))
-            {
-                hitInfo.CalculateNormalAndUpDifferenceAngle();
-                isGrounded = (hitInfo.NormalAndUpAngle <= gameParameters?.MaxWheelDetectionAngle);
-            }
-            else
-            {
-                isGrounded = false;
-            }
-
-            Vector3 tirePos = NotGroundedWheelPosition;
-
-            if (isGrounded)
-            {
-                tirePos = transform.position - (transform.up * hitInfo.Distance);
-                extension = Vector3.Distance(upperConstraintTransform.position, tirePos) / suspensionTravel;
-                if (hardPointAbs < (tirePosition - transform.position).sqrMagnitude)
-                {
-                    compressionRate = 1 - extension;
-                }
-                else
-                {
-                    compressionRate = 1;
-                    extension = 0;
-                }
-            }
-            else
-            {
-                extension = 1;
-                compressionRate = 0;
-            }
-            return tirePos;
+            return Vector3.zero;
         }
 
-        protected virtual float GetSuspensionForce(Vector3 tirePosition)
-        {
-            float distance = Vector3.Distance(lowerConstraintTransform.position, tirePosition);
-            float springForce = spring * distance;
-            float damperForce = damper * ((distance - previousSuspensionDistance) / Time.fixedDeltaTime);
-            previousSuspensionDistance = distance;
-            return springForce + damperForce;
-        }
+        
     }
 }

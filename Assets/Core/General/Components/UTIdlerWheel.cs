@@ -5,49 +5,29 @@ using UnityEngine;
 using GLShared.General.Enums;
 using UnityEditor;
 using GLShared.General.ScriptableObjects;
-using UnityEditor.PackageManager;
 
 namespace GLShared.General.Components
 {
-    public class UTIdlerWheel : MonoBehaviour
+    public class UTIdlerWheel : UTPhysicWheelBase
     {
-        [Inject] protected readonly GameParameters gameParameters;
-        [Inject(Id = "mainRig")] protected Rigidbody rig;
-        [Inject] protected readonly IVehicleController vehicleController;
-
-        [SerializeField] private float wheelRadius = 0.7f;
         [SerializeField] private LayerMask terrainMask;
 
-        private Vector3 tirePosition;
-        private bool isGrounded = false;
         private Vector3 idlerForcePoint;
 
-        [SerializeField]
-        protected UTWheelDebug debugSettings = new UTWheelDebug()
-        {
-            DrawGizmos = true,
-            DrawOnDisable = false,
-            DrawMode = UTDebugMode.All,
-            DrawWheelDirection = true,
-            DrawShapeGizmo = true,
-            DrawSprings = true,
-        };
 
-        public bool IsGrounded => isGrounded;
-
-        private void FixedUpdate()
+        protected override void FixedUpdate()
         {
             tirePosition = GetTirePosition();
         }
 
-        private Vector3 GetTirePosition()
+        protected override Vector3 GetTirePosition()
         {
             isGrounded = Physics.CheckSphere(transform.position, wheelRadius, terrainMask);
             idlerForcePoint = isGrounded ? transform.position + (transform.forward * wheelRadius) : transform.position;
             return transform.position;
         }
 
-        private void OnValidate()
+        public void OnValidate()
         {
             if (rig == null)
             {
@@ -55,7 +35,7 @@ namespace GLShared.General.Components
             }
             tirePosition = GetTirePosition();
         }
-
+        #if UNITY_EDITOR
         private void OnDrawGizmos()
         {
             bool drawCurrently = (debugSettings.DrawGizmos) && (debugSettings.DrawMode == UTDebugMode.All)
@@ -93,5 +73,6 @@ namespace GLShared.General.Components
                 }
             }
         }
+        #endif
     }
 }

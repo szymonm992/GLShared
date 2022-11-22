@@ -10,7 +10,7 @@ using GLShared.General.Enums;
 
 namespace GLShared.General.Components
 {
-    public class UTWheel : UTWheelBase, IInitializable, IPhysicsWheel
+    public class UTWheel : UTPhysicWheelBase, IInitializable, IPhysicsWheel
     {
 
         #if UNITY_EDITOR

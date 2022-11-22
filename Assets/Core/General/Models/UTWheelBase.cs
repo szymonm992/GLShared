@@ -10,7 +10,7 @@ using GLShared.General.Utilities;
 
 namespace GLShared.General.Models
 {
-    public abstract class UTWheelBase : MonoBehaviour, IInitializable, IPhysicsWheel
+    public abstract class UTPhysicWheelBase : MonoBehaviour, IPhysicsWheel
     {
         protected const float WHEEL_TURN_RATIO = 8f;
 

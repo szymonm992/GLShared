@@ -11,6 +11,7 @@ namespace GLShared.General.Interfaces
         bool DoesGravityDamping { get; }
         IEnumerable<IVehicleAxle> AllAxles { get; }
         IEnumerable<IPhysicsWheel> AllWheels { get; }
+
         float AbsoluteInputY { get; }
         float AbsoluteInputX { get; }
         float SignedInputY { get; }

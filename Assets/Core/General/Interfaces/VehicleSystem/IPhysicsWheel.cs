@@ -24,5 +24,6 @@ namespace GLShared.General.Interfaces
         float SteerAngle { get; set; }
 
         abstract void IInitializable.Initialize();
+
     }
 }

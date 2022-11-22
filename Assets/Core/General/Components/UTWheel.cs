@@ -12,6 +12,76 @@ namespace GLShared.General.Components
 {
     public class UTWheel : UTPhysicWheelBase, IInitializable, IPhysicsWheel
     {
+        [Header("Settings")]
+        [SerializeField] protected float spring = 20000f;
+        [SerializeField] protected float damper = 3000f;
+        [SerializeField] protected float tireMass = 60f;
+
+        [Range(0, 1f)]
+        [SerializeField] protected float forwardTireGripFactor = 1f, sidewaysTireGripFactor = 1f;
+        
+        [SerializeField] protected Transform upperConstraintTransform;
+        [SerializeField] protected Transform lowerConstraintTransform;
+        [SerializeField] protected Transform notGroundedTransform;
+
+        [Range(-3f, 0)]
+        [SerializeField] protected float hardPointOfTire = -0.7f;
+        [Range(0.1f, 2f)]
+        [SerializeField] protected float suspensionTravel = 0.5f;
+
+        [SerializeField]
+        protected UTWheelDebug debugSettings = new UTWheelDebug()
+        {
+            DrawGizmos = true,
+            DrawOnDisable = false,
+            DrawMode = UTDebugMode.All,
+            DrawWheelDirection = true,
+            DrawShapeGizmo = false,
+            DrawSprings = true,
+        };
+
+        #region Telemetry/readonly
+        protected float previousSuspensionDistance = 0f;
+        protected float normalForce = 0f;
+        protected float extension = 0f;
+        protected float compressionRate = 0f;
+        protected float absGravity;
+        protected float finalTravelLength;
+        protected float hardPointAbs;
+
+        protected HitInfo hitInfo = new HitInfo();
+        protected Rigidbody localRig;
+        #endregion
+
+        public override HitInfo HitInfo => hitInfo;
+        public override float TireMass => tireMass;
+        public override float CompressionRate => compressionRate;
+        public override float ForwardTireGripFactor => forwardTireGripFactor;
+        public override float SidewaysTireGripFactor => sidewaysTireGripFactor;
+        public override float HardPointAbs => hardPointAbs;
+        public override Vector3 TireWorldPosition => tirePosition;
+        public override Vector3 UpperConstraintPoint
+        {
+            get
+            {
+                return upperConstraintTransform != null ? upperConstraintTransform.position : transform.position;
+            }
+        }
+        public override Vector3 LowerConstraintPoint
+        {
+            get
+            {
+                return lowerConstraintTransform != null ? lowerConstraintTransform.position : transform.position;
+            }
+        }
+        public override Vector3 NotGroundedWheelPosition
+        {
+            get
+            {
+                return notGroundedTransform != null ? notGroundedTransform.position :
+                    lowerConstraintTransform != null ? LowerConstraintPoint : Vector3.zero;
+            }
+        }
 
         public override void Initialize()
         {
@@ -74,14 +144,6 @@ namespace GLShared.General.Components
             ApplyFriction();
         }
 
-        private void GravityCounterforce()
-        {
-            if (rig.velocity.y < -4f)
-            {
-                rig.AddForce(Vector3.up * Mathf.Min(-rig.velocity.y, 4f), ForceMode.VelocityChange);
-            }
-        }
-
         protected override void ApplyFriction()
         {
             base.ApplyFriction();
@@ -97,7 +159,6 @@ namespace GLShared.General.Components
                 rig.AddForceAtPosition(desiredAccel * tireMass * steeringDir, UpperConstraintPoint);
             }
         }
-
 
         protected override Vector3 GetTirePosition()
         {
@@ -135,6 +196,14 @@ namespace GLShared.General.Components
             return tirePos;
         }
 
+        private void GravityCounterforce()
+        {
+            if (rig.velocity.y < -4f)
+            {
+                rig.AddForce(Vector3.up * Mathf.Min(-rig.velocity.y, 4f), ForceMode.VelocityChange);
+            }
+        }
+
         private float GetSuspensionForce(Vector3 tirePosition)
         {
             float distance = Vector3.Distance(lowerConstraintTransform.position, tirePosition);
@@ -144,7 +213,7 @@ namespace GLShared.General.Components
             return springForce + damperForce;
         }
 
-#if UNITY_EDITOR
+        #if UNITY_EDITOR
         #region DEBUG
         private void OnValidate()
         {

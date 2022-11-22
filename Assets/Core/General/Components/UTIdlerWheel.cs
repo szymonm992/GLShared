@@ -14,6 +14,25 @@ namespace GLShared.General.Components
 
         private Vector3 idlerForcePoint;
 
+        [SerializeField]
+        protected UTWheelDebug debugSettings = new UTWheelDebug()
+        {
+            DrawGizmos = true,
+            DrawOnDisable = false,
+            DrawMode = UTDebugMode.All,
+            DrawWheelDirection = false,
+            DrawShapeGizmo = true,
+            DrawSprings = true,
+        };
+
+        public void OnValidate()
+        {
+            if (rig == null)
+            {
+                rig = transform.GetComponentInParent<Rigidbody>();
+            }
+            tirePosition = GetTirePosition();
+        }
 
         protected override void FixedUpdate()
         {
@@ -27,14 +46,6 @@ namespace GLShared.General.Components
             return transform.position;
         }
 
-        public void OnValidate()
-        {
-            if (rig == null)
-            {
-                rig = transform.GetComponentInParent<Rigidbody>();
-            }
-            tirePosition = GetTirePosition();
-        }
         #if UNITY_EDITOR
         private void OnDrawGizmos()
         {

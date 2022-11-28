@@ -37,6 +37,11 @@ namespace GLShared.General.Components
 
         public void RotateTurret()
         {
+            if (turret.localRotation != lastRotation)
+            {
+                turret.localRotation = lastRotation;
+            }
+                
             Matrix4x4 parentMatrix = transform.worldToLocalMatrix;
             Vector3 turretDiff = parentMatrix * targetVector;
 

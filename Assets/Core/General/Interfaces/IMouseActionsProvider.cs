@@ -4,9 +4,8 @@ using UnityEngine;
 
 namespace GLShared.General.Interfaces
 {
-    public interface ITurretController
+    public interface IMouseActionsProvider
     {
-        bool TurretLock { get; }
-        void RotateTurret();
+        Vector3 CameraTargetingPosition { get; }
     }
 }

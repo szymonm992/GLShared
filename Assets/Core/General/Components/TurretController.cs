@@ -3,13 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
-using static UnityEngine.GraphicsBuffer;
 
 namespace GLShared.General.Components
 {
     public class TurretController : MonoBehaviour, IInitializable, ITurretController
     {
         [Inject] private readonly IVehicleController vehicleController;
+        [Inject] private readonly IMouseActionsProvider mouseActionsProvider;
+        [Inject] private readonly IPlayerInputProvider inputProvider;
 
         [SerializeField] private float turretRotationSpeed = 48f;
         [SerializeField] private Transform turret;
@@ -18,16 +19,10 @@ namespace GLShared.General.Components
         private Vector3 targetingWorldSpacePosition;
         private Vector3 targetVector;
         private Quaternion lastRotation;
-        public Vector3 TargetingWorldSpacePosition
-        { 
-            get => targetingWorldSpacePosition;
-            set => targetingWorldSpacePosition = value;
-        }
 
         public bool TurretLock
         {
             get => turretLock; 
-            set => this.turretLock = value;
         }
 
         public void Initialize()
@@ -63,7 +58,12 @@ namespace GLShared.General.Components
 
         private void Update()
         {
-            targetVector = targetingWorldSpacePosition - transform.position;
+            turretLock = inputProvider.TurretLockKey;
+            if(!turretLock)
+            {
+                targetingWorldSpacePosition = mouseActionsProvider.CameraTargetingPosition;
+                targetVector = targetingWorldSpacePosition - transform.position;
+            }
             lastRotation = turret.localRotation;
         }
     }

@@ -14,11 +14,14 @@ namespace GLShared.General.Components
 
         [SerializeField] private float turretRotationSpeed = 48f;
         [SerializeField] private Transform turret;
+        [SerializeField] private Transform gun;
         
         private bool turretLock;
         private Vector3 targetingWorldSpacePosition;
         private Vector3 targetVector;
         private Quaternion lastRotation;
+
+        public Transform Gun => gun;
 
         public bool TurretLock
         {

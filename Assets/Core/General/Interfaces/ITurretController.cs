@@ -6,6 +6,7 @@ namespace GLShared.General.Interfaces
 {
     public interface ITurretController
     {
+        Transform Gun { get; }
         bool TurretLock { get; }
         void RotateTurret();
     }

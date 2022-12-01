@@ -16,6 +16,9 @@ namespace GLShared.General.ScriptableObjects
         [SerializeField] private float airControlAngleThreshold = 15f;
         [SerializeField] private float airControlForce = 5f;
 
+        [Header("Aiming")]
+        [SerializeField] private float gunMaxAimingDistance = 500f;
+
         public float SpeedMultiplier => speedMultiplier;
         public float MassMultiplier => massMultiplier;
 
@@ -25,5 +28,8 @@ namespace GLShared.General.ScriptableObjects
 
         public float AirControlAngleThreshold => airControlAngleThreshold;
         public float AirControlForce => airControlForce;
+
+
+        public float GunMaxAimingDistance => gunMaxAimingDistance;
     }
 }

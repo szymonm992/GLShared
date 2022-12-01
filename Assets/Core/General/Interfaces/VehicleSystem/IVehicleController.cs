@@ -21,6 +21,7 @@ namespace GLShared.General.Interfaces
         float MaxForwardSpeed { get; }
         float MaxBackwardsSpeed { get; }
         bool IsUpsideDown { get; }
+        bool HasTurret { get; }
         ForceApplyPoint BrakesForceApplyPoint { get; }
         ForceApplyPoint AccelerationForceApplyPoint { get; }
         float VisualElementsMovementSpeed { get; }

@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 937f9f118ffa28c449abcdda8eeed27d, type: 3}
   m_Name: GameParameters
   m_EditorClassIdentifier: 
+  speedMultiplier: 4
+  massMultiplier: 0.1
   maxWheelDetectionAngle: 75
   airControlAngleThreshold: 15
   airControlForce: 5
+  gunMaxAimingDistance: 3000

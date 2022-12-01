@@ -22,13 +22,10 @@ namespace GLShared.General.ScriptableObjects
         public float SpeedMultiplier => speedMultiplier;
         public float MassMultiplier => massMultiplier;
 
-
         public float MaxWheelDetectionAngle => maxWheelDetectionAngle;
-
 
         public float AirControlAngleThreshold => airControlAngleThreshold;
         public float AirControlForce => airControlForce;
-
 
         public float GunMaxAimingDistance => gunMaxAimingDistance;
     }

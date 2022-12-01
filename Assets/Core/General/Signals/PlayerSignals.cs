@@ -9,6 +9,9 @@ namespace GLShared.General.Signals
         public class OnLocalPlayerInitialized
         {
             public float TurretRotationSpeed { get; set; }
+            public float GunRotationSpeed { get; set; }
+            public float GunDepression { get; set; }
+            public float GunElevation { get; set; }
         }
     }
 }

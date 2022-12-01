@@ -1,3 +1,4 @@
+using Frontend.Scripts;
 using GLShared.General.Interfaces;
 using GLShared.General.Signals;
 using System.Collections;
@@ -19,6 +20,9 @@ namespace GLShared.General.Components
         [SerializeField] private Transform gun;
 
         private float turretRotationSpeed = 0;
+        private float gunRotationSpeed = 0;
+        private float gunDepression = 0;
+        private float gunElevation = 0;
 
         private bool turretLock;
 
@@ -56,26 +60,47 @@ namespace GLShared.General.Components
             turret.localRotation = Quaternion.RotateTowards(turret.localRotation, desiredRotation, Time.deltaTime * turretRotationSpeed);
         }
 
+        public void RotateGun()
+        {
+            if (gun != null)
+            {
+                Vector3 gunDesiredPosition = targetingWorldSpacePosition - gun.position;
+                Matrix4x4 turrentMatrix = turret.worldToLocalMatrix;
+                Vector3 gun_diff = turrentMatrix * gunDesiredPosition;
+
+                var rotation = Quaternion.LookRotation(gun_diff, turret.up);
+                
+                rotation.eulerAngles = new Vector3(rotation.eulerAngles.x.ClampAngle(-gunElevation, gunDepression), 0, 0);
+                gun.localRotation = Quaternion.RotateTowards(gun.localRotation, rotation, Time.deltaTime * gunRotationSpeed);
+            }
+
+        }
+
         private void OnLocalPlayerInitialized(PlayerSignals.OnLocalPlayerInitialized OnLocalPlayerInitialized)
         {
             turretRotationSpeed = OnLocalPlayerInitialized.TurretRotationSpeed;
+            gunRotationSpeed = OnLocalPlayerInitialized.GunRotationSpeed;
+
+            gunDepression = OnLocalPlayerInitialized.GunDepression;
+            gunElevation = OnLocalPlayerInitialized.GunElevation;
         }
 
         private void LateUpdate()
         {
-            if(vehicleController.IsUpsideDown || turretLock)
+            if (turretLock || vehicleController.IsUpsideDown)
             {
                 return; 
             }
 
             RotateTurret();
+            RotateGun();
         }
 
         private void Update()
         {
             turretLock = inputProvider.TurretLockKey;
 
-            if(!turretLock)
+            if (!turretLock)
             {
                 targetingWorldSpacePosition = mouseActionsProvider.CameraTargetingPosition;
                 targetVector = targetingWorldSpacePosition - transform.position;

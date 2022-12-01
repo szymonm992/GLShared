@@ -1,4 +1,5 @@
 using GLShared.General.Interfaces;
+using GLShared.General.Signals;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,14 +12,19 @@ namespace GLShared.General.Components
         [Inject] private readonly IVehicleController vehicleController;
         [Inject] private readonly IMouseActionsProvider mouseActionsProvider;
         [Inject] private readonly IPlayerInputProvider inputProvider;
+        [Inject] private readonly SignalBus signalBus;
 
-        [SerializeField] private float turretRotationSpeed = 48f;
+        
         [SerializeField] private Transform turret;
         [SerializeField] private Transform gun;
-        
+
+        private float turretRotationSpeed = 0;
+
         private bool turretLock;
+
         private Vector3 targetingWorldSpacePosition;
         private Vector3 targetVector;
+
         private Quaternion lastRotation;
 
         public Transform Gun => gun;
@@ -31,6 +37,7 @@ namespace GLShared.General.Components
         public void Initialize()
         {
             lastRotation = transform.localRotation;
+            signalBus.Subscribe<PlayerSignals.OnLocalPlayerInitialized>(OnLocalPlayerInitialized);
         }
 
         public void RotateTurret()
@@ -47,6 +54,11 @@ namespace GLShared.General.Components
             desiredRotation.eulerAngles = new Vector3(0, desiredRotation.eulerAngles.y, 0);
 
             turret.localRotation = Quaternion.RotateTowards(turret.localRotation, desiredRotation, Time.deltaTime * turretRotationSpeed);
+        }
+
+        private void OnLocalPlayerInitialized(PlayerSignals.OnLocalPlayerInitialized OnLocalPlayerInitialized)
+        {
+            turretRotationSpeed = OnLocalPlayerInitialized.TurretRotationSpeed;
         }
 
         private void LateUpdate()

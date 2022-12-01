@@ -62,11 +62,13 @@ namespace GLShared.General.Components
         private void Update()
         {
             turretLock = inputProvider.TurretLockKey;
+
             if(!turretLock)
             {
                 targetingWorldSpacePosition = mouseActionsProvider.CameraTargetingPosition;
                 targetVector = targetingWorldSpacePosition - transform.position;
-            }
+            } 
+
             lastRotation = turret.localRotation;
         }
     }

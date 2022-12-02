@@ -86,6 +86,11 @@ namespace Frontend.Scripts
             return angle;
         }
 
+        public static bool InRange(this float input, float min, float max)
+        {
+            return input >= min && input <= max;
+        }
+
         public static bool IsInLayerMask(this int layer, LayerMask layermask)
         {
             return layermask == (layermask | (1 << layer));

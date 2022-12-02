@@ -15,14 +15,13 @@ namespace GLShared.General.Components
         [Inject] private readonly IPlayerInputProvider inputProvider;
         [Inject] private readonly SignalBus signalBus;
 
-        
         [SerializeField] private Transform turret;
         [SerializeField] private Transform gun;
 
-        private float turretRotationSpeed = 0;
-        private float gunRotationSpeed = 0;
-        private float gunDepression = 0;
-        private float gunElevation = 0;
+        private float turretRotationSpeed;
+        private float gunRotationSpeed;
+        private float gunDepression;
+        private float gunElevation;
 
         private bool turretLock;
 
@@ -73,7 +72,6 @@ namespace GLShared.General.Components
                 rotation.eulerAngles = new Vector3(rotation.eulerAngles.x.ClampAngle(-gunElevation, gunDepression), 0, 0);
                 gun.localRotation = Quaternion.RotateTowards(gun.localRotation, rotation, Time.deltaTime * gunRotationSpeed);
             }
-
         }
 
         private void OnLocalPlayerInitialized(PlayerSignals.OnLocalPlayerInitialized OnLocalPlayerInitialized)

@@ -7,6 +7,7 @@ using GLShared.General.ScriptableObjects;
 using GLShared.General.Models;
 using GLShared.General.Interfaces;
 using GLShared.General.Enums;
+using Frontend.Scripts;
 
 namespace GLShared.General.Components
 {
@@ -161,8 +162,8 @@ namespace GLShared.General.Components
         {
             if (localRig.SweepTest(-transform.up, out hitInfo.rayHit, finalTravelLength))
             {
-                hitInfo.CalculateNormalAndUpDifferenceAngle();
-                isGrounded = (hitInfo.NormalAndUpAngle <= gameParameters?.MaxWheelDetectionAngle);
+                bool canCollide = gameParameters != null ? (hitInfo != null ? hitInfo.CanCollide(gameParameters.MaxWheelDetectionAngle, vehicleController.WheelsCollisionDetectionMask) : false) : false;
+                isGrounded = canCollide;
             }
             else
             {

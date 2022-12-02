@@ -1,5 +1,6 @@
 using GLShared.General.Enums;
 using System.Collections.Generic;
+using UnityEngine;
 using Zenject;
 
 namespace GLShared.General.Interfaces
@@ -22,6 +23,7 @@ namespace GLShared.General.Interfaces
         float MaxBackwardsSpeed { get; }
         bool IsUpsideDown { get; }
         bool HasTurret { get; }
+        LayerMask WheelsCollisionDetectionMask { get; }
         ForceApplyPoint BrakesForceApplyPoint { get; }
         ForceApplyPoint AccelerationForceApplyPoint { get; }
         float VisualElementsMovementSpeed { get; }

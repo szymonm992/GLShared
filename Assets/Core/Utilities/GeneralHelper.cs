@@ -86,5 +86,10 @@ namespace Frontend.Scripts
             return angle;
         }
 
+        public static bool IsInLayerMask(this int layer, LayerMask layermask)
+        {
+            return layermask == (layermask | (1 << layer));
+        }
+
     }
 }

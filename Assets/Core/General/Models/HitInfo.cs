@@ -1,3 +1,7 @@
+using Frontend.Scripts;
+using GLShared.General.Interfaces;
+using GLShared.General.ScriptableObjects;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 namespace GLShared.General.Models
@@ -8,35 +12,23 @@ namespace GLShared.General.Models
 		public RaycastHit rayHit;
 		private float normalAndUpAngle;
 
-		public void CalculateNormalAndUpDifferenceAngle()
-        {
-			this.normalAndUpAngle = Vector3.Angle(Vector3.up, rayHit.normal);
-		}
+        public Vector3 Point => rayHit.point;
+        public Vector3 Normal => rayHit.normal;
+        public float Distance => rayHit.distance;
+        public Collider Collider => rayHit.collider;
+        public float NormalAndUpAngle => normalAndUpAngle;
 
-		public Vector3 Point
+        public bool CanCollide(float maxAngle, LayerMask wheelsMask)
 		{
-			get => rayHit.point;
+            return CalculateNormalAngle(rayHit.normal) <= maxAngle && rayHit.collider.gameObject.layer.IsInLayerMask(wheelsMask);
 		}
 
-		public Vector3 Normal
+		private float CalculateNormalAngle(Vector3 normal)
 		{
-			get => rayHit.normal;
-		}
-
-		public float Distance
-        {
-			get => rayHit.distance;
+			normalAndUpAngle = Vector3.Angle(Vector3.up, normal);
+            return normalAndUpAngle;
         }
 
-		public Collider Collider
-        {
-			get => rayHit.collider;
-        }
-
-		public float NormalAndUpAngle
-        {
-			get => normalAndUpAngle;
-
-		}
+		
 	}
 }

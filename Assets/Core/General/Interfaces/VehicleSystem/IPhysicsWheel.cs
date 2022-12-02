@@ -11,8 +11,8 @@ namespace GLShared.General.Interfaces
         HitInfo HitInfo { get; }
         float WheelRadius { get; }
         float TireMass { get; }
-        float ForwardTireGripFactor { get; }
-        float SidewaysTireGripFactor { get; }
+        float ForwardTireGripFactor { get; set; }
+        float SidewaysTireGripFactor { get; set; }
         float CompressionRate { get; }
         float HardPointAbs { get; }
 

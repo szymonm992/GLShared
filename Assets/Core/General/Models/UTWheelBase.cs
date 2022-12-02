@@ -36,8 +36,8 @@ namespace GLShared.General.Models
 
         public virtual HitInfo HitInfo => hitInfo;
         public virtual float TireMass => 0f;
-        public virtual float ForwardTireGripFactor => 0f;
-        public virtual float SidewaysTireGripFactor => 0f;
+        public virtual float ForwardTireGripFactor { get; set; }
+        public virtual float SidewaysTireGripFactor { get; set; }
         public virtual float CompressionRate => 0f;
         public virtual float HardPointAbs => 0f;
         public virtual Vector3 TireWorldPosition => Vector3.zero;

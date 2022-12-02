@@ -54,8 +54,16 @@ namespace GLShared.General.Components
 
         public override float TireMass => tireMass;
         public override float CompressionRate => compressionRate;
-        public override float ForwardTireGripFactor => forwardTireGripFactor;
-        public override float SidewaysTireGripFactor => sidewaysTireGripFactor;
+        public override float ForwardTireGripFactor
+        {
+            get => forwardTireGripFactor;
+            set => this.forwardTireGripFactor = value;
+        }
+        public override float SidewaysTireGripFactor
+        {
+            get => sidewaysTireGripFactor;
+            set => this.sidewaysTireGripFactor = value;
+        }
         public override float HardPointAbs => hardPointAbs;
         public override Vector3 TireWorldPosition => tirePosition;
         public override Vector3 UpperConstraintPoint

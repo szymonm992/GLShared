@@ -1,7 +1,4 @@
 using Frontend.Scripts;
-using GLShared.General.Interfaces;
-using GLShared.General.ScriptableObjects;
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 namespace GLShared.General.Models

@@ -11,7 +11,7 @@ namespace GLShared.General.Components
     public class UTIdlerWheel : UTPhysicWheelBase
     {
         [SerializeField] private LayerMask terrainMask;
-
+        [SerializeField] private Vector3 idlerWheelOffset;
         private Vector3 idlerForcePoint;
 
         public override HitInfo HitInfo => base.HitInfo;
@@ -42,7 +42,8 @@ namespace GLShared.General.Components
 
         protected override Vector3 GetTirePosition()
         {
-            isGrounded = Physics.CheckSphere(transform.position, wheelRadius, terrainMask);
+            Vector3 offsetStartPosition = OffsetPosition(transform, idlerWheelOffset);
+            isGrounded = Physics.CheckSphere(offsetStartPosition, wheelRadius, terrainMask);
             idlerForcePoint = isGrounded ? transform.position + (transform.forward * wheelRadius) : transform.position;
             hitInfo = new HitInfo()
             {
@@ -53,7 +54,18 @@ namespace GLShared.General.Components
                     normal = -Transform.forward
                 },
             };
-            return transform.position;
+            return offsetStartPosition;
+        }
+
+        private Vector3 OffsetPosition(Transform origin, Vector3 offset)
+        {
+            if(offset != Vector3.zero)
+            {
+                return origin.position + (origin.right * offset.x)
+                + (origin.up * offset.y) + (origin.forward * offset.z);
+                
+            }
+            return origin.position;
         }
 
         #if UNITY_EDITOR

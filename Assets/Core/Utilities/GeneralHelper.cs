@@ -49,9 +49,11 @@ namespace Frontend.Scripts
             angle = Mathf.Repeat(angle, 360);
             min = Mathf.Repeat(min, 360);
             max = Mathf.Repeat(max, 360);
+
             bool inverse = false;
             var tmin = min;
             var tangle = angle;
+
             if (min > 180)
             {
                 inverse = !inverse;
@@ -62,13 +64,17 @@ namespace Frontend.Scripts
                 inverse = !inverse;
                 tangle -= 180;
             }
+
             var result = !inverse ? tangle > tmin : tangle < tmin;
             if (!result)
+            {
                 angle = min;
+            }
 
             inverse = false;
             tangle = angle;
             var tmax = max;
+
             if (angle > 180)
             {
                 inverse = !inverse;
@@ -82,7 +88,9 @@ namespace Frontend.Scripts
 
             result = !inverse ? tangle < tmax : tangle > tmax;
             if (!result)
+            {
                 angle = max;
+            }
             return angle;
         }
 

@@ -26,8 +26,6 @@ namespace GLShared.General.Interfaces
         LayerMask WheelsCollisionDetectionMask { get; }
         ForceApplyPoint BrakesForceApplyPoint { get; }
         ForceApplyPoint AccelerationForceApplyPoint { get; }
-        float VisualElementsMovementSpeed { get; }
-
         abstract float GetCurrentMaxSpeed();
         abstract void SetupRigidbody();
     }

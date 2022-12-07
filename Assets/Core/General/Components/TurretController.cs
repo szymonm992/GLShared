@@ -28,7 +28,7 @@ namespace GLShared.General.Components
         private Vector3 targetingWorldSpacePosition;
         private Vector3 targetVector;
 
-        private Quaternion lastRotation;
+        public float lastTurretEulerY;
 
         public Transform Gun => gun;
 
@@ -39,15 +39,15 @@ namespace GLShared.General.Components
 
         public void Initialize()
         {
-            lastRotation = transform.localRotation;
+            lastTurretEulerY = turret.eulerAngles.y;
             signalBus.Subscribe<PlayerSignals.OnLocalPlayerInitialized>(OnLocalPlayerInitialized);
         }
 
         public void RotateTurret()
         {
-            if (turret.localRotation != lastRotation)
+            if (turret.eulerAngles.y != lastTurretEulerY)
             {
-                turret.localRotation = lastRotation;
+                turret.eulerAngles = new Vector3(turret.eulerAngles.x, lastTurretEulerY, turret.eulerAngles.z);
             }
                 
             Matrix4x4 parentMatrix = transform.worldToLocalMatrix;
@@ -57,6 +57,8 @@ namespace GLShared.General.Components
             desiredRotation.eulerAngles = new Vector3(0, desiredRotation.eulerAngles.y, 0);
 
             turret.localRotation = Quaternion.RotateTowards(turret.localRotation, desiredRotation, Time.deltaTime * turretRotationSpeed);
+
+            lastTurretEulerY = turret.eulerAngles.y;
         }
 
         public void RotateGun()
@@ -103,8 +105,6 @@ namespace GLShared.General.Components
                 targetingWorldSpacePosition = mouseActionsProvider.CameraTargetingPosition;
                 targetVector = targetingWorldSpacePosition - transform.position;
             } 
-
-            lastRotation = turret.localRotation;
         }
     }
 }

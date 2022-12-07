@@ -4,6 +4,7 @@ namespace GLShared.General.Enums
     {
         None = 0,
         Beginning = 1,
+        Countdown,
         InProgress,
         Ending
     }

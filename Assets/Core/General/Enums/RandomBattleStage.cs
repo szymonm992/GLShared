@@ -10,7 +10,8 @@ namespace GLShared.General.Enums
         Beginning = 0,
         [StateEntity(typeof(BattleCountdownStage))]
         Countdown = 1,
-        InProgress,
+        [StateEntity(typeof(BattleInProgressStage))]
+        InProgress = 2,
         Ending
     }
 }

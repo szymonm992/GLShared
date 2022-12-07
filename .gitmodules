@@ -1,0 +1,3 @@
+[submodule "Submodules/Automachine"]
+	path = Submodules/Automachine
+	url = https://github.com/szymonm992/Automachine_v2.git

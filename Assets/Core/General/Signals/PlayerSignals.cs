@@ -1,13 +1,21 @@
+using GLShared.General.Models;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 namespace GLShared.General.Signals
 {
     public class PlayerSignals
     {
+        public class OnPlayerSpawned
+        {
+            public PlayerProperties PlayerProperties { get; set; }
+        }
+
         public class OnLocalPlayerInitialized
         {
+            public PlayerProperties PlayerProperties { get; set; }
             public float TurretRotationSpeed { get; set; }
             public float GunRotationSpeed { get; set; }
             public float GunDepression { get; set; }

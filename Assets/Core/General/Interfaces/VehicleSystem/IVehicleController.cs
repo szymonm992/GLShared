@@ -23,7 +23,7 @@ namespace GLShared.General.Interfaces
         float MaxBackwardsSpeed { get; }
         bool IsUpsideDown { get; }
         bool HasTurret { get; }
-        bool IsReady { get; }
+  
         LayerMask WheelsCollisionDetectionMask { get; }
         ForceApplyPoint BrakesForceApplyPoint { get; }
         ForceApplyPoint AccelerationForceApplyPoint { get; }

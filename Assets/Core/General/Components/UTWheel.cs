@@ -128,7 +128,7 @@ namespace GLShared.General.Components
 
         protected override void FixedUpdate()
         {
-            if(vehicleController == null || !vehicleController.IsReady)
+            if(vehicleController == null)
             {
                 return;
             }

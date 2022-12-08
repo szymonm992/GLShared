@@ -1,5 +1,6 @@
 using GLShared.General.Interfaces;
 using UnityEngine;
+using Zenject;
 
 namespace GLShared.General.Models
 {
@@ -7,9 +8,9 @@ namespace GLShared.General.Models
     public class VehicleEntryInfo : IVehicleEntryInfo
     {
         [SerializeField] private string vehicleName;
-        [SerializeField] private GameObject vehiclePrefab;
+        [SerializeField] private GameObjectContext vehiclePrefab;
 
         public string VehicleName => vehicleName;
-        public GameObject VehiclePrefab => vehiclePrefab;
+        public GameObjectContext VehiclePrefab => vehiclePrefab;
     }
 }

@@ -37,7 +37,7 @@ namespace GLShared.General.Components
 
         public void Initialize()
         {
-            signalBus.Subscribe<PlayerSignals.OnLocalPlayerInitialized>(OnLocalPlayerInitialized);
+            signalBus.Subscribe<PlayerSignals.OnPlayerInitialized>(OnLocalPlayerInitialized);
         }
 
         public void RotateTurret()
@@ -66,7 +66,7 @@ namespace GLShared.General.Components
             }
         }
 
-        private void OnLocalPlayerInitialized(PlayerSignals.OnLocalPlayerInitialized OnLocalPlayerInitialized)
+        private void OnLocalPlayerInitialized(PlayerSignals.OnPlayerInitialized OnLocalPlayerInitialized)
         {
             turretRotationSpeed = OnLocalPlayerInitialized.TurretRotationSpeed;
             gunRotationSpeed = OnLocalPlayerInitialized.GunRotationSpeed;

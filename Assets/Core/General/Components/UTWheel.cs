@@ -97,6 +97,7 @@ namespace GLShared.General.Components
 
             AssignPrimaryParameters();
             SetIgnoredColliders();
+            Debug.Log("asdf23123");
         }
 
         protected override void AssignPrimaryParameters()

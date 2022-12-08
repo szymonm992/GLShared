@@ -13,7 +13,7 @@ namespace GLShared.General.Signals
             public PlayerProperties PlayerProperties { get; set; }
         }
 
-        public class OnLocalPlayerInitialized
+        public class OnPlayerInitialized
         {
             public PlayerProperties PlayerProperties { get; set; }
             public float TurretRotationSpeed { get; set; }

@@ -35,14 +35,16 @@ namespace Frontend.Scripts
             }
         }
 
-        public void Spawn(PlayerEntity prefab, PlayerProperties properties)
+        public PlayerEntity Spawn(PlayerEntity prefab, PlayerProperties properties)
         {
-            playerFactory.Create(prefab, properties);
+            var newPlayer = playerFactory.Create(prefab, properties);
 
             signalBus.Fire(new PlayerSignals.OnPlayerSpawned()
             {
-                PlayerProperties = properties,
+                PlayerProperties = newPlayer.PlayerProperties,
             });
+
+            return newPlayer;
         }
     }
 }

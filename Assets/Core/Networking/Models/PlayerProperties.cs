@@ -1,3 +1,4 @@
+using GLShared.Networking.Components;
 using GLShared.Networking.Interfaces;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,6 +14,5 @@ namespace GLShared.General.Models
         public Quaternion SpawnRotation { get; set; }
         public string PlayerVehicleName { get; set; }
         public bool IsLocal { get; set; }
-
     }
 }

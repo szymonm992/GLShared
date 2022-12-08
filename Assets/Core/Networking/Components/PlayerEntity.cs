@@ -10,6 +10,8 @@ namespace GLShared.Networking.Components
 {
     public class PlayerEntity : NetworkEntity, IInitializable
     {
+        [Inject] private readonly GameObjectContext context;
+
         [SerializeField] private bool isLocalPlayer;
 
         private PlayerProperties playerProperties;
@@ -18,14 +20,10 @@ namespace GLShared.Networking.Components
         public PlayerProperties PlayerProperties => playerProperties;
 
         [Inject]
-        public void Construct(PlayerProperties properties)
+        public void Construct(PlayerProperties propertiesAtPrefab)
         {
-            UpdateProperties(properties);
-        }
-
-        public void Initialize()
-        {
-            
+            propertiesAtPrefab.PlayerContext = context;
+            UpdateProperties(propertiesAtPrefab);
         }
 
         public void UpdateProperties(PlayerProperties properties)
@@ -35,5 +33,11 @@ namespace GLShared.Networking.Components
             transform.SetPositionAndRotation(playerProperties.SpawnPosition, playerProperties.SpawnRotation);
             isLocalPlayer = playerProperties.IsLocal;
         }
+
+        public void Initialize()
+        {
+
+        }
+
     }
 }

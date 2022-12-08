@@ -77,7 +77,7 @@ namespace GLShared.General.Components
 
         private void LateUpdate()
         {
-            if (turretLock || vehicleController.IsUpsideDown)
+            if (vehicleController == null || turretLock || vehicleController.IsUpsideDown)
             {
                 return; 
             }
@@ -88,6 +88,11 @@ namespace GLShared.General.Components
 
         private void Update()
         {
+            if(vehicleController == null)
+            {
+                return;
+            }
+
             turretLock = inputProvider.TurretLockKey;
 
             if (!turretLock)

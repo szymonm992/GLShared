@@ -97,7 +97,6 @@ namespace GLShared.General.Components
 
             AssignPrimaryParameters();
             SetIgnoredColliders();
-            Debug.Log("asdf23123");
         }
 
         protected override void AssignPrimaryParameters()
@@ -129,6 +128,11 @@ namespace GLShared.General.Components
 
         protected override void FixedUpdate()
         {
+            if(vehicleController == null || !vehicleController.IsReady)
+            {
+                return;
+            }
+
             base.FixedUpdate();
             Vector3 newPosition = GetTirePosition();
 

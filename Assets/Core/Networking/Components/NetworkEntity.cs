@@ -1,6 +1,7 @@
 using UnityEngine;
 using GLShared.Networking.Enums;
 using GLShared.Networking.Interfaces;
+using Unity.VisualScripting;
 
 namespace GLShared.Networking.Components
 {

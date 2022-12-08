@@ -1,3 +1,4 @@
+using GLShared.General.Interfaces;
 using GLShared.General.Models;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,6 +17,8 @@ namespace GLShared.General.Signals
         public class OnPlayerInitialized
         {
             public PlayerProperties PlayerProperties { get; set; }
+            public IPlayerInputProvider InputProvider { get; set; }
+            public VehicleStatsBase VehicleStats { get; set; }
             public float TurretRotationSpeed { get; set; }
             public float GunRotationSpeed { get; set; }
             public float GunDepression { get; set; }

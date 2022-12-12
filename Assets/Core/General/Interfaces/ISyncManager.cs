@@ -6,6 +6,6 @@ namespace GLShared.General.Interfaces
 {
     public interface ISyncManager
     {
-        void CreatePlayer(string vehicleName, Vector3 spawnPosition, Quaternion spawnRotation);
+        void CreatePlayer(bool isLocal, string vehicleName, Vector3 spawnPosition, Quaternion spawnRotation);
     }
 }

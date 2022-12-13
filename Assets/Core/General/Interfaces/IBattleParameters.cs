@@ -6,6 +6,7 @@ namespace GLShared.General.Interfaces
 {
     public interface IBattleParameters 
     {
+        int DemandedPlayersSpawnedAmount { get; }
         float CountdownTime { get; }
     }
 }

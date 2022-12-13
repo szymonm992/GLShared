@@ -8,7 +8,8 @@ namespace GLShared.General.ScriptableObjects
     {
         [Header("General parameters")]
         [SerializeField] private float countdownTime = 2f;
-       
+        [SerializeField] private int demandedPlayersSpawnedAmount = 1;
         public float CountdownTime => countdownTime;
+        public int DemandedPlayersSpawnedAmount => demandedPlayersSpawnedAmount;
     }
 }

@@ -24,6 +24,11 @@ namespace GLShared.General.Signals
             public float GunDepression { get; set; }
             public float GunElevation { get; set; }
         }
+
+        public class OnAllPlayersInputLockUpdate
+        {
+            public bool LockPlayersInput { get; set; }
+        }
     }
 }
 

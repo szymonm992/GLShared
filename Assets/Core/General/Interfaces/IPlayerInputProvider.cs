@@ -1,8 +1,7 @@
-using UnityEngine;
 
 namespace GLShared.General.Interfaces
 { 
-    public interface IPlayerInputProvider 
+    public interface IPlayerInputProvider
     {
         public float Vertical { get; }
         public float Horizontal { get; }

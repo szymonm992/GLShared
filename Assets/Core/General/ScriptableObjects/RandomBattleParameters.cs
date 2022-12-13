@@ -1,4 +1,5 @@
 using GLShared.General.Interfaces;
+using System;
 using UnityEngine;
 
 namespace GLShared.General.ScriptableObjects
@@ -11,5 +12,12 @@ namespace GLShared.General.ScriptableObjects
         [SerializeField] private int demandedPlayersSpawnedAmount = 1;
         public float CountdownTime => countdownTime;
         public int DemandedPlayersSpawnedAmount => demandedPlayersSpawnedAmount;
+
+        public Func<int, bool> AreAllPlayersSpawned => ArePlayersSpawned;
+
+        public bool ArePlayersSpawned(int currentPlayersAmount)
+        {
+            return currentPlayersAmount == demandedPlayersSpawnedAmount;
+        }
     }
 }

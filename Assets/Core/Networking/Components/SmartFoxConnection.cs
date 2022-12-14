@@ -1,9 +1,8 @@
 using UnityEngine;
-
 using Sfs2X;
 
 
-namespace GLShared.Networking
+namespace GLShared.Networking.Components
 {
 	public class SmartFoxConnection : MonoBehaviour
 	{

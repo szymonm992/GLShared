@@ -7,7 +7,6 @@ namespace GLShared.General.ScriptableObjects
     {
         [Header("General parameters")][Range(3f, 5f)]
         [SerializeField] private float speedMultiplier = 4f;
-        [SerializeField] private float massMultiplier = 0.1f;
 
         [Header("Vehicles wheel parameters")]
         [SerializeField] private float maxWheelDetectionAngle = 75f;
@@ -17,10 +16,12 @@ namespace GLShared.General.ScriptableObjects
         [SerializeField] private float airControlForce = 5f;
 
         [Header("Aiming")]
-        [SerializeField] private float gunMaxAimingDistance = 500f;
+        [SerializeField] private float gunMaxAimingDistance = 3000f;
+
+        [Header("Network sync")]
+        [SerializeField] private float serverSettingsUpdateRate = 15f;
 
         public float SpeedMultiplier => speedMultiplier;
-        public float MassMultiplier => massMultiplier;
 
         public float MaxWheelDetectionAngle => maxWheelDetectionAngle;
 
@@ -28,5 +29,7 @@ namespace GLShared.General.ScriptableObjects
         public float AirControlForce => airControlForce;
 
         public float GunMaxAimingDistance => gunMaxAimingDistance;
+
+        public float ServerSettingsUpdateRate => serverSettingsUpdateRate;
     }
 }

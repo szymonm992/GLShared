@@ -11,6 +11,9 @@ namespace GLShared.Networking.Components
         public int PORT = 9933;
 
         private SmartFox sfs;
+
+		public string DisconnectError { get; set; }
+
 		public SmartFox Connection 
 		{
 			get => sfs;	

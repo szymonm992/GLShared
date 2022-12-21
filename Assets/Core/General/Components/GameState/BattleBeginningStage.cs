@@ -10,7 +10,7 @@ namespace GLShared.General.Components
 {
     public class BattleBeginningStage : State<BattleStage>
     {
-        [Inject(Id = "countdownText")] private readonly TextMeshProUGUI countdownText;
+
         [Inject] private readonly ISyncManager syncManager;
 
         public override void Initialize()
@@ -21,7 +21,6 @@ namespace GLShared.General.Components
         public override void StartState()
         {
             base.StartState();
-            countdownText.text = "Initializing battle...";
             syncManager.CreatePlayer(true, "T-55", new Vector3(132.35f, 2f, 118.99f), Quaternion.Euler(0, 90f, 0));
         }
     }

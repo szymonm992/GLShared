@@ -13,7 +13,6 @@ namespace GLShared.General.Components
     public class BattleCountdownStage : State<BattleStage>
     {
         [Inject] private readonly IBattleParameters battleParameters;
-        [Inject(Id = "countdownText")] private readonly TextMeshProUGUI countdownText;
 
         private float currentTimer = 0f;
         private bool finishedCountdown = false;
@@ -35,12 +34,10 @@ namespace GLShared.General.Components
                 if (currentTimer > 0)
                 {
                     currentTimer -= Time.deltaTime;
-                    countdownText.text = "Battle starts in: " + currentTimer.ToString("F0");
                 }
                 else
                 {
                     currentTimer = 0;
-                    countdownText.text = "Let's go";
                     finishedCountdown = true;
                 }
             }       

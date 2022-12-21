@@ -7,5 +7,6 @@ namespace GLShared.General.Interfaces
 {
     public interface IBattleManager
     {
+        public BattleStage CurrentBattleStage { get; }
     }
 }

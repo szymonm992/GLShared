@@ -7,6 +7,5 @@ namespace GLShared.General.Interfaces
 {
     public interface IBattleManager
     {
-        public void ApplyCurrentState(BattleStage battleStage);
     }
 }

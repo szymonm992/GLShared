@@ -16,8 +16,13 @@ namespace GLShared.General.Components
 
         private float currentTimer = 0f;
         private bool finishedCountdown = false;
+        private int previousIntTimer = 30;
+        private int currentIntTimer = 30;
 
         public bool FinishedCountdown => finishedCountdown;
+        public float CurrentTimer => currentTimer;
+        public int PreviousIntegerTimer => previousIntTimer;
+        public int CurrentIntegerTimer => currentIntTimer;
 
         public override void StartState()
         {
@@ -31,6 +36,7 @@ namespace GLShared.General.Components
 
             if(isActive && !finishedCountdown)
             {
+                previousIntTimer = (int)currentTimer;
                 if (currentTimer > 0)
                 {
                     currentTimer -= Time.deltaTime;
@@ -40,6 +46,7 @@ namespace GLShared.General.Components
                     currentTimer = 0;
                     finishedCountdown = true;
                 }
+                currentIntTimer = (int)currentTimer;
             }       
         }
     }

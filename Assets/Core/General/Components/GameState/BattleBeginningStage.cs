@@ -10,7 +10,6 @@ namespace GLShared.General.Components
 {
     public class BattleBeginningStage : State<BattleStage>
     {
-
         [Inject] private readonly ISyncManager syncManager;
 
         public override void Initialize()

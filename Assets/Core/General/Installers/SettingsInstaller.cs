@@ -14,7 +14,8 @@ namespace GLShared.General.Installers
         public override void InstallBindings()
         {
             Container.BindInterfacesAndSelfTo<IVehiclesDatabase>().FromInstance(vehiclesDatabase).AsCached();
-           Container.BindInterfacesAndSelfTo<ISyncManager>().FromComponentInHierarchy().AsCached();
+            Container.BindInterfacesAndSelfTo<ISyncManager>().FromComponentInHierarchy().AsCached();
+            Container.BindInterfacesAndSelfTo<IBattleManager>().FromComponentInHierarchy().AsCached();
         }
     }
 }

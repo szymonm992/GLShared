@@ -1,3 +1,4 @@
+using Sfs2X.Entities;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,6 @@ namespace GLShared.General.Interfaces
         double CurrentServerTime { get; }
         int SpawnedPlayersAmount { get; }
 
-        void CreatePlayer(bool isLocal, string vehicleName, Vector3 spawnPosition, Quaternion spawnRotation);
+        void TryCreatePlayer(SFSUser user);
     }
 }

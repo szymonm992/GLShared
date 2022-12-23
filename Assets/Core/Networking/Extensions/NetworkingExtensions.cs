@@ -1,5 +1,4 @@
 using GLShared.General.Models;
-using GLShared.Networking.Models;
 using Sfs2X.Entities.Data;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,5 +20,6 @@ namespace GLShared.Networking.Extensions
             data.PutFloat("spawnRotationZ", properties.SpawnRotation.eulerAngles.z);
             return data;
         }
+
     }
 }

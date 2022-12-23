@@ -16,7 +16,7 @@ namespace GLShared.Networking.Models
         public float SpawnEulerX { get; }
         public float SpawnEulerY { get; }
         public float SpawnEulerZ { get; }
-        public User User { get; }
+        public string Username { get; }
 
         public NetworkPlayerProperties(Vector3 spawnPosition, Quaternion spawnRotation, User user)
         {
@@ -28,7 +28,7 @@ namespace GLShared.Networking.Models
             this.SpawnEulerY = spawnRotation.eulerAngles.y;
             this.SpawnEulerZ = spawnRotation.eulerAngles.z;
 
-            this.User = user;
+            this.Username = user.Name;
         }
     }
 }

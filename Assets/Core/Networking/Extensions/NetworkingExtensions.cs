@@ -20,6 +20,5 @@ namespace GLShared.Networking.Extensions
             data.PutFloat("spawnRotationZ", properties.SpawnRotation.eulerAngles.z);
             return data;
         }
-
     }
 }

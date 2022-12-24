@@ -8,22 +8,31 @@ using Zenject;
 
 namespace GLShared.Networking.Components
 {
-    public class PlayerEntity : NetworkEntity, IInitializable
+    public class PlayerEntity : NetworkEntity
     {
         [Inject] private readonly GameObjectContext context;
-
+        [Inject] private readonly IVehicleController vehicleController;
         [SerializeField] private bool isLocalPlayer;
 
         private PlayerProperties playerProperties;
-
         public bool IsLocalPlayer => isLocalPlayer;
         public PlayerProperties PlayerProperties => playerProperties;
+        public override float EntityVelocity => vehicleController.CurrentSpeed;
 
         [Inject]
         public void Construct(PlayerProperties propertiesAtPrefab)
         {
             propertiesAtPrefab.PlayerContext = context;
             UpdateProperties(propertiesAtPrefab);
+
+            currentNetworkTransform = new()
+            {
+                Position = transform.position,
+                EulerAngles = transform.eulerAngles,
+                TimeStamp = 0d,
+                CurrentSpeed = EntityVelocity,
+                Username = PlayerProperties.User.Name,
+            };
         }
 
         public void UpdateProperties(PlayerProperties properties)
@@ -34,9 +43,9 @@ namespace GLShared.Networking.Components
             isLocalPlayer = playerProperties.IsLocal;
         }
 
-        public void Initialize()
+        public override void Initialize()
         {
-
+            base.Initialize();
         }
 
     }

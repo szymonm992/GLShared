@@ -1,13 +1,70 @@
 using UnityEngine;
 using GLShared.Networking.Enums;
 using GLShared.Networking.Interfaces;
-using Unity.VisualScripting;
+using Zenject;
+using GLShared.General.Interfaces;
+using GLShared.Networking.Models;
 
 namespace GLShared.Networking.Components
 {
-    public class NetworkEntity : MonoBehaviour, INetworkEntity
+    public class NetworkEntity : MonoBehaviour, INetworkEntity, IInitializable
     {
+        [Inject] private readonly ISyncManager syncManager;
+
         [SerializeField] private NetworkEntityType objectType;
+        [SerializeField] private float syncRate = 0.2f;
+
+        protected NetworkTransform currentNetworkTransform;
+        protected float currentSyncTimer = 0;
+        protected bool isPlayer = false;
         public NetworkEntityType EntityType => objectType;
+        public NetworkTransform CurrentNetworkTransform => currentNetworkTransform;
+        public float SyncRate => syncRate;
+        public bool IsPlayer => isPlayer;
+        public virtual float EntityVelocity => 0;
+
+        protected void Update()
+        {
+            if(syncRate <= 0)
+            {
+                return;
+            }
+
+            if(currentSyncTimer < syncRate)
+            {
+                currentSyncTimer += Time.deltaTime;
+            }
+            else
+            {
+                SyncPosition();
+                currentSyncTimer = 0;
+            }
+        }
+
+        public virtual void SyncPosition()
+        {
+            if(currentNetworkTransform.HasChanged(transform, 0.001f))
+            {
+                currentNetworkTransform.Update(transform, EntityVelocity);
+                syncManager.SyncPosition(this);
+            }
+        }
+
+        public virtual void Initialize()
+        {
+            isPlayer = (this is PlayerEntity);
+
+            if(currentNetworkTransform == null)
+            {
+                currentNetworkTransform = new()
+                {
+                    Position = transform.position,
+                    EulerAngles = transform.eulerAngles,
+                    TimeStamp = 0d,
+                    CurrentSpeed = EntityVelocity,
+                    Username = "OBSTACLE",
+                };
+            }
+        }
     }
 }

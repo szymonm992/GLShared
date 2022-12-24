@@ -1,6 +1,5 @@
+using GLShared.Networking.Interfaces;
 using Sfs2X.Entities;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
@@ -12,5 +11,7 @@ namespace GLShared.General.Interfaces
         int SpawnedPlayersAmount { get; }
 
         void TryCreatePlayer(User user, Vector3 spawnPosition, Quaternion spawnRotation);
+
+        void SyncPosition(INetworkEntity networkEntity);
     }
 }

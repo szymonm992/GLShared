@@ -29,5 +29,7 @@ namespace GLShared.General.Interfaces
         ForceApplyPoint AccelerationForceApplyPoint { get; }
         abstract float GetCurrentMaxSpeed();
         abstract void SetupRigidbody();
+
+        bool RunPhysics { get; }
     }
 }

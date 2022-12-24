@@ -136,7 +136,7 @@ namespace GLShared.General.Components
             base.FixedUpdate();
             Vector3 newPosition = GetTirePosition();
 
-            if (compressionRate == 1 && vehicleController.DoesGravityDamping)
+            if (vehicleController.RunPhysics && compressionRate == 1 && vehicleController.DoesGravityDamping)
             {
                 GravityCounterforce();
             }
@@ -146,7 +146,7 @@ namespace GLShared.General.Components
             normalForce = GetSuspensionForce(tirePosition) + tireMass * absGravity;
             suspensionForce = normalForce * transform.up;
 
-            if (!isGrounded)
+            if (!vehicleController.RunPhysics || !isGrounded)
             {
                 return;
             }

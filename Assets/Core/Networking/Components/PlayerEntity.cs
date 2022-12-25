@@ -63,11 +63,8 @@ namespace GLShared.Networking.Components
             }
 
             base.ReceiveSyncPosition(newNetworkTransform);
-            if (currentNetworkTransform.HasChanged(newNetworkTransform, 0.001f))
-            {
-                currentNetworkTransform = newNetworkTransform;
-                syncInterpolator.ProcessCurrentNetworkTransform(currentNetworkTransform);
-            }
+            syncInterpolator.ProcessCurrentNetworkTransform(newNetworkTransform);
+            
         }
         public override void Initialize()
         {

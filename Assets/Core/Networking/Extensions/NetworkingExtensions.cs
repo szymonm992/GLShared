@@ -44,7 +44,7 @@ namespace GLShared.Networking.Extensions
                 Position = new Vector3(data.GetFloat("posX"), data.GetFloat("posY"), data.GetFloat("posZ")),
                 EulerAngles = new Vector3(data.GetFloat("rotAnglesX"), data.GetFloat("rotAnglesY"), data.GetFloat("rotAnglesZ")),
                 Username = data.GetUtfString("username"),
-                TimeStamp = data.GetDouble("timeStamp"),
+                TimeStamp = data.GetLong("timeStamp"),
                 CurrentSpeed = 0,
             };
 

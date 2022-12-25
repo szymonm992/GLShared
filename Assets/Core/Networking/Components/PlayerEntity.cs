@@ -14,7 +14,7 @@ namespace GLShared.Networking.Components
     {
         [Inject] private readonly GameObjectContext context;
         [Inject] private readonly IVehicleController vehicleController;
-        [Inject] private readonly ISyncInterpolator syncInterpolator;
+        [Inject(Optional =  true)] private readonly ISyncInterpolator syncInterpolator;
 
         [SerializeField] private bool isLocalPlayer;
 

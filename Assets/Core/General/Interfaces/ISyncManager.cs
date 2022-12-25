@@ -10,7 +10,7 @@ namespace GLShared.General.Interfaces
         double CurrentServerTime { get; }
         int SpawnedPlayersAmount { get; }
 
-        void TryCreatePlayer(User user, Vector3 spawnPosition, Quaternion spawnRotation);
+        void TryCreatePlayer(User user, Vector3 spawnPosition, Vector3 spawnEulerAngles);
 
         void SyncPosition(INetworkEntity networkEntity);
     }

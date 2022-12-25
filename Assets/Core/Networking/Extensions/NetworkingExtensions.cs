@@ -36,5 +36,19 @@ namespace GLShared.Networking.Extensions
             data.PutDouble("rotAnglesZ", transform.EulerAngles.z);
             return data;
         }
+
+        public static NetworkTransform ToNetworkTransform(this ISFSObject data)
+        {
+            NetworkTransform transform = new()
+            {
+                Position = new Vector3(data.GetFloat("posX"), data.GetFloat("posY"), data.GetFloat("posZ")),
+                EulerAngles = new Vector3(data.GetFloat("rotAnglesX"), data.GetFloat("rotAnglesY"), data.GetFloat("rotAnglesZ")),
+                Username = data.GetUtfString("username"),
+                TimeStamp = data.GetDouble("timeStamp"),
+                CurrentSpeed = 0,
+            };
+
+            return transform;
+        }
     }
 }

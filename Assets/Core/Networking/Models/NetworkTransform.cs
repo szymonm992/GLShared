@@ -22,7 +22,13 @@ namespace GLShared.Networking.Models
         public bool HasChanged(Transform transform, float differenceThreshold)
         {
             bool isPositionDifferent = Vector3.Distance(Position, transform.position) > differenceThreshold;
-            return isPositionDifferent || (Vector3.Distance(EulerAngles, transform.localEulerAngles) > differenceThreshold);
+            return isPositionDifferent || (Vector3.Distance(EulerAngles, transform.eulerAngles) > differenceThreshold);
+        }
+
+        public bool HasChanged(NetworkTransform transform, float differenceThreshold)
+        {
+            bool isPositionDifferent = Vector3.Distance(Position, transform.Position) > differenceThreshold;
+            return isPositionDifferent || (Vector3.Distance(EulerAngles, transform.EulerAngles) > differenceThreshold);
         }
     }
 }

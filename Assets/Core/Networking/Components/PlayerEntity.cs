@@ -2,6 +2,8 @@ using GLShared.General.Interfaces;
 using GLShared.General.Models;
 using GLShared.General.Signals;
 using GLShared.Networking.Components;
+using GLShared.Networking.Interfaces;
+using GLShared.Networking.Models;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +14,7 @@ namespace GLShared.Networking.Components
     {
         [Inject] private readonly GameObjectContext context;
         [Inject] private readonly IVehicleController vehicleController;
+        [Inject] private readonly ISyncInterpolator syncInterpolator;
 
         [SerializeField] private bool isLocalPlayer;
 
@@ -45,6 +48,20 @@ namespace GLShared.Networking.Components
             isLocalPlayer = playerProperties.IsLocal;
         }
 
+        public override void ReceiveSyncPosition(NetworkTransform newNetworkTransform)
+        {
+            if (isSender)
+            {
+                return;
+            }
+
+            base.ReceiveSyncPosition(newNetworkTransform);
+            if (currentNetworkTransform.HasChanged(newNetworkTransform, 0.001f))
+            {
+                currentNetworkTransform = newNetworkTransform;
+                syncInterpolator.ProcessCurrentNetworkTransform(currentNetworkTransform);
+            }
+        }
         public override void Initialize()
         {
             base.Initialize();

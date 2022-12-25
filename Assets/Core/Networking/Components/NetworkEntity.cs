@@ -12,13 +12,14 @@ namespace GLShared.Networking.Components
         [Inject] protected readonly ISyncManager syncManager;
         [Inject] protected readonly SignalBus signalBus;
 
-        [SerializeField] private NetworkEntityType objectType;
-        [SerializeField] private float syncRate = 0.2f;
-        [SerializeField] private bool isSender = false;
+        [SerializeField] protected NetworkEntityType objectType;
+        [SerializeField] protected float syncRate = 0.2f;
+        [SerializeField] protected bool isSender = false;
 
         protected NetworkTransform currentNetworkTransform;
         protected float currentSyncTimer = 0;
         protected bool isPlayer = false;
+
         public NetworkEntityType EntityType => objectType;
         public NetworkTransform CurrentNetworkTransform => currentNetworkTransform;
         public float SyncRate => syncRate;
@@ -38,18 +39,22 @@ namespace GLShared.Networking.Components
             }
             else
             {
-                SyncPosition();
+                SendSyncPosition();
                 currentSyncTimer = 0;
             }
         }
 
-        public virtual void SyncPosition()
+        public virtual void SendSyncPosition()
         {
             if (currentNetworkTransform.HasChanged(transform, 0.001f))
             {
                 currentNetworkTransform.Update(transform, EntityVelocity);
                 syncManager.SyncPosition(this);
             }
+        }
+
+        public virtual void ReceiveSyncPosition(NetworkTransform newNetworkTransform)
+        {
         }
 
         public virtual void Initialize()

@@ -9,6 +9,6 @@ namespace GLShared.Networking.Interfaces
         public bool IsPlayer { get; }
         public float EntityVelocity { get; }
         public NetworkTransform CurrentNetworkTransform { get; }
-        void SyncPosition();
+        void SendSyncPosition();
     }
 }

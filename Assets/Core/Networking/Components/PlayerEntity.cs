@@ -8,6 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
+
 namespace GLShared.Networking.Components
 {
     public class PlayerEntity : NetworkEntity
@@ -15,6 +16,7 @@ namespace GLShared.Networking.Components
         [Inject] private readonly GameObjectContext context;
         [Inject] private readonly IVehicleController vehicleController;
         [Inject(Optional =  true)] private readonly ISyncInterpolator syncInterpolator;
+        [Inject] private readonly IPlayerInputProvider inputProvider;
 
         [SerializeField] private bool isLocalPlayer;
 
@@ -25,6 +27,7 @@ namespace GLShared.Networking.Components
         public PlayerProperties Properties => playerProperties;
         public PlayerInput Input => playerInput;
         public override float EntityVelocity => vehicleController.CurrentSpeed;
+        public IPlayerInputProvider InputProvider => inputProvider;
 
         [Inject]
         public void Construct(PlayerProperties propertiesAtPrefab)

@@ -1,4 +1,6 @@
 
+using GLShared.General.Models;
+
 namespace GLShared.General.Interfaces
 { 
     public interface IPlayerInputProvider
@@ -15,5 +17,7 @@ namespace GLShared.General.Interfaces
         public float LastVerticalInput { get; }
         public bool SnipingKey { get; }
         public bool TurretLockKey { get; }
+
+        void SetInput(PlayerInput input);
     }
 }

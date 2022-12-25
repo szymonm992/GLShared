@@ -1,5 +1,8 @@
+using GLShared.General.Models;
+using GLShared.Networking.Components;
 using GLShared.Networking.Interfaces;
 using Sfs2X.Entities;
+using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
@@ -13,5 +16,6 @@ namespace GLShared.General.Interfaces
         void TryCreatePlayer(User user, Vector3 spawnPosition, Vector3 spawnEulerAngles);
 
         void SyncPosition(INetworkEntity networkEntity);
+        void SyncInputs(PlayerInput playerInput);
     }
 }

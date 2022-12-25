@@ -32,6 +32,11 @@ namespace GLShared.Networking.Models
         {
         }
 
+        public virtual void SyncInputs(PlayerInput _)
+        {
+
+        }
+
         public void TryCreatePlayer(User user, Vector3 spawnPosition, Vector3 spawnEulerAngles)
         {
             if (!connectedPlayers.ContainsKey(user.Name))

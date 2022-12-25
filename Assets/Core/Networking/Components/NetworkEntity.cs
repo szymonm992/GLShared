@@ -55,7 +55,7 @@ namespace GLShared.Networking.Components
         {
             isPlayer = (this is PlayerEntity);
 
-            if(currentNetworkTransform == null)
+            if (currentNetworkTransform == null)
             {
                 currentNetworkTransform = new()
                 {

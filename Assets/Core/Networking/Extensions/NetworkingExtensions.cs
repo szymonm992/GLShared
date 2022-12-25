@@ -63,7 +63,7 @@ namespace GLShared.Networking.Extensions
             NetworkTransform transform = new()
             {
                 Position = new Vector3(data.GetFloat("posX"), data.GetFloat("posY"), data.GetFloat("posZ")),
-                EulerAngles = new Vector3(data.GetFloat("rotAnglesX"), data.GetFloat("rotAnglesY"), data.GetFloat("rotAnglesZ")),
+                EulerAngles = new Vector3(data.GetFloat("rotX"), data.GetFloat("rotY"), data.GetFloat("rotZ")),
                 Username = data.GetUtfString("u"),
                 TimeStamp = 0, //data.GetLong("timeStamp"),
                 CurrentSpeed = 0,

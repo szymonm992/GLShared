@@ -9,7 +9,8 @@ namespace GLShared.Networking.Components
 {
     public class NetworkEntity : MonoBehaviour, INetworkEntity, IInitializable
     {
-        [Inject] private readonly ISyncManager syncManager;
+        [Inject] protected readonly ISyncManager syncManager;
+        [Inject] protected readonly SignalBus signalBus;
 
         [SerializeField] private NetworkEntityType objectType;
         [SerializeField] private float syncRate = 0.2f;
@@ -44,7 +45,7 @@ namespace GLShared.Networking.Components
 
         public virtual void SyncPosition()
         {
-            if(currentNetworkTransform.HasChanged(transform, 0.001f))
+            if (currentNetworkTransform.HasChanged(transform, 0.001f))
             {
                 currentNetworkTransform.Update(transform, EntityVelocity);
                 syncManager.SyncPosition(this);

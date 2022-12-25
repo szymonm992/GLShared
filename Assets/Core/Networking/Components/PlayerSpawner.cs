@@ -41,7 +41,7 @@ namespace Frontend.Scripts
 
             signalBus.Fire(new PlayerSignals.OnPlayerSpawned()
             {
-                PlayerProperties = newPlayer.PlayerProperties,
+                PlayerProperties = newPlayer.Properties,
             });
 
             return newPlayer;

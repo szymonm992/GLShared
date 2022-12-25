@@ -1,22 +1,24 @@
 using GLShared.General.Interfaces;
 using GLShared.General.Models;
+using GLShared.General.Signals;
 using GLShared.Networking.Components;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
-
 namespace GLShared.Networking.Components
 {
     public class PlayerEntity : NetworkEntity
     {
         [Inject] private readonly GameObjectContext context;
         [Inject] private readonly IVehicleController vehicleController;
+
         [SerializeField] private bool isLocalPlayer;
 
         private PlayerProperties playerProperties;
+
         public bool IsLocalPlayer => isLocalPlayer;
-        public PlayerProperties PlayerProperties => playerProperties;
+        public PlayerProperties Properties => playerProperties;
         public override float EntityVelocity => vehicleController.CurrentSpeed;
 
         [Inject]
@@ -31,7 +33,7 @@ namespace GLShared.Networking.Components
                 EulerAngles = transform.eulerAngles,
                 TimeStamp = 0d,
                 CurrentSpeed = EntityVelocity,
-                Username = PlayerProperties.User.Name,
+                Username = Properties.User.Name,
             };
         }
 
@@ -46,7 +48,15 @@ namespace GLShared.Networking.Components
         public override void Initialize()
         {
             base.Initialize();
+            signalBus.Subscribe<PlayerSignals.OnPlayerInitialized>(OnPlayerInitialized);
         }
 
+        private void OnPlayerInitialized(PlayerSignals.OnPlayerInitialized OnPlayerInitialized)
+        {
+            if(OnPlayerInitialized.PlayerProperties.User.Name == playerProperties.User.Name)
+            {
+                playerProperties.IsInitialized = true;
+            }
+        }    
     }
 }

@@ -36,14 +36,14 @@ namespace GLShared.Networking.Models
         {
             if (!connectedPlayers.ContainsKey(user.Name))
             {
-                CreatePlayer(user, spawnPosition, spawnEulerAngles);
+                CreatePlayer(user, spawnPosition, spawnEulerAngles, out _);
             }
         }
 
-        protected virtual void CreatePlayer(User user, Vector3 spawnPosition, Vector3 spawnEulerAngles)
+        protected virtual void CreatePlayer(User user, Vector3 spawnPosition, Vector3 spawnEulerAngles, out PlayerProperties playerProperties)
         {
             var vehicleName = user.GetVariable("playerVehicle").Value.ToString();
-            var playerProperties = GetPlayerInitData(user, vehicleName, spawnPosition, spawnEulerAngles);
+            playerProperties = GetPlayerInitData(user, vehicleName, spawnPosition, spawnEulerAngles);
             var prefabEntity = playerProperties.PlayerContext.gameObject.GetComponent<PlayerEntity>();//this references only to prefab
             var playerEntity = playerSpawner.Spawn(prefabEntity, playerProperties);
 

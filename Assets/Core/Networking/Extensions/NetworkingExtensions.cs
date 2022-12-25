@@ -42,8 +42,11 @@ namespace GLShared.Networking.Extensions
         {
             ISFSObject data = new SFSObject();
 
+            data.PutUtfString("username", playerInput.Username);
+
             data.PutFloat("hor", playerInput.Horizontal);
             data.PutFloat("ver", playerInput.Vertical);
+
             data.PutBool("brk", playerInput.Brake);
             data.PutBool("turLck", playerInput.TurretLockKey);
 
@@ -71,7 +74,8 @@ namespace GLShared.Networking.Extensions
 
         public static PlayerInput ToPlayerInput(this ISFSObject data)
         {
-            PlayerInput input = new (data.GetFloat("hor"), data.GetFloat("ver"), data.GetBool("brk"), data.GetBool("turLck"),
+            PlayerInput input = new (data.GetUtfString("username"), data.GetFloat("hor"), data.GetFloat("ver"), 
+                data.GetBool("brk"), data.GetBool("turLck"),
                 new Vector3(data.GetFloat("camX"), data.GetFloat("camY"), data.GetFloat("camZ")));
             return input;
         }

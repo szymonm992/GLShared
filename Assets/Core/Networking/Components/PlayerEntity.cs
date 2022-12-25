@@ -19,9 +19,11 @@ namespace GLShared.Networking.Components
         [SerializeField] private bool isLocalPlayer;
 
         private PlayerProperties playerProperties;
+        private PlayerInput playerInput;
 
         public bool IsLocalPlayer => isLocalPlayer;
         public PlayerProperties Properties => playerProperties;
+        public PlayerInput Input => playerInput;
         public override float EntityVelocity => vehicleController.CurrentSpeed;
 
         [Inject]
@@ -38,6 +40,8 @@ namespace GLShared.Networking.Components
                 CurrentSpeed = EntityVelocity,
                 Username = Properties.User.Name,
             };
+
+            playerInput = new(playerProperties.User.Name, 0, 0, true, true, Vector3.zero);
         }
 
         public void UpdateProperties(PlayerProperties properties)

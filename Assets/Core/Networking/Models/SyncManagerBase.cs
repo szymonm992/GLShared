@@ -70,5 +70,10 @@ namespace GLShared.Networking.Models
         {
             return null;
         }
+
+        protected virtual void Update()
+        {
+            
+        }
     }
 }

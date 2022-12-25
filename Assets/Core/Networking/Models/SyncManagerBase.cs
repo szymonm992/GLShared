@@ -42,7 +42,7 @@ namespace GLShared.Networking.Models
 
         protected virtual void CreatePlayer(User user, Vector3 spawnPosition, Vector3 spawnEulerAngles, out PlayerProperties playerProperties)
         {
-            if(user.ContainsVariable("playerVehicle"))
+            if (!user.ContainsVariable("playerVehicle"))
             {
                 Debug.LogError("User does not contain 'playerVehicle' variable");
                 playerProperties = null;
@@ -52,7 +52,7 @@ namespace GLShared.Networking.Models
             var vehicleName = user.GetVariable("playerVehicle").Value.ToString();
             playerProperties = GetPlayerInitData(user, vehicleName, spawnPosition, spawnEulerAngles);
 
-            if(playerProperties == null)
+            if (playerProperties == null)
             {
                 Debug.LogError("Could not create an init player data from given parameters");
                 return;

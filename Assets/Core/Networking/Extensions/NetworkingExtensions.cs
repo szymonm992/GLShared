@@ -9,6 +9,7 @@ namespace GLShared.Networking.Extensions
 {
     public static class NetworkingExtensions
     {
+        #region ISFS Object
         public static ISFSObject ToISFSOBject(this PlayerProperties properties)
         {
             ISFSObject data = new SFSObject();
@@ -37,6 +38,23 @@ namespace GLShared.Networking.Extensions
             return data;
         }
 
+        public static ISFSObject ToISFSOBject(this PlayerInput playerInput)
+        {
+            ISFSObject data = new SFSObject();
+
+            data.PutFloat("hor", playerInput.Horizontal);
+            data.PutFloat("ver", playerInput.Vertical);
+            data.PutBool("brk", playerInput.Brake);
+            data.PutBool("turLck", playerInput.TurretLockKey);
+
+            data.PutFloat("camX", playerInput.CameraTargetingPosition.x);
+            data.PutFloat("camY", playerInput.CameraTargetingPosition.y);
+            data.PutFloat("camZ", playerInput.CameraTargetingPosition.z);
+
+            return data;
+        }
+        #endregion
+
         public static NetworkTransform ToNetworkTransform(this ISFSObject data)
         {
             NetworkTransform transform = new()
@@ -49,6 +67,13 @@ namespace GLShared.Networking.Extensions
             };
 
             return transform;
+        }
+
+        public static PlayerInput ToPlayerInput(this ISFSObject data)
+        {
+            PlayerInput input = new (data.GetFloat("hor"), data.GetFloat("ver"), data.GetBool("brk"), data.GetBool("turLck"),
+                new Vector3(data.GetFloat("camX"), data.GetFloat("camY"), data.GetFloat("camZ")));
+            return input;
         }
     }
 }

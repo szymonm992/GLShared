@@ -27,13 +27,13 @@ namespace GLShared.Networking.Extensions
             ISFSObject data = new SFSObject();
 
             data.PutUtfString("username", transform.Username);
-            data.PutDouble("posX", transform.Position.x);
-            data.PutDouble("posY", transform.Position.y);
-            data.PutDouble("posZ", transform.Position.z);
+            data.PutFloat("posX", transform.Position.x);
+            data.PutFloat("posY", transform.Position.y);
+            data.PutFloat("posZ", transform.Position.z);
 
-            data.PutDouble("rotAnglesX", transform.EulerAngles.x);
-            data.PutDouble("rotAnglesY", transform.EulerAngles.y);
-            data.PutDouble("rotAnglesZ", transform.EulerAngles.z);
+            data.PutFloat("rotAnglesX", transform.EulerAngles.x);
+            data.PutFloat("rotAnglesY", transform.EulerAngles.y);
+            data.PutFloat("rotAnglesZ", transform.EulerAngles.z);
             return data;
         }
 

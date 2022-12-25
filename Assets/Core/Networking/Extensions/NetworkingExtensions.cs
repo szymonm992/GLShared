@@ -27,14 +27,14 @@ namespace GLShared.Networking.Extensions
         {
             ISFSObject data = new SFSObject();
 
-            data.PutUtfString("username", transform.Username);
+            data.PutUtfString("u", transform.Username);
             data.PutFloat("posX", transform.Position.x);
             data.PutFloat("posY", transform.Position.y);
             data.PutFloat("posZ", transform.Position.z);
 
-            data.PutFloat("rotAnglesX", transform.EulerAngles.x);
-            data.PutFloat("rotAnglesY", transform.EulerAngles.y);
-            data.PutFloat("rotAnglesZ", transform.EulerAngles.z);
+            data.PutFloat("rotX", transform.EulerAngles.x);
+            data.PutFloat("rotY", transform.EulerAngles.y);
+            data.PutFloat("rotZ", transform.EulerAngles.z);
             return data;
         }
 
@@ -65,7 +65,7 @@ namespace GLShared.Networking.Extensions
                 Position = new Vector3(data.GetFloat("posX"), data.GetFloat("posY"), data.GetFloat("posZ")),
                 EulerAngles = new Vector3(data.GetFloat("rotAnglesX"), data.GetFloat("rotAnglesY"), data.GetFloat("rotAnglesZ")),
                 Username = data.GetUtfString("username"),
-                TimeStamp = data.GetLong("timeStamp"),
+                TimeStamp = 0, //data.GetLong("timeStamp"),
                 CurrentSpeed = 0,
             };
 

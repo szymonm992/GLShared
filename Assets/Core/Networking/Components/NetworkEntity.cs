@@ -13,6 +13,7 @@ namespace GLShared.Networking.Components
 
         [SerializeField] private NetworkEntityType objectType;
         [SerializeField] private float syncRate = 0.2f;
+        [SerializeField] private bool isSender = false;
 
         protected NetworkTransform currentNetworkTransform;
         protected float currentSyncTimer = 0;
@@ -25,7 +26,7 @@ namespace GLShared.Networking.Components
 
         protected void Update()
         {
-            if(syncRate <= 0)
+            if(!isSender || syncRate <= 0)
             {
                 return;
             }

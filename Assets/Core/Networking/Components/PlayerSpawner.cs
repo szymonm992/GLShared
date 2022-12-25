@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-namespace Frontend.Scripts
+namespace GLShared.General.Models
 {
     public class PlayerSpawner : MonoBehaviour
     {

@@ -1,12 +1,9 @@
-using Frontend.Scripts;
 using GLShared.General.Interfaces;
 using GLShared.General.Models;
 using GLShared.Networking.Components;
 using GLShared.Networking.Interfaces;
 using Sfs2X.Entities;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Networking.PlayerConnection;
 using UnityEngine;
 using Zenject;
 

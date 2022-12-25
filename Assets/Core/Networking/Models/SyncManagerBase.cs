@@ -42,8 +42,22 @@ namespace GLShared.Networking.Models
 
         protected virtual void CreatePlayer(User user, Vector3 spawnPosition, Vector3 spawnEulerAngles, out PlayerProperties playerProperties)
         {
+            if(user.ContainsVariable("playerVehicle"))
+            {
+                Debug.LogError("User does not contain 'playerVehicle' variable");
+                playerProperties = null;
+                return;
+            }
+            
             var vehicleName = user.GetVariable("playerVehicle").Value.ToString();
             playerProperties = GetPlayerInitData(user, vehicleName, spawnPosition, spawnEulerAngles);
+
+            if(playerProperties == null)
+            {
+                Debug.LogError("Could not create an init player data from given parameters");
+                return;
+            }
+
             var prefabEntity = playerProperties.PlayerContext.gameObject.GetComponent<PlayerEntity>();//this references only to prefab
             var playerEntity = playerSpawner.Spawn(prefabEntity, playerProperties);
 
@@ -54,7 +68,6 @@ namespace GLShared.Networking.Models
         protected virtual PlayerProperties GetPlayerInitData(User user, string vehicleName,
             Vector3 spawnPosition, Vector3 spawnEulerAngles)
         {
-           
             return null;
         }
     }

@@ -1,3 +1,4 @@
+using GLShared.General.Interfaces;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,8 @@ namespace GLShared.Networking.Models
         public string Username { get; set; }
         public Vector3 Position { get; set; }
         public Vector3 EulerAngles { get; set; }
+        public float GunAngleX { get; set; }
+        public float TurretAngleY { get; set; }
         public float CurrentSpeed { get; set; }
         public double TimeStamp { get; set; }
         
@@ -17,6 +20,12 @@ namespace GLShared.Networking.Models
             this.Position = transform.position;
             this.EulerAngles = transform.eulerAngles;
             this.CurrentSpeed = speed;
+        }
+
+        public void Update(ITurretController turretController)
+        {
+            this.TurretAngleY = turretController.Turret.localEulerAngles.y;
+            this.GunAngleX = turretController.Gun.localEulerAngles.x;
         }
 
         public bool HasChanged(Transform transform, float differenceThreshold)

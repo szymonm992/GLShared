@@ -7,7 +7,7 @@ namespace GLShared.General.Interfaces
 {
     public interface ITurretController
     {
-        NetworkTurretTransform CurrentNetworkTransform { get; }
+        Transform Turret { get; }
         Transform Gun { get; }
         bool TurretLock { get; }
         void RotateTurret();

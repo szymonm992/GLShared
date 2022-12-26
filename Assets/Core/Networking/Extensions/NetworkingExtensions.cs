@@ -28,6 +28,7 @@ namespace GLShared.Networking.Extensions
             ISFSObject data = new SFSObject();
 
             data.PutUtfString("u", transform.Username);
+
             data.PutFloat("posX", transform.Position.x);
             data.PutFloat("posY", transform.Position.y);
             data.PutFloat("posZ", transform.Position.z);
@@ -35,6 +36,10 @@ namespace GLShared.Networking.Extensions
             data.PutFloat("rotX", transform.EulerAngles.x);
             data.PutFloat("rotY", transform.EulerAngles.y);
             data.PutFloat("rotZ", transform.EulerAngles.z);
+
+            data.PutFloat("gunX", transform.GunAngleX);
+            data.PutFloat("turY", transform.TurretAngleY);
+
             data.PutFloat("vel", transform.CurrentSpeed);
 
             return data;
@@ -59,17 +64,6 @@ namespace GLShared.Networking.Extensions
             return data;
         }
 
-        public static ISFSObject ToISFSOBject(this NetworkTurretTransform turretTransform)
-        {
-            ISFSObject data = new SFSObject();
-
-            data.PutUtfString("u", turretTransform.Username);
-            data.PutFloat("gunX", turretTransform.GunAnglesX);
-            data.PutFloat("turY", turretTransform.TurretAnglesY);
-
-            return data;
-        }
-
         #endregion
 
         public static NetworkTransform ToNetworkTransform(this ISFSObject data)
@@ -80,6 +74,8 @@ namespace GLShared.Networking.Extensions
                 EulerAngles = new Vector3(data.GetFloat("rotX"), data.GetFloat("rotY"), data.GetFloat("rotZ")),
                 Username = data.GetUtfString("u"),
                 TimeStamp = 0, //data.GetLong("timeStamp"),
+                TurretAngleY = data.GetFloat("turY"),
+                GunAngleX = data.GetFloat("gunX"),
                 CurrentSpeed = data.GetFloat("vel"),
             };
 

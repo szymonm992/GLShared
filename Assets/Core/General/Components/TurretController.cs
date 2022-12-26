@@ -32,10 +32,8 @@ namespace GLShared.General.Components
         private Vector3 targetingWorldSpacePosition;
         private Vector3 targetVector;
 
-        private NetworkTurretTransform currentNetworkTransform;
-
         public Transform Gun => gun;
-        public NetworkTurretTransform CurrentNetworkTransform => currentNetworkTransform;
+        public Transform Turret => turret;
         public bool TurretLock
         {
             get => turretLock; 
@@ -44,13 +42,6 @@ namespace GLShared.General.Components
         public void Initialize()
         {
             signalBus.Subscribe<PlayerSignals.OnPlayerInitialized>(OnLocalPlayerInitialized);
-
-            currentNetworkTransform = new NetworkTurretTransform()
-            {
-                Username = playerEntity.Properties.User.Name,
-                GunAnglesX = gun.localEulerAngles.x,
-                TurretAnglesY = turret.localEulerAngles.y,
-            };
         }
 
         public void RotateTurret()
@@ -63,7 +54,7 @@ namespace GLShared.General.Components
                 Quaternion desiredRotation = Quaternion.LookRotation(turretDiff, transform.up);
                 desiredRotation.eulerAngles = new Vector3(0, desiredRotation.eulerAngles.y, 0);
                 turret.localRotation = Quaternion.RotateTowards(turret.localRotation, desiredRotation, Time.deltaTime * turretRotationSpeed);
-                currentNetworkTransform.TurretAnglesY = turret.localEulerAngles.y;
+                playerEntity.CurrentNetworkTransform.Update(this);
             }
         }
 
@@ -82,7 +73,7 @@ namespace GLShared.General.Components
 
                     rotation.eulerAngles = new Vector3(rotation.eulerAngles.x.ClampAngle(-gunElevation, gunDepression), 0, 0);
                     gun.localRotation = Quaternion.RotateTowards(gun.localRotation, rotation, Time.deltaTime * gunRotationSpeed);
-                    currentNetworkTransform.GunAnglesX = gun.localEulerAngles.x;
+                    playerEntity.CurrentNetworkTransform.Update(this);
                 }
             }
         }
@@ -121,12 +112,6 @@ namespace GLShared.General.Components
                 targetingWorldSpacePosition = mouseActionsProvider.CameraTargetingPosition;
                 targetVector = targetingWorldSpacePosition - transform.position;
             } 
-
-            if(currentNetworkTransform.NeedsUpdate)
-            {
-                syncManager.SyncTurretTransform(this);
-                currentNetworkTransform.NeedsUpdate = false;
-            }
         }
     }
 }

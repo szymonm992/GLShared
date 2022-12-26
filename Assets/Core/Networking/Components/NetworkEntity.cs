@@ -46,11 +46,7 @@ namespace GLShared.Networking.Components
 
         public virtual void SendSyncPosition()
         {
-            if (currentNetworkTransform.HasChanged(transform, 0.001f))
-            {
-                currentNetworkTransform.Update(transform, EntityVelocity);
-                syncManager.SyncPosition(this);
-            }
+            
         }
 
         public virtual void ReceiveSyncPosition(NetworkTransform newNetworkTransform)
@@ -67,6 +63,8 @@ namespace GLShared.Networking.Components
                 {
                     Position = transform.position,
                     EulerAngles = transform.eulerAngles,
+                    GunAngleX = 0,
+                    TurretAngleY = 0,
                     TimeStamp = 0d,
                     CurrentSpeed = EntityVelocity,
                     Username = "OBSTACLE",

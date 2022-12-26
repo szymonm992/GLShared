@@ -17,6 +17,7 @@ namespace GLShared.Networking.Components
         [Inject] private readonly IVehicleController vehicleController;
         [Inject(Optional =  true)] private readonly ISyncInterpolator syncInterpolator;
         [Inject] private readonly IPlayerInputProvider inputProvider;
+        [Inject] private readonly ITurretController turretController;
 
         [SerializeField] private bool isLocalPlayer;
 
@@ -39,6 +40,8 @@ namespace GLShared.Networking.Components
             {
                 Position = transform.position,
                 EulerAngles = transform.eulerAngles,
+                GunAngleX = turretController.Gun.localEulerAngles.x,
+                TurretAngleY = turretController.Turret.localEulerAngles.y,
                 TimeStamp = 0d,
                 CurrentSpeed = EntityVelocity,
                 Username = Properties.User.Name,
@@ -53,6 +56,16 @@ namespace GLShared.Networking.Components
 
             transform.SetPositionAndRotation(playerProperties.SpawnPosition, playerProperties.SpawnRotation);
             isLocalPlayer = playerProperties.IsLocal;
+        }
+
+        public override void SendSyncPosition()
+        {
+            base.SendSyncPosition();
+            if (currentNetworkTransform.HasChanged(transform, 0.001f))
+            {
+                currentNetworkTransform.Update(transform, EntityVelocity);
+                syncManager.SyncPosition(this);
+            }
         }
 
         public override void ReceiveSyncPosition(NetworkTransform newNetworkTransform)

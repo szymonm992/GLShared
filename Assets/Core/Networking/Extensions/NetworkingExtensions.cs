@@ -45,7 +45,7 @@ namespace GLShared.Networking.Extensions
 
             DateTime epoch = new (1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             long timeStamp = (long)((DateTime.UtcNow - epoch).TotalMilliseconds);
-            data.PutDouble("tim", System.Convert.ToInt64(timeStamp));
+            data.PutLong("tim", System.Convert.ToInt64(timeStamp));
 
             return data;
         }

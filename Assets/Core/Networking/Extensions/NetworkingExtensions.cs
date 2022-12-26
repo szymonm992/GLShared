@@ -29,18 +29,18 @@ namespace GLShared.Networking.Extensions
 
             data.PutUtfString("u", transform.Username);
 
-            data.PutFloat("posX", transform.Position.x);
-            data.PutFloat("posY", transform.Position.y);
-            data.PutFloat("posZ", transform.Position.z);
+            data.PutFloat("pX", transform.Position.x);
+            data.PutFloat("pY", transform.Position.y);
+            data.PutFloat("pZ", transform.Position.z);
 
-            data.PutFloat("rotX", transform.EulerAngles.x);
-            data.PutFloat("rotY", transform.EulerAngles.y);
-            data.PutFloat("rotZ", transform.EulerAngles.z);
+            data.PutFloat("rX", transform.EulerAngles.x);
+            data.PutFloat("rY", transform.EulerAngles.y);
+            data.PutFloat("rZ", transform.EulerAngles.z);
 
-            data.PutFloat("gunX", transform.GunAngleX);
-            data.PutFloat("turY", transform.TurretAngleY);
+            data.PutFloat("gX", transform.GunAngleX);
+            data.PutFloat("tY", transform.TurretAngleY);
 
-            data.PutFloat("vel", transform.CurrentSpeed);
+            data.PutFloat("v", transform.CurrentSpeed);
             data.PutDouble("tim", System.Convert.ToInt64(transform.TimeStamp));
 
             return data;
@@ -71,13 +71,13 @@ namespace GLShared.Networking.Extensions
         {
             NetworkTransform transform = new()
             {
-                Position = new Vector3(data.GetFloat("posX"), data.GetFloat("posY"), data.GetFloat("posZ")),
-                EulerAngles = new Vector3(data.GetFloat("rotX"), data.GetFloat("rotY"), data.GetFloat("rotZ")),
+                Position = new Vector3(data.GetFloat("pX"), data.GetFloat("pY"), data.GetFloat("pZ")),
+                EulerAngles = new Vector3(data.GetFloat("rX"), data.GetFloat("rY"), data.GetFloat("rZ")),
                 Username = data.GetUtfString("u"),
                 TimeStamp = System.Convert.ToDouble(data.GetLong("tim")),
-                TurretAngleY = data.GetFloat("turY"),
-                GunAngleX = data.GetFloat("gunX"),
-                CurrentSpeed = data.GetFloat("vel"),
+                TurretAngleY = data.GetFloat("tY"),
+                GunAngleX = data.GetFloat("gX"),
+                CurrentSpeed = data.GetFloat("v"),
             };
 
             return transform;

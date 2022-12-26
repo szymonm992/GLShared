@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Frontend.Scripts
+namespace GLShared.General
 {
     public static class GeneralHelper 
     {
@@ -102,6 +102,12 @@ namespace Frontend.Scripts
         public static bool IsInLayerMask(this int layer, LayerMask layermask)
         {
             return layermask == (layermask | (1 << layer));
+        }
+
+        public static long GenerateTimestamp()
+        {
+            DateTime epoch = new(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            return (long)((DateTime.UtcNow - epoch).TotalMilliseconds);
         }
 
     }

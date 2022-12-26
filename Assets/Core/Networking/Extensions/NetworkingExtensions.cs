@@ -1,3 +1,4 @@
+using GLShared.General;
 using GLShared.General.Models;
 using GLShared.Networking.Models;
 using Sfs2X.Entities.Data;
@@ -43,9 +44,8 @@ namespace GLShared.Networking.Extensions
 
             data.PutFloat("v", transform.CurrentSpeed);
 
-            DateTime epoch = new (1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            long timeStamp = (long)((DateTime.UtcNow - epoch).TotalMilliseconds);
-            data.PutLong("tim", System.Convert.ToInt64(timeStamp));
+           
+            data.PutLong("tim", Convert.ToInt64(GeneralHelper.GenerateTimestamp()));
 
             return data;
         }
@@ -78,7 +78,7 @@ namespace GLShared.Networking.Extensions
                 Position = new Vector3(data.GetFloat("pX"), data.GetFloat("pY"), data.GetFloat("pZ")),
                 EulerAngles = new Vector3(data.GetFloat("rX"), data.GetFloat("rY"), data.GetFloat("rZ")),
                 Username = data.GetUtfString("u"),
-                TimeStamp = System.Convert.ToDouble(data.GetLong("tim")),
+                TimeStamp = Convert.ToDouble(data.GetLong("tim")),
                 TurretAngleY = data.GetFloat("tY"),
                 GunAngleX = data.GetFloat("gX"),
                 CurrentSpeed = data.GetFloat("v"),

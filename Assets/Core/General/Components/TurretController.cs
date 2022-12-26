@@ -1,6 +1,8 @@
 using Frontend.Scripts;
 using GLShared.General.Interfaces;
 using GLShared.General.Signals;
+using GLShared.Networking.Components;
+using GLShared.Networking.Models;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,7 +15,9 @@ namespace GLShared.General.Components
         [Inject] private readonly IVehicleController vehicleController;
         [Inject] private readonly IMouseActionsProvider mouseActionsProvider;
         [Inject] private readonly IPlayerInputProvider inputProvider;
+        [Inject] private readonly ISyncManager syncManager;
         [Inject] private readonly SignalBus signalBus;
+        [Inject] private readonly PlayerEntity playerEntity;
 
         [SerializeField] private Transform turret;
         [SerializeField] private Transform gun;
@@ -28,8 +32,10 @@ namespace GLShared.General.Components
         private Vector3 targetingWorldSpacePosition;
         private Vector3 targetVector;
 
-        public Transform Gun => gun;
+        private NetworkTurretTransform currentNetworkTransform;
 
+        public Transform Gun => gun;
+        public NetworkTurretTransform CurrentNetworkTransform => currentNetworkTransform;
         public bool TurretLock
         {
             get => turretLock; 
@@ -38,6 +44,13 @@ namespace GLShared.General.Components
         public void Initialize()
         {
             signalBus.Subscribe<PlayerSignals.OnPlayerInitialized>(OnLocalPlayerInitialized);
+
+            currentNetworkTransform = new NetworkTurretTransform()
+            {
+                Username = playerEntity.Properties.User.Name,
+                GunAnglesX = gun.localEulerAngles.x,
+                TurretAnglesY = turret.localEulerAngles.y,
+            };
         }
 
         public void RotateTurret()
@@ -45,24 +58,32 @@ namespace GLShared.General.Components
             Matrix4x4 parentMatrix = transform.worldToLocalMatrix;
             Vector3 turretDiff = parentMatrix * targetVector;
 
-            Quaternion desiredRotation = Quaternion.LookRotation(turretDiff, transform.up);
-            desiredRotation.eulerAngles = new Vector3(0, desiredRotation.eulerAngles.y, 0);
-
-            turret.localRotation = Quaternion.RotateTowards(turret.localRotation, desiredRotation, Time.deltaTime * turretRotationSpeed);
+            if (turretDiff != Vector3.zero)
+            {
+                Quaternion desiredRotation = Quaternion.LookRotation(turretDiff, transform.up);
+                desiredRotation.eulerAngles = new Vector3(0, desiredRotation.eulerAngles.y, 0);
+                turret.localRotation = Quaternion.RotateTowards(turret.localRotation, desiredRotation, Time.deltaTime * turretRotationSpeed);
+                currentNetworkTransform.TurretAnglesY = turret.localEulerAngles.y;
+            }
         }
 
         public void RotateGun()
         {
             if (gun != null)
             {
-                Vector3 gunDesiredPosition = targetingWorldSpacePosition - gun.position;
-                Matrix4x4 turrentMatrix = turret.worldToLocalMatrix;
-                Vector3 gun_diff = turrentMatrix * gunDesiredPosition;
+                Vector3 gunDesiredDirection = targetingWorldSpacePosition - gun.position;
+                float gunDotProduct = Vector3.Dot(gun.forward, gunDesiredDirection.normalized);
 
-                var rotation = Quaternion.LookRotation(gun_diff, turret.up);
-                
-                rotation.eulerAngles = new Vector3(rotation.eulerAngles.x.ClampAngle(-gunElevation, gunDepression), 0, 0);
-                gun.localRotation = Quaternion.RotateTowards(gun.localRotation, rotation, Time.deltaTime * gunRotationSpeed);
+                if (gunDotProduct == 1)
+                {
+                    var turrentMatrix = turret.worldToLocalMatrix;
+                    Vector3 gunDiff = turrentMatrix * gunDesiredDirection;
+                    var rotation = Quaternion.LookRotation(gunDiff, turret.up);
+
+                    rotation.eulerAngles = new Vector3(rotation.eulerAngles.x.ClampAngle(-gunElevation, gunDepression), 0, 0);
+                    gun.localRotation = Quaternion.RotateTowards(gun.localRotation, rotation, Time.deltaTime * gunRotationSpeed);
+                    currentNetworkTransform.GunAnglesX = gun.localEulerAngles.x;
+                }
             }
         }
 
@@ -88,7 +109,7 @@ namespace GLShared.General.Components
 
         private void Update()
         {
-            if(vehicleController == null)
+            if (vehicleController == null)
             {
                 return;
             }
@@ -100,6 +121,12 @@ namespace GLShared.General.Components
                 targetingWorldSpacePosition = mouseActionsProvider.CameraTargetingPosition;
                 targetVector = targetingWorldSpacePosition - transform.position;
             } 
+
+            if(currentNetworkTransform.NeedsUpdate)
+            {
+                syncManager.SyncTurretTransform(this);
+                currentNetworkTransform.NeedsUpdate = false;
+            }
         }
     }
 }

@@ -1,3 +1,4 @@
+using GLShared.General.Components;
 using GLShared.General.Interfaces;
 using GLShared.General.Models;
 using GLShared.Networking.Components;
@@ -33,6 +34,10 @@ namespace GLShared.Networking.Models
         }
 
         public virtual void SyncInputs(PlayerInput _)
+        {
+        }
+
+        public virtual void SyncTurretTransform(ITurretController _)
         {
 
         }

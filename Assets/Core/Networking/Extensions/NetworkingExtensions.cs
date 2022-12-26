@@ -58,6 +58,18 @@ namespace GLShared.Networking.Extensions
 
             return data;
         }
+
+        public static ISFSObject ToISFSOBject(this NetworkTurretTransform turretTransform)
+        {
+            ISFSObject data = new SFSObject();
+
+            data.PutUtfString("u", turretTransform.Username);
+            data.PutFloat("gunX", turretTransform.GunAnglesX);
+            data.PutFloat("turY", turretTransform.TurretAnglesY);
+
+            return data;
+        }
+
         #endregion
 
         public static NetworkTransform ToNetworkTransform(this ISFSObject data)

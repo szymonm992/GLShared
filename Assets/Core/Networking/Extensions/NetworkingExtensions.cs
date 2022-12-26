@@ -73,7 +73,7 @@ namespace GLShared.Networking.Extensions
                 Position = new Vector3(data.GetFloat("posX"), data.GetFloat("posY"), data.GetFloat("posZ")),
                 EulerAngles = new Vector3(data.GetFloat("rotX"), data.GetFloat("rotY"), data.GetFloat("rotZ")),
                 Username = data.GetUtfString("u"),
-                TimeStamp = 0, //data.GetLong("timeStamp"),
+                TimeStamp = data.GetLong("timeStamp"),
                 TurretAngleY = data.GetFloat("turY"),
                 GunAngleX = data.GetFloat("gunX"),
                 CurrentSpeed = data.GetFloat("vel"),

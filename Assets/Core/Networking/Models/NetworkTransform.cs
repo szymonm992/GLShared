@@ -14,7 +14,8 @@ namespace GLShared.Networking.Models
         public float TurretAngleY { get; set; }
         public float CurrentSpeed { get; set; }
         public double TimeStamp { get; set; }
-        
+        public Quaternion Rotation => Quaternion.Euler(EulerAngles);
+
         public void Update(Transform transform, float speed)
         {
             this.Position = transform.position;

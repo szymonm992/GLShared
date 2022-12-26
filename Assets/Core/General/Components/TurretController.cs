@@ -54,6 +54,7 @@ namespace GLShared.General.Components
                 Quaternion desiredRotation = Quaternion.LookRotation(turretDiff, transform.up);
                 desiredRotation.eulerAngles = new Vector3(0, desiredRotation.eulerAngles.y, 0);
                 turret.localRotation = Quaternion.RotateTowards(turret.localRotation, desiredRotation, Time.deltaTime * turretRotationSpeed);
+
                 playerEntity.CurrentNetworkTransform.Update(this);
             }
         }
@@ -65,14 +66,14 @@ namespace GLShared.General.Components
                 Vector3 gunDesiredDirection = targetingWorldSpacePosition - gun.position;
                 float gunDotProduct = Vector3.Dot(gun.forward, gunDesiredDirection.normalized);
 
-                if (gunDotProduct == 1)
+                if (gunDotProduct != 1)
                 {
                     var turrentMatrix = turret.worldToLocalMatrix;
                     Vector3 gunDiff = turrentMatrix * gunDesiredDirection;
                     var rotation = Quaternion.LookRotation(gunDiff, turret.up);
-
                     rotation.eulerAngles = new Vector3(rotation.eulerAngles.x.ClampAngle(-gunElevation, gunDepression), 0, 0);
                     gun.localRotation = Quaternion.RotateTowards(gun.localRotation, rotation, Time.deltaTime * gunRotationSpeed);
+
                     playerEntity.CurrentNetworkTransform.Update(this);
                 }
             }

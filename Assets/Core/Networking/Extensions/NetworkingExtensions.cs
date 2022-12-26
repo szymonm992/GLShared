@@ -1,6 +1,7 @@
 using GLShared.General.Models;
 using GLShared.Networking.Models;
 using Sfs2X.Entities.Data;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -41,7 +42,10 @@ namespace GLShared.Networking.Extensions
             data.PutFloat("tY", transform.TurretAngleY);
 
             data.PutFloat("v", transform.CurrentSpeed);
-            data.PutDouble("tim", System.Convert.ToInt64(transform.TimeStamp));
+
+            DateTime epoch = new (1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            long timeStamp = (long)((DateTime.UtcNow - epoch).TotalMilliseconds);
+            data.PutDouble("tim", System.Convert.ToInt64(timeStamp));
 
             return data;
         }

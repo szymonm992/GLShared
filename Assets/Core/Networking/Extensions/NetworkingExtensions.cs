@@ -35,6 +35,8 @@ namespace GLShared.Networking.Extensions
             data.PutFloat("rotX", transform.EulerAngles.x);
             data.PutFloat("rotY", transform.EulerAngles.y);
             data.PutFloat("rotZ", transform.EulerAngles.z);
+            data.PutFloat("vel", transform.CurrentSpeed);
+
             return data;
         }
 
@@ -66,7 +68,7 @@ namespace GLShared.Networking.Extensions
                 EulerAngles = new Vector3(data.GetFloat("rotX"), data.GetFloat("rotY"), data.GetFloat("rotZ")),
                 Username = data.GetUtfString("u"),
                 TimeStamp = 0, //data.GetLong("timeStamp"),
-                CurrentSpeed = 0,
+                CurrentSpeed = data.GetFloat("vel"),
             };
 
             return transform;

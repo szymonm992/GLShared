@@ -15,9 +15,9 @@ namespace GLShared.Networking.Components
     {
         [Inject] private readonly GameObjectContext context;
         [Inject] private readonly IVehicleController vehicleController;
-        [Inject(Optional =  true)] private readonly ISyncInterpolator syncInterpolator;
         [Inject] private readonly IPlayerInputProvider inputProvider;
-        [Inject] private readonly ITurretController turretController;
+        [Inject(Optional = true)] private readonly ISyncInterpolator syncInterpolator;
+        [Inject(Optional = true)] private readonly ITurretController turretController;
 
         [SerializeField] private bool isLocalPlayer;
 
@@ -40,8 +40,8 @@ namespace GLShared.Networking.Components
             {
                 Position = transform.position,
                 EulerAngles = transform.eulerAngles,
-                GunAngleX = turretController.Gun.localEulerAngles.x,
-                TurretAngleY = turretController.Turret.localEulerAngles.y,
+                GunAngleX = vehicleController.HasTurret ? turretController.Gun.localEulerAngles.x : 0,
+                TurretAngleY = vehicleController.HasTurret ? turretController.Turret.localEulerAngles.y : 0,
                 TimeStamp = 0d,
                 CurrentSpeed = EntityVelocity,
                 Username = Properties.User.Name,

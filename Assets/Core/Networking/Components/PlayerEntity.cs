@@ -26,7 +26,7 @@ namespace GLShared.Networking.Components
         public bool IsLocalPlayer => isLocalPlayer;
         public PlayerProperties Properties => playerProperties;
         public PlayerInput Input => playerInput;
-        public override float EntityVelocity => vehicleController.CurrentSpeed;
+        public override float EntityVelocity => isSender ? vehicleController.CurrentSpeed : currentNetworkTransform.CurrentSpeed;
         public IPlayerInputProvider InputProvider => inputProvider;
 
         [Inject]

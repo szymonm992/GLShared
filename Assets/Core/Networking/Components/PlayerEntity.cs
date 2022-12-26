@@ -26,7 +26,7 @@ namespace GLShared.Networking.Components
         public bool IsLocalPlayer => isLocalPlayer;
         public PlayerProperties Properties => playerProperties;
         public PlayerInput Input => playerInput;
-        public override float EntityVelocity => vehicleController.CurrentSpeed;
+        public override float EntityVelocity => currentNetworkTransform.CurrentSpeed;
         public IPlayerInputProvider InputProvider => inputProvider;
 
         [Inject]
@@ -62,9 +62,9 @@ namespace GLShared.Networking.Components
                 return;
             }
 
-            base.ReceiveSyncPosition(newNetworkTransform);
-            syncInterpolator.ProcessCurrentNetworkTransform(newNetworkTransform);
-            
+            currentNetworkTransform = newNetworkTransform;
+            base.ReceiveSyncPosition(currentNetworkTransform);
+            syncInterpolator.ProcessCurrentNetworkTransform(currentNetworkTransform);
         }
         public override void Initialize()
         {

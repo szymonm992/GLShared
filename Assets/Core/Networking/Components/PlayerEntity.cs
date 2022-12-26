@@ -28,6 +28,7 @@ namespace GLShared.Networking.Components
         public PlayerInput Input => playerInput;
         public IPlayerInputProvider InputProvider => inputProvider;
 
+
         [Inject]
         public void Construct(PlayerProperties propertiesAtPrefab)
         {
@@ -65,10 +66,17 @@ namespace GLShared.Networking.Components
             base.ReceiveSyncPosition(currentNetworkTransform);
             syncInterpolator.ProcessCurrentNetworkTransform(currentNetworkTransform);
         }
+
         public override void Initialize()
         {
             base.Initialize();
             signalBus.Subscribe<PlayerSignals.OnPlayerInitialized>(OnPlayerInitialized);
+        }
+
+        protected override void Update()
+        {
+            base.Update();
+            entityVelocity = isSender ? vehicleController.CurrentSpeed : Properties.IsInitialized ? currentNetworkTransform.CurrentSpeed : 0;
         }
 
         private void OnPlayerInitialized(PlayerSignals.OnPlayerInitialized OnPlayerInitialized)
@@ -77,12 +85,6 @@ namespace GLShared.Networking.Components
             {
                 playerProperties.IsInitialized = true;
             }
-        }
-
-        protected override void Update()
-        {
-            base.Update();
-            entityVelocity = isSender ? vehicleController.CurrentSpeed : Properties.IsInitialized ? currentNetworkTransform.CurrentSpeed : 0;
         }
     }
 }

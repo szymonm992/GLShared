@@ -19,14 +19,14 @@ namespace GLShared.Networking.Components
         protected NetworkTransform currentNetworkTransform;
         protected float currentSyncTimer = 0;
         protected bool isPlayer = false;
-
+        protected float entityVelocity = 0;
         public NetworkEntityType EntityType => objectType;
         public NetworkTransform CurrentNetworkTransform => currentNetworkTransform;
         public float SyncRate => syncRate;
         public bool IsPlayer => isPlayer;
-        public virtual float EntityVelocity => 0;
+        public float EntityVelocity => entityVelocity;
 
-        protected void Update()
+        protected virtual void Update()
         {
             if(!isSender || syncRate <= 0)
             {

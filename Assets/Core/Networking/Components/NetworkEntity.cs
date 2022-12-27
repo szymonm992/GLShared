@@ -17,9 +17,10 @@ namespace GLShared.Networking.Components
         [SerializeField] protected bool isSender = false;
 
         protected NetworkTransform currentNetworkTransform;
-        protected float timeLastSendingInput = 0;
+        protected float timeLastSendingPosition = 0;
         protected bool isPlayer = false;
         protected float entityVelocity = 0;
+
         public NetworkEntityType EntityType => objectType;
         public NetworkTransform CurrentNetworkTransform => currentNetworkTransform;
         public float SyncRate => syncRate;
@@ -33,18 +34,17 @@ namespace GLShared.Networking.Components
                 return;
             }
 
-            if (timeLastSendingInput >= syncRate)
+            if (timeLastSendingPosition >= syncRate)
             {
                 SendSyncPosition();
-                timeLastSendingInput = 0;
+                timeLastSendingPosition = 0;
                 return;
             }
-            timeLastSendingInput += Time.deltaTime;
+            timeLastSendingPosition += Time.deltaTime;
         }
 
         public virtual void SendSyncPosition()
         {
-            
         }
 
         public virtual void ReceiveSyncPosition(NetworkTransform newNetworkTransform)

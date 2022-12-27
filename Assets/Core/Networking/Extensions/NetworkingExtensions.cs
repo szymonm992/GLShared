@@ -44,7 +44,6 @@ namespace GLShared.Networking.Extensions
 
             data.PutFloat("v", transform.CurrentSpeed);
 
-           
             data.PutLong("tim", Convert.ToInt64(GeneralHelper.GenerateTimestamp()));
 
             return data;

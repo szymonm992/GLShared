@@ -13,6 +13,7 @@ namespace GLShared.Networking.Components
 {
     public class PlayerEntity : NetworkEntity
     {
+        [Inject] private readonly IPlayerInstaller playerInstaller;
         [Inject] private readonly GameObjectContext context;
         [Inject] private readonly IVehicleController vehicleController;
         [Inject] private readonly IPlayerInputProvider inputProvider;
@@ -44,10 +45,10 @@ namespace GLShared.Networking.Components
                 TurretAngleY = vehicleController.HasTurret ? turretController.Turret.localEulerAngles.y : 0,
                 TimeStamp = 0d,
                 CurrentSpeed = EntityVelocity,
-                Username = Properties.User.Name,
+                Username = playerInstaller.IsPrototypeInstaller ? "localPlayer" : Properties.User.Name,
             };
 
-            playerInput = new(playerProperties.User.Name, 0, 0, true, true, Vector3.zero);
+            playerInput = new(playerInstaller.IsPrototypeInstaller ? "localPlayer" : playerProperties.User.Name, 0, 0, true, true, Vector3.zero);
         }
 
         public void UpdateProperties(PlayerProperties properties)
@@ -94,7 +95,14 @@ namespace GLShared.Networking.Components
 
         private void OnPlayerInitialized(PlayerSignals.OnPlayerInitialized OnPlayerInitialized)
         {
-            if(OnPlayerInitialized.PlayerProperties.User.Name == playerProperties.User.Name)
+            if(!playerInstaller.IsPrototypeInstaller)
+            {
+                if (OnPlayerInitialized.PlayerProperties.User.Name == playerProperties.User.Name)
+                {
+                    playerProperties.IsInitialized = true;
+                }
+            }
+            else
             {
                 playerProperties.IsInitialized = true;
             }

@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: GameParameters
   m_EditorClassIdentifier: 
   speedMultiplier: 4
-  massMultiplier: 0.1
   maxWheelDetectionAngle: 75
+  maxWheelDrivingAngle: 45
   airControlAngleThreshold: 15
   airControlForce: 5
   gunMaxAimingDistance: 3000
+  serverSettingsUpdateRate: 15

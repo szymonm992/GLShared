@@ -39,7 +39,7 @@ namespace GLShared.General.Models
             return (value - min) / Length;
         }
 
-        public float GetMidPoint(float value)
+        public float GetMidPoint()
         {
             return (min + max) * 0.5f;
         }

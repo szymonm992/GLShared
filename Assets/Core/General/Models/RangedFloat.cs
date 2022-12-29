@@ -8,8 +8,18 @@ namespace GLShared.General.Models
         [SerializeField] private float min;
         [SerializeField] private float max;
         
-        public float Max => max;
-        public float Min => min;
+        public float Max
+        {
+            get => max;
+            set => max = value;
+        }
+
+        public float Min
+        {
+            get => min;
+            set => min = value;
+        }
+
         public float Difference => max - min;
         public float Length => max - min;
 

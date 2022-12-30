@@ -14,7 +14,6 @@ namespace GLShared.Networking.Models
         public float TurretAngleY { get; set; }
         public float CurrentSpeed { get; set; }
         public double TimeStamp { get; set; }
-        public double Length { get; set; } // New field to store precalculated length
         public Vector3 EulerAngles { get; set; }
 
 

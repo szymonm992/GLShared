@@ -40,5 +40,12 @@ namespace GLShared.Networking.Models
             bool isPositionDifferent = Vector3.Distance(Position, transform.Position) > differenceThreshold;
             return isPositionDifferent || (Vector3.Distance(EulerAngles, transform.EulerAngles) > differenceThreshold);
         }
+
+        public bool HasChanged(NetworkTransform transform, float positionDifferenceThreshold, float rotationDifferenceThreshold)
+        {
+            bool isPositionDifferent = Vector3.Distance(Position, transform.Position) > positionDifferenceThreshold;
+            bool isRotationDifferent = Vector3.Distance(EulerAngles, transform.EulerAngles) > rotationDifferenceThreshold;
+            return isPositionDifferent || isRotationDifferent;
+        }
     }
 }

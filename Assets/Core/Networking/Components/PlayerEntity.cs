@@ -65,10 +65,8 @@ namespace GLShared.Networking.Components
         public override void SendSyncPosition()
         {
             base.SendSyncPosition();
-            if (currentNetworkTransform.HasChanged(currentNetworkTransform, positionDifferenceThreshold, rotationDifferenceThreshold))
-            {
-                syncManager.SyncPosition(this);
-            }
+            currentNetworkTransform.Update(transform, EntityVelocity);
+            syncManager.SyncPosition(this);
         }
 
         public override void ReceiveSyncPosition(NetworkTransform newNetworkTransform)

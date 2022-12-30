@@ -13,6 +13,9 @@ namespace GLShared.Networking.Components
 {
     public class PlayerEntity : NetworkEntity
     {
+        private const float positionDifferenceThreshold = 0.01f;
+        private const float rotationDifferenceThreshold = 0.05f;
+
         [Inject] private readonly IPlayerInstaller playerInstaller;
         [Inject] private readonly GameObjectContext context;
         [Inject] private readonly IVehicleController vehicleController;
@@ -62,11 +65,10 @@ namespace GLShared.Networking.Components
         public override void SendSyncPosition()
         {
             base.SendSyncPosition();
-           // if (currentNetworkTransform.HasChanged(transform, 0.005f))
-           // {
-                currentNetworkTransform.Update(transform, EntityVelocity);
+            if (currentNetworkTransform.HasChanged(currentNetworkTransform, positionDifferenceThreshold, rotationDifferenceThreshold))
+            {
                 syncManager.SyncPosition(this);
-            //}
+            }
         }
 
         public override void ReceiveSyncPosition(NetworkTransform newNetworkTransform)

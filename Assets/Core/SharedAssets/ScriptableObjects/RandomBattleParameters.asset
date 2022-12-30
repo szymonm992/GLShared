@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: RandomBattleParameters
   m_EditorClassIdentifier: 
   countdownTime: 4
-  demandedPlayersSpawnedAmount: 2
+  demandedPlayersSpawnedAmount: 1

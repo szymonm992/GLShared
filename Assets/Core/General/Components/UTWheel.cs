@@ -8,6 +8,9 @@ using GLShared.General.Models;
 using GLShared.General.Interfaces;
 using GLShared.General.Enums;
 using Frontend.Scripts;
+using Unity.Collections;
+using Unity.Jobs;
+using Unity.Burst;
 
 namespace GLShared.General.Components
 {
@@ -143,9 +146,29 @@ namespace GLShared.General.Components
 
             tirePosition = Vector3.Lerp(tirePosition, newPosition, Time.deltaTime * Mathf.Max(50f, 100f * vehicleController.CurrentSpeedRatio));
 
-            normalForce = GetSuspensionForce(tirePosition) + tireMass * absGravity;
-            suspensionForce = normalForce * transform.up;
 
+            NativeArray<float> result = new NativeArray<float>(2, Allocator.TempJob);
+            GetSuspensionForceJob jobData = new()
+            {
+                damper = damper,
+                spring = spring,
+                previousSuspensionDistance = previousSuspensionDistance,
+                fixedTime = Time.fixedDeltaTime,
+                lowerConstraintPoint = LowerConstraintPoint,
+                tirePosition = tirePosition,
+                result = result,
+            };
+
+            JobHandle handle = jobData.Schedule();
+            handle.Complete();
+
+            normalForce = result[0] + tireMass * absGravity;
+            previousSuspensionDistance = result[1];
+            result.Dispose();
+
+            //normalForce = GetSuspensionForce(tirePosition) + tireMass * absGravity;
+            suspensionForce = normalForce * transform.up;
+            
             if (!vehicleController.RunPhysics || !isGrounded)
             {
                 return;
@@ -224,7 +247,28 @@ namespace GLShared.General.Components
             return springForce + damperForce;
         }
 
-        #if UNITY_EDITOR
+        public struct GetSuspensionForceJob : IJob
+        {
+            public Vector3 tirePosition;
+            public Vector3 lowerConstraintPoint;
+            public float spring;
+            public float damper;
+            public float fixedTime;
+            public float previousSuspensionDistance;
+
+            public NativeArray<float> result;
+
+            public void Execute()
+            {
+                float distance = Vector3.Distance(lowerConstraintPoint, tirePosition);
+                float springForce = spring * distance;
+                float damperForce = damper * ((distance - previousSuspensionDistance) / fixedTime);
+                result[0] = springForce + damperForce;
+                result[1] = distance;
+            }
+        }
+
+#if UNITY_EDITOR
         #region DEBUG
         private void OnValidate()
         {

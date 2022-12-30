@@ -247,14 +247,15 @@ namespace GLShared.General.Components
             return springForce + damperForce;
         }
 
-        public struct GetSuspensionForceJob : IJob
+        [BurstCompile]
+        private struct GetSuspensionForceJob : IJob
         {
-            public Vector3 tirePosition;
-            public Vector3 lowerConstraintPoint;
-            public float spring;
-            public float damper;
-            public float fixedTime;
-            public float previousSuspensionDistance;
+            [ReadOnly] public Vector3 tirePosition;
+            [ReadOnly] public Vector3 lowerConstraintPoint;
+            [ReadOnly] public float spring;
+            [ReadOnly] public float damper;
+            [ReadOnly] public float fixedTime;
+            [ReadOnly] public float previousSuspensionDistance;
 
             public NativeArray<float> result;
 

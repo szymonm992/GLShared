@@ -23,6 +23,15 @@ namespace GLShared.General.Models
 
         }
 
+
+        public PlayerInput(float horizontal, float vertical, bool brake,bool turretLockKey)
+        {
+            Horizontal = horizontal;
+            Vertical = vertical;
+            Brake = brake;
+            TurretLockKey = turretLockKey;
+        }
+
         public void UpdateCameraTarget(Vector3 cameraTargetingPosition)
         {
             CameraTargetingPosition = cameraTargetingPosition;

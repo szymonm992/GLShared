@@ -17,6 +17,8 @@ namespace GLShared.Networking.Models
         public double Length { get; set; } // New field to store precalculated length
         public Vector3 EulerAngles { get; set; }
 
+
+
         public void Update(Transform transform, float speed)
         {
             this.Position = transform.position;

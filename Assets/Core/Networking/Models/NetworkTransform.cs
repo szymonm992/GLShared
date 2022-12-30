@@ -5,15 +5,20 @@ using UnityEngine;
 
 namespace GLShared.Networking.Models
 {
+
+
     public class NetworkTransform
     {
         public string Username { get; set; }
         public Vector3 Position { get; set; }
-        public Vector3 EulerAngles { get; set; }
+        public Quaternion Rotation => Quaternion.Euler(EulerAngles);
         public float GunAngleX { get; set; }
         public float TurretAngleY { get; set; }
         public float CurrentSpeed { get; set; }
         public double TimeStamp { get; set; }
+        public double Length { get; set; } // New field to store precalculated length
+        public Vector3 EulerAngles { get; set; }
+
 
         public Vector3 PreviousPosition { get; set; }
         public Vector3 PreviousEulerAngles { get; set; }
@@ -21,8 +26,15 @@ namespace GLShared.Networking.Models
         public float PreviousTurretAngleY { get; set; }
         public float PreviousGunAngleX { get; set; }
 
+        public NetworkTransform()
+        {
+        }
 
-        public Quaternion Rotation => Quaternion.Euler(EulerAngles);
+        public NetworkTransform(NetworkTransform previousTransform, double timeStamp)
+        {
+            TimeStamp = timeStamp;
+            Length = TimeStamp - previousTransform.TimeStamp;
+        }
 
         public void Update(Transform transform, float speed)
         {
@@ -59,10 +71,11 @@ namespace GLShared.Networking.Models
 
         public bool HasChanged(NetworkTransform transform, float positionDifferenceThreshold, float rotationDifferenceThreshold)
         {
-            return Vector3.Distance(Position, transform.Position) > positionDifferenceThreshold 
+            return Vector3.Distance(Position, transform.Position) > positionDifferenceThreshold
                 || Vector3.Distance(EulerAngles, transform.EulerAngles) > rotationDifferenceThreshold
-                || PreviousTurretAngleY != TurretAngleY 
+                || PreviousTurretAngleY != TurretAngleY
                 || PreviousGunAngleX != GunAngleX;
         }
     }
 }
+

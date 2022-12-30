@@ -20,12 +20,6 @@ namespace GLShared.Networking.Models
         public Vector3 EulerAngles { get; set; }
 
 
-        public Vector3 PreviousPosition { get; set; }
-        public Vector3 PreviousEulerAngles { get; set; }
-        public float PreviousCurrentSpeed { get; set; }
-        public float PreviousTurretAngleY { get; set; }
-        public float PreviousGunAngleX { get; set; }
-
         public NetworkTransform()
         {
         }
@@ -38,20 +32,9 @@ namespace GLShared.Networking.Models
 
         public void Update(Transform transform, float speed)
         {
-            // Update the current values
             this.Position = transform.position;
             this.EulerAngles = transform.eulerAngles;
             this.CurrentSpeed = speed;
-
-            // Check if any of the relevant variables have changed
-            if (Position != PreviousPosition || EulerAngles != PreviousEulerAngles ||
-                CurrentSpeed != PreviousCurrentSpeed)
-            {
-                // Update the previous values
-                PreviousPosition = Position;
-                PreviousEulerAngles = EulerAngles;
-                PreviousCurrentSpeed = CurrentSpeed;
-            }
         }
 
         public void Update(ITurretController turretController)
@@ -59,22 +42,12 @@ namespace GLShared.Networking.Models
             // Update the current values
             this.TurretAngleY = turretController.Turret.localEulerAngles.y;
             this.GunAngleX = turretController.Gun.localEulerAngles.x;
-
-            // Check if any of the relevant variables have changed
-            if (TurretAngleY != PreviousTurretAngleY || GunAngleX != PreviousGunAngleX)
-            {
-                // Update the previous values
-                PreviousTurretAngleY = TurretAngleY;
-                PreviousGunAngleX = GunAngleX;
-            }
         }
 
         public bool HasChanged(NetworkTransform transform, float positionDifferenceThreshold, float rotationDifferenceThreshold)
         {
             return Vector3.Distance(Position, transform.Position) > positionDifferenceThreshold
-                || Vector3.Distance(EulerAngles, transform.EulerAngles) > rotationDifferenceThreshold
-                || PreviousTurretAngleY != TurretAngleY
-                || PreviousGunAngleX != GunAngleX;
+                || Vector3.Distance(EulerAngles, transform.EulerAngles) > rotationDifferenceThreshold;
         }
     }
 }

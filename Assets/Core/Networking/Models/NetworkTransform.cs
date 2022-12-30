@@ -5,8 +5,6 @@ using UnityEngine;
 
 namespace GLShared.Networking.Models
 {
-
-
     public class NetworkTransform
     {
         public string Username { get; set; }
@@ -18,17 +16,6 @@ namespace GLShared.Networking.Models
         public double TimeStamp { get; set; }
         public double Length { get; set; } // New field to store precalculated length
         public Vector3 EulerAngles { get; set; }
-
-
-        public NetworkTransform()
-        {
-        }
-
-        public NetworkTransform(NetworkTransform previousTransform, double timeStamp)
-        {
-            TimeStamp = timeStamp;
-            Length = TimeStamp - previousTransform.TimeStamp;
-        }
 
         public void Update(Transform transform, float speed)
         {

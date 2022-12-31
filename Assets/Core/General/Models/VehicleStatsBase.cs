@@ -18,7 +18,8 @@ namespace GLShared.General.Models
         [SerializeField] protected float gunRotationSpeed;
         [SerializeField] protected float gunDepression;
         [SerializeField] protected float gunElevation;
-       
+        [SerializeField] protected bool stabilizeGun = true;
+        [SerializeField] protected bool stabilizeTurret = true;
 
         public string VehicleName => vehicleName;
 
@@ -35,6 +36,8 @@ namespace GLShared.General.Models
         public float GunRotationSpeed => gunRotationSpeed;
         public float GunDepression => gunDepression;
         public float GunElevation => gunElevation;
+        public bool StabilizeGun => stabilizeGun;
+        public bool StabilizeTurret => stabilizeTurret;
         #endregion
     }
 }

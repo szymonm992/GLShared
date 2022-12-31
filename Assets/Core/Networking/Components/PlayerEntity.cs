@@ -13,9 +13,6 @@ namespace GLShared.Networking.Components
 {
     public class PlayerEntity : NetworkEntity
     {
-        private const float positionDifferenceThreshold = 0.01f;
-        private const float rotationDifferenceThreshold = 0.05f;
-
         [Inject] private readonly IPlayerInstaller playerInstaller;
         [Inject] private readonly GameObjectContext context;
         [Inject] private readonly IVehicleController vehicleController;
@@ -90,7 +87,7 @@ namespace GLShared.Networking.Components
         protected override void Update()
         {
             base.Update();
-            entityVelocity = isSender ? vehicleController.CurrentSpeed : Properties.IsInitialized ? currentNetworkTransform.CurrentSpeed : 0;
+            entityVelocity = GetLocalControllerSpeed();
         }
 
         private void OnPlayerInitialized(PlayerSignals.OnPlayerInitialized OnPlayerInitialized)
@@ -105,6 +102,18 @@ namespace GLShared.Networking.Components
             else
             {
                 playerProperties.IsInitialized = true;
+            }
+        }
+
+        private float GetLocalControllerSpeed()
+        {
+            if (playerInstaller.IsPrototypeInstaller)
+            {
+                return vehicleController.CurrentSpeed;
+            }
+            else
+            {
+                return isSender ? vehicleController.CurrentSpeed : Properties.IsInitialized ? currentNetworkTransform.CurrentSpeed : 0;
             }
         }
     }

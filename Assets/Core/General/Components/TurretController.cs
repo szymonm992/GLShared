@@ -76,7 +76,6 @@ namespace GLShared.General.Components
                 playerEntity.CurrentNetworkTransform.Update(this);
             }
 
-            previousTurretRotation = turret.rotation;
         }
 
         public void RotateGun()
@@ -111,7 +110,6 @@ namespace GLShared.General.Components
                 playerEntity.CurrentNetworkTransform.Update(this);
             }
 
-            previousGunRotation = gun.rotation;
         }
 
         private void OnLocalPlayerInitialized(PlayerSignals.OnPlayerInitialized OnLocalPlayerInitialized)
@@ -126,15 +124,21 @@ namespace GLShared.General.Components
             stabilizeTurret = OnLocalPlayerInitialized.StabilizeTurret;
         }
 
+        private void CacheControllerRotations()
+        {
+            previousTurretRotation = turret.rotation;
+            previousGunRotation = gun.rotation;
+        }
+
         private void LateUpdate()
         {
-            if (vehicleController == null || turretLock || vehicleController.IsUpsideDown)
+            if (vehicleController != null && !turretLock && !vehicleController.IsUpsideDown)
             {
-                return; 
+                RotateTurret();
+                RotateGun();
             }
 
-            RotateTurret();
-            RotateGun();
+            CacheControllerRotations();
         }
 
         private void Update()

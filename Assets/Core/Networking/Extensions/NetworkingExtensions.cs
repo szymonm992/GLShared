@@ -58,6 +58,7 @@ namespace GLShared.Networking.Extensions
 
             data.PutFloat("hor", playerInput.Horizontal);
             data.PutFloat("ver", playerInput.Vertical);
+            data.PutFloat("ver", playerInput.RawVertical);
 
             data.PutBool("brk", playerInput.Brake);
             data.PutBool("turLck", playerInput.TurretLockKey);
@@ -89,7 +90,7 @@ namespace GLShared.Networking.Extensions
 
         public static PlayerInput ToPlayerInput(this ISFSObject data)
         {
-            PlayerInput input = new (data.GetUtfString("u"), data.GetFloat("hor"), data.GetFloat("ver"), 
+            PlayerInput input = new (data.GetUtfString("u"), data.GetFloat("hor"), data.GetFloat("ver"), data.GetFloat("rVer"),
                 data.GetBool("brk"), data.GetBool("turLck"),
                 new Vector3(data.GetFloat("camX"), data.GetFloat("camY"), data.GetFloat("camZ")));
             return input;

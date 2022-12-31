@@ -48,7 +48,7 @@ namespace GLShared.Networking.Components
                 Username = playerInstaller.IsPrototypeInstaller ? "localPlayer" : Properties.User.Name,
             };
 
-            playerInput = new(playerInstaller.IsPrototypeInstaller ? "localPlayer" : playerProperties.User.Name, 0, 0, true, true, Vector3.zero);
+            playerInput = new(playerInstaller.IsPrototypeInstaller ? "localPlayer" : playerProperties.User.Name, 0, 0,0, true, true, Vector3.zero);
         }
 
         public void UpdateProperties(PlayerProperties properties)

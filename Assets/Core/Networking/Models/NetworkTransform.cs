@@ -16,8 +16,6 @@ namespace GLShared.Networking.Models
         public double TimeStamp { get; set; }
         public Vector3 EulerAngles { get; set; }
 
-
-
         public void Update(Transform transform, float speed)
         {
             this.Position = transform.position;

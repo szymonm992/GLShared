@@ -58,7 +58,7 @@ namespace GLShared.Networking.Extensions
 
             data.PutFloat("hor", playerInput.Horizontal);
             data.PutFloat("ver", playerInput.Vertical);
-            data.PutFloat("ver", playerInput.RawVertical);
+            data.PutFloat("rVer", playerInput.RawVertical);
 
             data.PutBool("brk", playerInput.Brake);
             data.PutBool("turLck", playerInput.TurretLockKey);

@@ -49,31 +49,29 @@ namespace GLShared.General.Components
 
         public void RotateTurret()
         { 
-            Matrix4x4 parentMatrix = transform.worldToLocalMatrix;
-            Vector3 turretDiff = parentMatrix * targetVector;
+            Vector3 turretDiff = transform.InverseTransformVector(targetVector);
 
             if (turretDiff != Vector3.zero)
             {
-                Quaternion desiredRotation = Quaternion.LookRotation(turretDiff, transform.up);
-                desiredRotation.eulerAngles = new Vector3(0.0f, desiredRotation.eulerAngles.y, 0.0f);
+                float desiredLocalAngleY = Quaternion.LookRotation(turretDiff).eulerAngles.y;
 
-                Quaternion localRotation = turret.localRotation;
+                float localAngleY = turret.localRotation.eulerAngles.y;
                 if (stabilizeTurret && previousTurretRotation != null)
                 {
-                    var previousLocalRotation = Quaternion.Inverse(turret.parent.rotation) * previousTurretRotation.GetValueOrDefault();
-                    var angDiffOfPrevious = Quaternion.Inverse(previousLocalRotation) * localRotation;
-                    var angDiffOfDesired = Quaternion.Inverse(desiredRotation) * localRotation;
+                    var previousLocalRotationDiff = Quaternion.Inverse(previousTurretRotation.GetValueOrDefault()) * turret.rotation;
 
-                    var angDiffOfPreviousAngleY = Mathf.DeltaAngle(0, angDiffOfPrevious.eulerAngles.y);
-                    var angDiffOfDesiredAngleY = Mathf.DeltaAngle(0, angDiffOfDesired.eulerAngles.y);
+                    var angDiffOfPreviousAngleY = Mathf.DeltaAngle(0, previousLocalRotationDiff.eulerAngles.y);
+                    var angDiffOfDesiredAngleY = Mathf.DeltaAngle(0, localAngleY - desiredLocalAngleY);
 
                     if (angDiffOfPreviousAngleY * angDiffOfDesiredAngleY > 0.0f)
                     {
-                        localRotation = previousLocalRotation;
+                        localAngleY -= angDiffOfPreviousAngleY;
                     }
                 }
 
-                turret.localRotation = Quaternion.RotateTowards(localRotation, desiredRotation, Time.deltaTime * turretRotationSpeed);
+                localAngleY = Mathf.MoveTowardsAngle(localAngleY, desiredLocalAngleY, Time.deltaTime * turretRotationSpeed);
+
+                turret.localRotation = Quaternion.Euler(0.0f, localAngleY, 0.0f);
 
                 playerEntity.CurrentNetworkTransform.Update(this);
             }
@@ -93,19 +91,22 @@ namespace GLShared.General.Components
 
             if (gunDotProduct != 1.0f)
             {
-                var turrentMatrix = turret.worldToLocalMatrix;
-                Vector3 gunDiff = turrentMatrix * gunDesiredDirection;
-                var targetRotation = Quaternion.LookRotation(gunDiff, turret.up);
-                targetRotation.eulerAngles = new Vector3(targetRotation.eulerAngles.x.ClampAngle(-gunElevation, gunDepression), 0, 0);
+                Vector3 gunDiff = turret.InverseTransformVector(gunDesiredDirection);
 
-                Quaternion localRotation = gun.localRotation;
+                var desiredAngleX = Quaternion.LookRotation(gunDiff).eulerAngles.x;
+                desiredAngleX = desiredAngleX.ClampAngle(-gunElevation, gunDepression);
+
+                float localAngleX = gun.localRotation.eulerAngles.x;
                 if (stabilizeGun && previousGunRotation != null)
                 {
-                    localRotation = Quaternion.Inverse(turret.parent.rotation) * previousGunRotation.GetValueOrDefault();
-                    localRotation.eulerAngles = new Vector3(localRotation.eulerAngles.x.ClampAngle(-gunElevation, gunDepression), 0, 0);
+                    var previousLocalRotationDiff = Quaternion.Inverse(gun.rotation) * previousGunRotation.GetValueOrDefault();
+                    localAngleX += previousLocalRotationDiff.eulerAngles.x;
+                    localAngleX = localAngleX.ClampAngle(-gunElevation, gunDepression);
                 }
 
-                gun.localRotation = Quaternion.RotateTowards(localRotation, targetRotation, Time.deltaTime * gunRotationSpeed);
+                localAngleX = Mathf.MoveTowardsAngle(localAngleX, desiredAngleX, Time.deltaTime * gunRotationSpeed);
+
+                gun.localRotation = Quaternion.Euler(localAngleX, 0.0f, 0.0f);
 
                 playerEntity.CurrentNetworkTransform.Update(this);
             }

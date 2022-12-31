@@ -28,16 +28,19 @@ namespace GLShared.General.Components
         private float gunElevation;
 
         private bool turretLock;
+        private bool stabilizeTurret;
+        private bool stabilizeGun;
 
         private Vector3 targetingWorldSpacePosition;
         private Vector3 targetVector;
 
+        private Quaternion? previousGunRotation;
+        private Quaternion? previousTurretRotation;
+
         public Transform Gun => gun;
         public Transform Turret => turret;
-        public bool TurretLock
-        {
-            get => turretLock; 
-        }
+        public bool TurretLock => turretLock; 
+        
 
         public void Initialize()
         {
@@ -52,31 +55,62 @@ namespace GLShared.General.Components
             if (turretDiff != Vector3.zero)
             {
                 Quaternion desiredRotation = Quaternion.LookRotation(turretDiff, transform.up);
-                desiredRotation.eulerAngles = new Vector3(0, desiredRotation.eulerAngles.y, 0);
-                turret.localRotation = Quaternion.RotateTowards(turret.localRotation, desiredRotation, Time.deltaTime * turretRotationSpeed);
+                desiredRotation.eulerAngles = new Vector3(0.0f, desiredRotation.eulerAngles.y, 0.0f);
+
+                Quaternion localRotation = turret.localRotation;
+                if (stabilizeTurret && previousTurretRotation != null)
+                {
+                    var previousLocalRotation = Quaternion.Inverse(turret.parent.rotation) * previousTurretRotation.GetValueOrDefault();
+                    var angDiffOfPrevious = Quaternion.Inverse(previousLocalRotation) * localRotation;
+                    var angDiffOfDesired = Quaternion.Inverse(desiredRotation) * localRotation;
+
+                    var angDiffOfPreviousAngleY = Mathf.DeltaAngle(0, angDiffOfPrevious.eulerAngles.y);
+                    var angDiffOfDesiredAngleY = Mathf.DeltaAngle(0, angDiffOfDesired.eulerAngles.y);
+
+                    if (angDiffOfPreviousAngleY * angDiffOfDesiredAngleY > 0.0f)
+                    {
+                        localRotation = previousLocalRotation;
+                    }
+                }
+
+                turret.localRotation = Quaternion.RotateTowards(localRotation, desiredRotation, Time.deltaTime * turretRotationSpeed);
 
                 playerEntity.CurrentNetworkTransform.Update(this);
             }
+
+            previousTurretRotation = turret.rotation;
         }
 
         public void RotateGun()
         {
-            if (gun != null)
+            if (gun == null)
             {
-                Vector3 gunDesiredDirection = targetingWorldSpacePosition - gun.position;
-                float gunDotProduct = Vector3.Dot(gun.forward, gunDesiredDirection.normalized);
-
-                if (gunDotProduct != 1)
-                {
-                    var turrentMatrix = turret.worldToLocalMatrix;
-                    Vector3 gunDiff = turrentMatrix * gunDesiredDirection;
-                    var rotation = Quaternion.LookRotation(gunDiff, turret.up);
-                    rotation.eulerAngles = new Vector3(rotation.eulerAngles.x.ClampAngle(-gunElevation, gunDepression), 0, 0);
-                    gun.localRotation = Quaternion.RotateTowards(gun.localRotation, rotation, Time.deltaTime * gunRotationSpeed);
-
-                    playerEntity.CurrentNetworkTransform.Update(this);
-                }
+                return;
             }
+
+            Vector3 gunDesiredDirection = targetingWorldSpacePosition - gun.position;
+            float gunDotProduct = Vector3.Dot(gun.forward, gunDesiredDirection.normalized);
+
+            if (gunDotProduct != 1.0f)
+            {
+                var turrentMatrix = turret.worldToLocalMatrix;
+                Vector3 gunDiff = turrentMatrix * gunDesiredDirection;
+                var targetRotation = Quaternion.LookRotation(gunDiff, turret.up);
+                targetRotation.eulerAngles = new Vector3(targetRotation.eulerAngles.x.ClampAngle(-gunElevation, gunDepression), 0, 0);
+
+                Quaternion localRotation = gun.localRotation;
+                if (stabilizeGun && previousGunRotation != null)
+                {
+                    localRotation = Quaternion.Inverse(turret.parent.rotation) * previousGunRotation.GetValueOrDefault();
+                    localRotation.eulerAngles = new Vector3(localRotation.eulerAngles.x.ClampAngle(-gunElevation, gunDepression), 0, 0);
+                }
+
+                gun.localRotation = Quaternion.RotateTowards(localRotation, targetRotation, Time.deltaTime * gunRotationSpeed);
+
+                playerEntity.CurrentNetworkTransform.Update(this);
+            }
+
+            previousGunRotation = gun.rotation;
         }
 
         private void OnLocalPlayerInitialized(PlayerSignals.OnPlayerInitialized OnLocalPlayerInitialized)
@@ -86,6 +120,9 @@ namespace GLShared.General.Components
 
             gunDepression = OnLocalPlayerInitialized.GunDepression;
             gunElevation = OnLocalPlayerInitialized.GunElevation;
+
+            stabilizeGun = OnLocalPlayerInitialized.StabilizeGun;
+            stabilizeTurret = OnLocalPlayerInitialized.StabilizeTurret;
         }
 
         private void LateUpdate()

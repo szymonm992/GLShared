@@ -31,6 +31,13 @@ namespace GLShared.General.Signals
         {
             public bool LockPlayersInput { get; set; }
         }
+
+
+        public class OnPlayerDetectionStatusUpdate
+        {
+            public string Username { get; set; }
+            public bool SpottedStatus { get; set; }
+        }
     }
 }
 

@@ -12,6 +12,7 @@ namespace GLShared.General.Interfaces
         public float CombinedInput { get; }
         public float SignedVertical { get; }
         public float SignedHorizontal { get; }
+        public float RawVertical { get; }
         public float AbsoluteVertical { get; }
         public float AbsoluteHorizontal { get; }
         public float LastVerticalInput { get; }

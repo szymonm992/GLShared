@@ -166,7 +166,6 @@ namespace GLShared.General.Components
             previousSuspensionDistance = result[1];
             result.Dispose();
 
-            //normalForce = GetSuspensionForce(tirePosition) + tireMass * absGravity;
             suspensionForce = normalForce * transform.up;
             
             if (!vehicleController.RunPhysics || !isGrounded)
@@ -236,15 +235,6 @@ namespace GLShared.General.Components
             {
                 rig.AddForce(Vector3.up * Mathf.Min(-rig.velocity.y, 4f), ForceMode.VelocityChange);
             }
-        }
-
-        private float GetSuspensionForce(Vector3 tirePosition)
-        {
-            float distance = Vector3.Distance(lowerConstraintTransform.position, tirePosition);
-            float springForce = spring * distance;
-            float damperForce = damper * ((distance - previousSuspensionDistance) / Time.fixedDeltaTime);
-            previousSuspensionDistance = distance;
-            return springForce + damperForce;
         }
 
         [BurstCompile]

@@ -10,6 +10,7 @@ namespace GLShared.General.ScriptableObjects
 
         [Header("Vehicles wheel parameters")]
         [SerializeField] private float maxWheelDetectionAngle = 75f;
+        [SerializeField] private float maxWheelDrivingAngle = 45f;
 
         [Header("Vehicles air control")]
         [SerializeField] private float airControlAngleThreshold = 15f;
@@ -24,6 +25,7 @@ namespace GLShared.General.ScriptableObjects
         public float SpeedMultiplier => speedMultiplier;
 
         public float MaxWheelDetectionAngle => maxWheelDetectionAngle;
+        public float MaxWheelDrivingAngle => maxWheelDrivingAngle;
 
         public float AirControlAngleThreshold => airControlAngleThreshold;
         public float AirControlForce => airControlForce;

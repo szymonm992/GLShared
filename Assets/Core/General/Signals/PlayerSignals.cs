@@ -23,11 +23,20 @@ namespace GLShared.General.Signals
             public float GunRotationSpeed { get; set; }
             public float GunDepression { get; set; }
             public float GunElevation { get; set; }
+            public bool StabilizeGun { get; set; }
+            public bool StabilizeTurret { get; set; }
         }
 
         public class OnAllPlayersInputLockUpdate
         {
             public bool LockPlayersInput { get; set; }
+        }
+
+
+        public class OnPlayerDetectionStatusUpdate
+        {
+            public string Username { get; set; }
+            public bool SpottedStatus { get; set; }
         }
     }
 }

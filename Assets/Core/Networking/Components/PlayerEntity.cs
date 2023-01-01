@@ -48,7 +48,7 @@ namespace GLShared.Networking.Components
                 Username = playerInstaller.IsPrototypeInstaller ? "localPlayer" : Properties.User.Name,
             };
 
-            playerInput = new(playerInstaller.IsPrototypeInstaller ? "localPlayer" : playerProperties.User.Name, 0, 0, true, true, Vector3.zero);
+            playerInput = new(playerInstaller.IsPrototypeInstaller ? "localPlayer" : playerProperties.User.Name, 0, 0,0, true, true, Vector3.zero);
         }
 
         public void UpdateProperties(PlayerProperties properties)
@@ -62,11 +62,8 @@ namespace GLShared.Networking.Components
         public override void SendSyncPosition()
         {
             base.SendSyncPosition();
-           // if (currentNetworkTransform.HasChanged(transform, 0.005f))
-           // {
-                currentNetworkTransform.Update(transform, EntityVelocity);
-                syncManager.SyncPosition(this);
-            //}
+            currentNetworkTransform.Update(transform, EntityVelocity);
+            syncManager.SyncPosition(this);
         }
 
         public override void ReceiveSyncPosition(NetworkTransform newNetworkTransform)
@@ -90,7 +87,7 @@ namespace GLShared.Networking.Components
         protected override void Update()
         {
             base.Update();
-            entityVelocity = isSender ? vehicleController.CurrentSpeed : Properties.IsInitialized ? currentNetworkTransform.CurrentSpeed : 0;
+            entityVelocity = GetLocalControllerSpeed();
         }
 
         private void OnPlayerInitialized(PlayerSignals.OnPlayerInitialized OnPlayerInitialized)
@@ -105,6 +102,18 @@ namespace GLShared.Networking.Components
             else
             {
                 playerProperties.IsInitialized = true;
+            }
+        }
+
+        private float GetLocalControllerSpeed()
+        {
+            if (playerInstaller.IsPrototypeInstaller)
+            {
+                return vehicleController.CurrentSpeed;
+            }
+            else
+            {
+                return isSender ? vehicleController.CurrentSpeed : Properties.IsInitialized ? currentNetworkTransform.CurrentSpeed : 0;
             }
         }
     }

@@ -9,12 +9,12 @@ namespace GLShared.Networking.Models
     {
         public string Username { get; set; }
         public Vector3 Position { get; set; }
-        public Vector3 EulerAngles { get; set; }
+        public Quaternion Rotation => Quaternion.Euler(EulerAngles);
         public float GunAngleX { get; set; }
         public float TurretAngleY { get; set; }
         public float CurrentSpeed { get; set; }
         public double TimeStamp { get; set; }
-        public Quaternion Rotation => Quaternion.Euler(EulerAngles);
+        public Vector3 EulerAngles { get; set; }
 
         public void Update(Transform transform, float speed)
         {
@@ -29,16 +29,11 @@ namespace GLShared.Networking.Models
             this.GunAngleX = turretController.Gun.localEulerAngles.x;
         }
 
-        public bool HasChanged(Transform transform, float differenceThreshold)
+        public bool HasChanged(NetworkTransform transform, float positionDifferenceThreshold, float rotationDifferenceThreshold)
         {
-            bool isPositionDifferent = Vector3.Distance(Position, transform.position) > differenceThreshold;
-            return isPositionDifferent || (Vector3.Distance(EulerAngles, transform.eulerAngles) > differenceThreshold);
-        }
-
-        public bool HasChanged(NetworkTransform transform, float differenceThreshold)
-        {
-            bool isPositionDifferent = Vector3.Distance(Position, transform.Position) > differenceThreshold;
-            return isPositionDifferent || (Vector3.Distance(EulerAngles, transform.EulerAngles) > differenceThreshold);
+            return Vector3.Distance(Position, transform.Position) > positionDifferenceThreshold
+                || Vector3.Distance(EulerAngles, transform.EulerAngles) > rotationDifferenceThreshold;
         }
     }
 }
+

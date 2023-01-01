@@ -269,7 +269,7 @@ namespace GLShared.General.Components
             }
         }
 
-#if UNITY_EDITOR
+        #if UNITY_EDITOR
         #region DEBUG
         private void OnValidate()
         {

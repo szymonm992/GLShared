@@ -25,7 +25,6 @@ namespace GLShared.Networking.Models
 
         public void Update(ITurretController turretController)
         {
-            // Update the current values
             this.TurretAngleY = turretController.Turret.localEulerAngles.y;
             this.GunAngleX = turretController.Gun.localEulerAngles.x;
         }

@@ -18,6 +18,7 @@ namespace GLShared.General.Interfaces
         public float LastVerticalInput { get; }
         public bool SnipingKey { get; }
         public bool TurretLockKey { get; }
+        public bool ShootingKey { get; }
 
         void SetInput(PlayerInput input);
     }

@@ -9,7 +9,7 @@ namespace GLShared.General.Utilities
     {
         public static PlayerInput EmptyPlayerInput(this PlayerInput input)
         {
-            return new PlayerInput(string.Empty, 0, 0,0, false, true, Vector3.zero);
+            return new PlayerInput(string.Empty, 0, 0,0, false, true, Vector3.zero, false);
         }
     }
 }

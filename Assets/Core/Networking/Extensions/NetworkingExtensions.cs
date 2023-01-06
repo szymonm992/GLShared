@@ -62,6 +62,7 @@ namespace GLShared.Networking.Extensions
 
             data.PutBool("brk", playerInput.Brake);
             data.PutBool("turLck", playerInput.TurretLockKey);
+            data.PutBool("shtK", playerInput.ShootingKey);
 
             data.PutFloat("camX", playerInput.CameraTargetingPosition.x);
             data.PutFloat("camY", playerInput.CameraTargetingPosition.y);
@@ -92,7 +93,7 @@ namespace GLShared.Networking.Extensions
         {
             PlayerInput input = new (data.GetUtfString("u"), data.GetFloat("hor"), data.GetFloat("ver"), data.GetFloat("rVer"),
                 data.GetBool("brk"), data.GetBool("turLck"),
-                new Vector3(data.GetFloat("camX"), data.GetFloat("camY"), data.GetFloat("camZ")));
+                new Vector3(data.GetFloat("camX"), data.GetFloat("camY"), data.GetFloat("camZ")), data.GetBool("shtK"));
             return input;
         }
     }

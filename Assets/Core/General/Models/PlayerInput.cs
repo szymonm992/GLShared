@@ -10,10 +10,11 @@ namespace GLShared.General.Models
         public float RawVertical { get; private set; }
         public bool Brake { get; private set; }
         public bool TurretLockKey { get; private set; }
+        public bool ShootingKey { get; private set; }
         public Vector3 CameraTargetingPosition { get; private set; }
 
         public PlayerInput(string username, float horizontal, float vertical, float rawVertical, bool brake, 
-            bool turretLockKey, Vector3 cameraTargetingPosition)
+            bool turretLockKey, Vector3 cameraTargetingPosition, bool shootingKey)
         {
             Username = username;
             Horizontal = horizontal;
@@ -22,17 +23,18 @@ namespace GLShared.General.Models
             Brake = brake;
             TurretLockKey = turretLockKey;
             CameraTargetingPosition = cameraTargetingPosition;
-
+            ShootingKey = shootingKey;
         }
 
 
-        public PlayerInput(float horizontal, float vertical, float rawVertical, bool brake, bool turretLockKey)
+        public PlayerInput(float horizontal, float vertical, float rawVertical, bool brake, bool turretLockKey, bool shootingKey)
         {
             Horizontal = horizontal;
             Vertical = vertical;
             RawVertical = rawVertical;
             Brake = brake;
             TurretLockKey = turretLockKey;
+            ShootingKey = shootingKey;
         }
 
         public void UpdateCameraTarget(Vector3 cameraTargetingPosition)
@@ -41,13 +43,15 @@ namespace GLShared.General.Models
         }
 
         public void UpdateControllerInputs(float horizontal, float vertical, float rawVertical, bool brake,
-            bool turretLockKey)
+            bool turretLockKey, bool shootingKey)
         {
             Horizontal = horizontal;
             Vertical = vertical;
             RawVertical = rawVertical;
             Brake = brake;
             TurretLockKey = turretLockKey;
+            ShootingKey = shootingKey;
         }
+
     }
 }

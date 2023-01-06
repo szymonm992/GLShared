@@ -6,14 +6,11 @@ namespace GLShared.Networking.Components
 {
 	public class SmartFoxConnection : MonoBehaviour
 	{
-        //public const string HOST = "185.157.80.18";
-        public string HOST = "127.0.0.1";
         public int PORT = 9933;
 
         private SmartFox sfs;
 
 		public string DisconnectError { get; set; }
-
 		public SmartFox Connection 
 		{
 			get => sfs;	

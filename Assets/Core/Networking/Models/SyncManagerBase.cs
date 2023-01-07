@@ -37,11 +37,6 @@ namespace GLShared.Networking.Models
         {
         }
 
-        public virtual void SyncTurretTransform(ITurretController _)
-        {
-
-        }
-
         public virtual void SyncShell(IShellController _)
         {
 

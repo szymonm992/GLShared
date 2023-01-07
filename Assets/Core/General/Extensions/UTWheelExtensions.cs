@@ -1,5 +1,6 @@
 using GLShared.General.Enums;
 using GLShared.General.Interfaces;
+using GLShared.General.Models;
 using UnityEngine;
 
 namespace GLShared.General
@@ -20,8 +21,6 @@ namespace GLShared.General
             {
                 return wheel.HitInfo.Point;
             }
-
         }
     }
-
 }

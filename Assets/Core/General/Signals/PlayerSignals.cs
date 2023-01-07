@@ -38,6 +38,12 @@ namespace GLShared.General.Signals
             public string Username { get; set; }
             public bool SpottedStatus { get; set; }
         }
+
+        public class OnPlayerShot
+        {
+            public string Username { get; set; }
+            public string ShellId { get; set; }
+        }
     }
 }
 

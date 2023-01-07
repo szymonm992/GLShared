@@ -20,6 +20,6 @@ namespace GLShared.General.Interfaces
 
         void SyncInputs(PlayerInput playerInput);
 
-        void SyncTurretTransform(ITurretController turretController);
+        void SyncShell(IShellController shellController);
     }
 }

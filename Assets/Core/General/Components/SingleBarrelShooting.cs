@@ -15,8 +15,12 @@ namespace GLShared.General.Components
 
         protected override void Update()
         {
-            base.Update();
+            if (inputProvider.LockPlayerInput)
+            {
+                return;
+            }
 
+            base.Update();
             if (ShootkingKeyPressed && !isReloading)
             {
                 AfterShotCallback(reloadTime);

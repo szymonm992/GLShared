@@ -26,11 +26,6 @@ namespace GLShared.General.Components
 
         protected virtual void Update()
         {
-            if (inputProvider.LockPlayerInput)
-            {
-                return;
-            }
-
             ShootkingKeyPressed = inputProvider.ShootingKey;
 
             if (currentReloadTimer > 0)

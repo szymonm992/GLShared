@@ -96,5 +96,6 @@ namespace GLShared.Networking.Extensions
                 new Vector3(data.GetFloat("camX"), data.GetFloat("camY"), data.GetFloat("camZ")), data.GetBool("shtK"));
             return input;
         }
+        
     }
 }

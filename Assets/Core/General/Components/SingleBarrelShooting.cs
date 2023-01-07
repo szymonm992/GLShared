@@ -1,3 +1,4 @@
+using GLShared.General.Signals;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,13 +24,21 @@ namespace GLShared.General.Components
             base.Update();
             if (ShootkingKeyPressed && !isReloading)
             {
-                AfterShotCallback(reloadTime);
+                SingleShotLogic();
             }
         }
 
         protected void SingleShotLogic()
         {
+            isReloading = true;
 
+            signalBus.Fire(new PlayerSignals.OnPlayerShot()
+            {
+                Username = playerEntity.Properties.User.Name,
+                ShellId = "0",
+            });
+
+            AfterShotCallback(reloadTime);
         }
     }
 }

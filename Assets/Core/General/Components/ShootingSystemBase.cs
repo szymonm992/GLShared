@@ -13,6 +13,7 @@ namespace GLShared.General.Components
         [Inject] protected readonly IPlayerInputProvider inputProvider;
         [Inject] protected readonly SignalBus signalBus;
         [Inject] protected readonly PlayerEntity playerEntity;
+        [Inject] protected readonly ITurretController turretController;
 
         protected float currentReloadTimer = 0;
         protected bool isReloading = true;
@@ -41,14 +42,7 @@ namespace GLShared.General.Components
 
         protected void AfterShotCallback(float value)
         {
-            signalBus.Fire(new PlayerSignals.OnPlayerShot()
-            {
-                Username = playerEntity.Properties.User.Name,
-                ShellId = "0",
-            });
-
             currentReloadTimer = value;
-            isReloading = true;
         }
     }
 }

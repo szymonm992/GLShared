@@ -6,6 +6,6 @@ namespace GLShared.General.Interfaces
 {
     public interface IShellController
     {
-        
+        public string OwnerUsername { get; set; }
     }
 }

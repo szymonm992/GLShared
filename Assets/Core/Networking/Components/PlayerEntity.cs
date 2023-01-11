@@ -29,7 +29,7 @@ namespace GLShared.Networking.Components
         public PlayerProperties Properties => playerProperties;
         public PlayerInput Input => playerInput;
         public IPlayerInputProvider InputProvider => inputProvider;
-
+        public string Username => currentNetworkTransform.Username;
 
         [Inject]
         public void Construct(PlayerProperties propertiesAtPrefab)

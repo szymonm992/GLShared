@@ -29,7 +29,7 @@ namespace GLShared.Networking.Components
         public PlayerProperties Properties => playerProperties;
         public PlayerInput Input => playerInput;
         public IPlayerInputProvider InputProvider => inputProvider;
-
+        public string Username => currentNetworkTransform.Username;
 
         [Inject]
         public void Construct(PlayerProperties propertiesAtPrefab)
@@ -92,7 +92,7 @@ namespace GLShared.Networking.Components
 
         private void OnPlayerInitialized(PlayerSignals.OnPlayerInitialized OnPlayerInitialized)
         {
-            if(!playerInstaller.IsPrototypeInstaller)
+            if (!playerInstaller.IsPrototypeInstaller)
             {
                 if (OnPlayerInitialized.PlayerProperties.User.Name == playerProperties.User.Name)
                 {

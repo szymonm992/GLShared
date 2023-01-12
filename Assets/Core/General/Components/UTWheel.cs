@@ -166,7 +166,7 @@ namespace GLShared.General.Components
             previousSuspensionDistance = result[1];
             result.Dispose();
 
-            suspensionForce = normalForce * transform.up;
+            suspensionForce = normalForce * (vehicleController.HorizontalAngle >= gameParameters.WheelForceDirectionChangeAngle ? hitInfo.Normal : transform.up);
             
             if (!vehicleController.RunPhysics || !isGrounded)
             {

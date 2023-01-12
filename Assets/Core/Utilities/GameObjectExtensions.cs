@@ -8,7 +8,7 @@ namespace Frontend.Scripts
     {
        public static void ToggleGameObjectIfActive(this GameObject gameObject, bool value)
        {
-            if(gameObject.activeInHierarchy != value)
+            if (gameObject.activeInHierarchy != value)
             {
                 gameObject.SetActive(value);
             }

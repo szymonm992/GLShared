@@ -114,14 +114,14 @@ namespace GLShared.General.Components
 
         private void OnLocalPlayerInitialized(PlayerSignals.OnPlayerInitialized OnLocalPlayerInitialized)
         {
-            turretRotationSpeed = OnLocalPlayerInitialized.TurretRotationSpeed;
-            gunRotationSpeed = OnLocalPlayerInitialized.GunRotationSpeed;
+            turretRotationSpeed = OnLocalPlayerInitialized.VehicleStats.TurretRotationSpeed;
+            gunRotationSpeed = OnLocalPlayerInitialized.VehicleStats.GunRotationSpeed;
 
-            gunDepression = OnLocalPlayerInitialized.GunDepression;
-            gunElevation = OnLocalPlayerInitialized.GunElevation;
+            gunDepression = OnLocalPlayerInitialized.VehicleStats.GunDepression;
+            gunElevation = OnLocalPlayerInitialized.VehicleStats.GunElevation;
 
-            stabilizeGun = OnLocalPlayerInitialized.StabilizeGun;
-            stabilizeTurret = OnLocalPlayerInitialized.StabilizeTurret;
+            stabilizeGun = OnLocalPlayerInitialized.VehicleStats.StabilizeGun;
+            stabilizeTurret = OnLocalPlayerInitialized.VehicleStats.StabilizeTurret;
         }
 
         private void CacheControllerRotations()

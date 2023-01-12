@@ -92,7 +92,7 @@ namespace GLShared.Networking.Components
 
         private void OnPlayerInitialized(PlayerSignals.OnPlayerInitialized OnPlayerInitialized)
         {
-            if(!playerInstaller.IsPrototypeInstaller)
+            if (!playerInstaller.IsPrototypeInstaller)
             {
                 if (OnPlayerInitialized.PlayerProperties.User.Name == playerProperties.User.Name)
                 {

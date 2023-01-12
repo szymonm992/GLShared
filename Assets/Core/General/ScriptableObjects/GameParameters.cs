@@ -11,6 +11,8 @@ namespace GLShared.General.ScriptableObjects
         [Header("Vehicles wheel parameters")]
         [SerializeField] private float maxWheelDetectionAngle = 75f;
         [SerializeField] private float maxWheelDrivingAngle = 45f;
+        [Tooltip("An angle at which wheel will not apply the force using its transform.up but to hitinfo.Normal")]
+        [SerializeField] private float wheelForceDirectionChangeAngle = 45f;
 
         [Header("Vehicles air control")]
         [SerializeField] private float airControlAngleThreshold = 15f;
@@ -26,6 +28,7 @@ namespace GLShared.General.ScriptableObjects
 
         public float MaxWheelDetectionAngle => maxWheelDetectionAngle;
         public float MaxWheelDrivingAngle => maxWheelDrivingAngle;
+        public float WheelForceDirectionChangeAngle => wheelForceDirectionChangeAngle;
 
         public float AirControlAngleThreshold => airControlAngleThreshold;
         public float AirControlForce => airControlForce;

@@ -16,8 +16,6 @@ namespace GLShared.General.Components
 {
     public class UTWheel : UTPhysicWheelBase, IInitializable, IPhysicsWheel
     {
-        private const float WHEEL_FORCE_CHANGE_ANGLE = 50f;
-
         [Header("Settings")]
         [SerializeField] protected float spring = 20000f;
         [SerializeField] protected float damper = 3000f;
@@ -168,7 +166,7 @@ namespace GLShared.General.Components
             previousSuspensionDistance = result[1];
             result.Dispose();
 
-            suspensionForce = normalForce * (vehicleController.HorizontalAngle >= WHEEL_FORCE_CHANGE_ANGLE ? hitInfo.Normal : transform.up);
+            suspensionForce = normalForce * (vehicleController.HorizontalAngle >= gameParameters.WheelForceDirectionChangeAngle ? hitInfo.Normal : transform.up);
             
             if (!vehicleController.RunPhysics || !isGrounded)
             {

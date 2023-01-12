@@ -21,6 +21,7 @@ namespace GLShared.General.Interfaces
         float CurrentSpeedRatio { get; }
         float MaxForwardSpeed { get; }
         float MaxBackwardsSpeed { get; }
+        float HorizontalAngle { get; }
         bool IsUpsideDown { get; }
         bool HasTurret { get; }
   

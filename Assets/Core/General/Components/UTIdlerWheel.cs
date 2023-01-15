@@ -15,6 +15,8 @@ namespace GLShared.General.Components
         private Vector3 idlerForcePoint;
 
         public override HitInfo HitInfo => base.HitInfo;
+        public override bool IsIdler => true;
+
         [SerializeField]
         protected UTWheelDebug debugSettings = new UTWheelDebug()
         {

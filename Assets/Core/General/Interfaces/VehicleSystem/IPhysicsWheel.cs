@@ -23,6 +23,8 @@ namespace GLShared.General.Interfaces
 
         float SteerAngle { get; set; }
 
+        bool IsIdler { get; }
+
         abstract void IInitializable.Initialize();
 
     }

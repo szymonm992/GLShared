@@ -41,6 +41,7 @@ namespace GLShared.General.Models
         public virtual float CompressionRate => 0f;
         public virtual float HardPointAbs => 0f;
         public virtual Vector3 TireWorldPosition => Vector3.zero;
+        public virtual bool IsIdler => false;
 
         public virtual Vector3 UpperConstraintPoint
         {

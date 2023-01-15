@@ -12,6 +12,8 @@ namespace GLShared.General.Components
     {
         [SerializeField] private LayerMask terrainMask;
         [SerializeField] private Vector3 idlerWheelOffset;
+        [SerializeField] private IdlerWheelSite idlerSite;
+
         private Vector3 idlerForcePoint;
 
         public override HitInfo HitInfo => base.HitInfo;
@@ -46,7 +48,7 @@ namespace GLShared.General.Components
         {
             Vector3 offsetStartPosition = OffsetPosition(transform, idlerWheelOffset);
             isGrounded = Physics.CheckSphere(offsetStartPosition, wheelRadius, terrainMask);
-            idlerForcePoint = isGrounded ? transform.position + (transform.forward * wheelRadius) : transform.position;
+            idlerForcePoint = isGrounded ? (transform.position  + (idlerSite == IdlerWheelSite.Forward ? transform.forward : -transform.forward) * wheelRadius) : transform.position;
             hitInfo = new HitInfo()
             {
                 rayHit = new RaycastHit()

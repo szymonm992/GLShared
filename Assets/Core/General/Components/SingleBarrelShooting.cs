@@ -7,7 +7,7 @@ namespace GLShared.General.Components
 {
     public class SingleBarrelShooting : ShootingSystemBase
     {
-        private float reloadTime = 5f;
+        [SerializeField] private float reloadTime = 5f;
 
         public override void Initialize()
         {

@@ -18,6 +18,7 @@ namespace GLShared.General.Components
 
         public override HitInfo HitInfo => base.HitInfo;
         public override bool IsIdler => true;
+        public IdlerWheelSite IdlerSite => idlerSite;
 
         [SerializeField]
         protected UTWheelDebug debugSettings = new UTWheelDebug()

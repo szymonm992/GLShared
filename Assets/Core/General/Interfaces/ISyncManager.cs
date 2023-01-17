@@ -16,6 +16,8 @@ namespace GLShared.General.Interfaces
 
         void TryCreatePlayer(User user, Vector3 spawnPosition, Vector3 spawnEulerAngles);
 
+        void TryCreateShell(User user, int shellId);
+
         void SyncPosition(INetworkEntity networkEntity);
 
         void SyncInputs(PlayerInput playerInput);

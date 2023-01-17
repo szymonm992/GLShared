@@ -17,7 +17,8 @@ namespace GLShared.Networking.Models
         [Inject] protected readonly PlayerSpawner playerSpawner;
         [Inject] protected readonly SmartFoxConnection smartFox;
 
-        protected readonly Dictionary<string, PlayerEntity> connectedPlayers = new Dictionary<string, PlayerEntity>();
+        protected readonly Dictionary<string, PlayerEntity> connectedPlayers = new();
+        protected readonly Dictionary<string, NetworkEntity> shells = new();
 
         protected int spawnedPlayersAmount = 0;
         protected double currentServerTime = 0;
@@ -38,6 +39,11 @@ namespace GLShared.Networking.Models
         }
 
         public virtual void SyncShell(IShellController _)
+        {
+
+        }
+
+        public void TryCreateShell(User user, int shellId)
         {
 
         }

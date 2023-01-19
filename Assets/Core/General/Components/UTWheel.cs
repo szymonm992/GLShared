@@ -213,18 +213,18 @@ namespace GLShared.General.Components
                 extension = Vector3.Distance(upperConstraintTransform.position, tirePos) / suspensionTravel;
                 if (hardPointAbs < Vector3.Distance(tirePosition, transform.position))
                 {
-                    compressionRate = 1 - extension;
+                    compressionRate = 1f - extension;
                 }
                 else
                 {
-                    compressionRate = 1;
-                    extension = 0;
+                    compressionRate = 1f;
+                    extension = 0f;
                 }
             }
             else
             {
-                extension = 1;
-                compressionRate = 0;
+                extension = 1f;
+                compressionRate = 0f;
             }
             return tirePos;
         }

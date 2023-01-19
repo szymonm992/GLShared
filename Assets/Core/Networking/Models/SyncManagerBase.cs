@@ -21,7 +21,7 @@ namespace GLShared.Networking.Models
         protected readonly Dictionary<string, NetworkEntity> shells = new();
 
         protected int spawnedPlayersAmount = 0;
-        protected double currentServerTime = 0;
+        protected double currentServerTime = 0d;
 
         public int SpawnedPlayersAmount => spawnedPlayersAmount;
         public double CurrentServerTime => currentServerTime;

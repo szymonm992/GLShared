@@ -34,7 +34,7 @@ namespace GLShared.General.Components
         [SerializeField] protected float suspensionTravel = 0.5f;
 
         [SerializeField]
-        protected UTWheelDebug debugSettings = new UTWheelDebug()
+        protected UTWheelDebug debugSettings = new()
         {
             DrawGizmos = true,
             DrawOnDisable = false,
@@ -147,7 +147,7 @@ namespace GLShared.General.Components
             tirePosition = Vector3.Lerp(tirePosition, newPosition, Time.deltaTime * Mathf.Max(50f, 100f * vehicleController.CurrentSpeedRatio));
 
 
-            NativeArray<float> result = new NativeArray<float>(2, Allocator.TempJob);
+            NativeArray<float> result = new(2, Allocator.TempJob);
             GetSuspensionForceJob jobData = new()
             {
                 damper = damper,
@@ -311,7 +311,7 @@ namespace GLShared.General.Components
                         if(notGroundedTransform != null)
                         {
                             Gizmos.color = Color.red;
-                            Handles.DrawWireCube(notGroundedTransform.position, new Vector3(0.06f, 0.06f, 0.06f));
+                            Handles.DrawWireCube(notGroundedTransform.position, new(0.06f, 0.06f, 0.06f));
                         }
 
                         Handles.color = Color.white;

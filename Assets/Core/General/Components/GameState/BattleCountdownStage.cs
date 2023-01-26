@@ -27,14 +27,14 @@ namespace GLShared.General.Components
         public override void StartState()
         {
             base.StartState();
-            currentTimer = battleParameters.CountdownTime;
+            currentTimer = battleParameters.BattleStartCountdown;
         }
 
         public override void Tick()
         {
             base.Tick();
 
-            if(isActive && !finishedCountdown)
+            if (isActive && !finishedCountdown)
             {
                 previousIntTimer = (int)currentTimer;
                 if (currentTimer > 0)

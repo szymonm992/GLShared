@@ -8,9 +8,13 @@ namespace GLShared.General.ScriptableObjects
     public class RandomBattleParameters : ScriptableObject, IBattleParameters
     {
         [Header("General parameters")]
-        [SerializeField] private float countdownTime = 2f;
+        [SerializeField] private float battleStartCountdown = 4f;
+        [Tooltip("In seconds")]
+        [SerializeField] private float battleDurationTime = 900f;
         [SerializeField] private int demandedPlayersSpawnedAmount = 1;
-        public float CountdownTime => countdownTime;
+
+        public float BattleDurationTime => battleDurationTime;
+        public float BattleStartCountdown => battleStartCountdown;
         public int DemandedPlayersSpawnedAmount => demandedPlayersSpawnedAmount;
 
         public Func<int, bool> AreAllPlayersSpawned => ArePlayersSpawned;

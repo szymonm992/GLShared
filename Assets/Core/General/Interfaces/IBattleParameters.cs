@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 namespace GLShared.General.Interfaces
 {
@@ -9,7 +6,8 @@ namespace GLShared.General.Interfaces
     {
         Func<int, bool> AreAllPlayersSpawned { get; }
         int DemandedPlayersSpawnedAmount { get; }
-        float CountdownTime { get; }
+        float BattleStartCountdown { get; }
+        float BattleDurationTime { get; }
 
     }
 }

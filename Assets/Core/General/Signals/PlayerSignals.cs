@@ -1,9 +1,5 @@
 using GLShared.General.Interfaces;
 using GLShared.General.Models;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Zenject;
 
 namespace GLShared.General.Signals
 {
@@ -25,7 +21,6 @@ namespace GLShared.General.Signals
         {
             public bool LockPlayersInput { get; set; }
         }
-
 
         public class OnPlayerDetectionStatusUpdate
         {

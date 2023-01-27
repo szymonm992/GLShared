@@ -33,6 +33,12 @@ namespace GLShared.General.Signals
             public string Username { get; set; }
             public string ShellId { get; set; }
         }
+
+        public class OnBattleTimeChanged
+        {
+            public int CurrentMinutesLeft { get; set; }
+            public int CurrentSecondsLeft { get; set; }
+        }
     }
 }
 

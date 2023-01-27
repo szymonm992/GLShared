@@ -16,24 +16,21 @@ namespace GLShared.General.Components
         private int currentSeconds = 0;
         private int previousSeconds = 0;
         public bool HaveSecondsChanged => haveSecondsChanged;
-        public int CurrentSecondsLeft => currentSeconds;
+        public int SecondsLeft => currentSeconds;
+        public int MinutesLeft => (int)currentTimer / 60;
 
         public override void StartState()
         {
             base.StartState();
-            currentSeconds = (int)currentTimer % 60;
+
             currentTimer = battleParameters.BattleDurationTime;
+            currentSeconds = (int)currentTimer % 60;
+            haveSecondsChanged = true;
         }
 
         public override void Tick()
         {
             base.Tick();
-
-            haveSecondsChanged = previousSeconds != currentSeconds;
-            if (haveSecondsChanged)
-            {
-                previousSeconds = currentSeconds;
-            }
 
             if (currentTimer > 0f)
             {
@@ -44,6 +41,12 @@ namespace GLShared.General.Components
             {
                 currentSeconds = 0;
                 currentTimer = 0;
+            }
+
+            haveSecondsChanged = previousSeconds != currentSeconds;
+            if (haveSecondsChanged)
+            {
+                previousSeconds = currentSeconds;
             }
         }
     }

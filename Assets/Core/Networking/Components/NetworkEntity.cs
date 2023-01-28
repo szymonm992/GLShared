@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEditor;
 using GLShared.Networking.Enums;
 using GLShared.Networking.Interfaces;
 using Zenject;
@@ -7,14 +8,16 @@ using GLShared.Networking.Models;
 
 namespace GLShared.Networking.Components
 {
+    
     public class NetworkEntity : MonoBehaviour, INetworkEntity, IInitializable
     {
         [Inject] protected readonly ISyncManager syncManager;
         [Inject] protected readonly SignalBus signalBus;
 
         [SerializeField] protected NetworkEntityType objectType;
-        [SerializeField] protected float syncRate = 0.2f;
         [SerializeField] protected bool isSender = false;
+        [SerializeField][HideInInspector] protected float syncRate = 0.015f;
+        
 
         protected NetworkTransform currentNetworkTransform;
         protected float timeLastSendingPosition;
@@ -25,6 +28,7 @@ namespace GLShared.Networking.Components
         public NetworkTransform CurrentNetworkTransform => currentNetworkTransform;
         public float SyncRate => syncRate;
         public bool IsPlayer => isPlayer;
+        public bool IsSender => isSender;
         public float EntityVelocity => entityVelocity;
 
         protected virtual void Update()

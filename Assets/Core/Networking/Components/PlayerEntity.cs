@@ -17,8 +17,7 @@ namespace GLShared.Networking.Components
         [Inject(Optional = true)] private readonly ISyncInterpolator syncInterpolator;
         [Inject(Optional = true)] private readonly ITurretController turretController;
 
-        [SerializeField] private bool isLocalPlayer;
-
+        private bool isLocalPlayer;
         private PlayerProperties playerProperties;
         private PlayerInput playerInput;
 

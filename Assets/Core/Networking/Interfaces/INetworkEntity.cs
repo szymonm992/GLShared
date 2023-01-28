@@ -5,10 +5,11 @@ namespace GLShared.Networking.Interfaces
 {
     public interface INetworkEntity
     {
-        public NetworkEntityType EntityType { get; }
-        public bool IsPlayer { get; }
-        public float EntityVelocity { get; }
-        public NetworkTransform CurrentNetworkTransform { get; }
+        NetworkEntityType EntityType { get; }
+        bool IsPlayer { get; }
+        bool IsSender { get; }
+        float EntityVelocity { get; }
+        NetworkTransform CurrentNetworkTransform { get; }
         void SendSyncPosition();
     }
 }

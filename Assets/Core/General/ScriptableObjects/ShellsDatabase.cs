@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace GLShared.General.ScriptableObjects
 {
-    public class ShellsDatabase : ScriptableObject, IShellsDatabase
+    public abstract class ShellsDatabase : ScriptableObject, IShellsDatabase
     {
         public virtual IEnumerable<ShellEntryInfo> AllShells { get; }
 

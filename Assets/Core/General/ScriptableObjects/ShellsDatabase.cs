@@ -5,15 +5,15 @@ using UnityEngine;
 
 namespace GLShared.General.ScriptableObjects
 {
-    public abstract class VehiclesDatabase : ScriptableObject, IVehiclesDatabase
+    public class ShellsDatabase : ScriptableObject, IShellsDatabase
     {
-        public virtual IEnumerable<VehicleEntryInfo> AllVehicles { get; }
+        public virtual IEnumerable<ShellEntryInfo> AllShells { get; }
 
-        public VehicleEntryInfo GetVehicleInfo(string name)
+        public ShellEntryInfo GetShellInfo(string shellId)
         {
-            foreach(var info in AllVehicles)
+            foreach (var info in AllShells)
             {
-                if(info.VehicleName == name)
+                if (info.ShellId == shellId)
                 {
                     return info;
                 }

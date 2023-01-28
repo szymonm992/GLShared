@@ -81,6 +81,11 @@ namespace GLShared.Networking.Models
             spawnedPlayersAmount++;
         }
 
+        protected virtual void CreateShell(User user, Vector3 spawnPosition, Vector3 spawnEulerAngles)
+        {
+
+        }
+
         protected virtual PlayerProperties GetPlayerInitData(User user, string vehicleName,
             Vector3 spawnPosition, Vector3 spawnEulerAngles)
         {

@@ -20,8 +20,8 @@ namespace GLShared.Networking.Models
         protected readonly Dictionary<string, PlayerEntity> connectedPlayers = new();
         protected readonly Dictionary<string, NetworkEntity> shells = new();
 
-        protected int spawnedPlayersAmount = 0;
-        protected double currentServerTime = 0d;
+        protected int spawnedPlayersAmount;
+        protected double currentServerTime;
 
         public int SpawnedPlayersAmount => spawnedPlayersAmount;
         public double CurrentServerTime => currentServerTime;
@@ -43,9 +43,9 @@ namespace GLShared.Networking.Models
 
         }
 
-        public void TryCreateShell(User user, int shellId)
+        public void TryCreateShell(User user, int shellId, Vector3 spawnPosition, Vector3 spawnEulerAngles)
         {
-
+            
         }
 
         public void TryCreatePlayer(User user, Vector3 spawnPosition, Vector3 spawnEulerAngles)

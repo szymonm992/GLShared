@@ -10,10 +10,13 @@ namespace GLShared.General.Installers
     public class SettingsInstaller : MonoInstaller
     {
         [SerializeField] private VehiclesDatabase vehiclesDatabase;
+        [SerializeField] private ShellsDatabase shellsDatabase;
 
         public override void InstallBindings()
         {
             Container.BindInterfacesAndSelfTo<IVehiclesDatabase>().FromInstance(vehiclesDatabase).AsCached();
+            Container.BindInterfacesAndSelfTo<IShellsDatabase>().FromInstance(shellsDatabase).AsCached();
+
             Container.BindInterfacesAndSelfTo<ISyncManager>().FromComponentInHierarchy().AsCached();
             Container.BindInterfacesAndSelfTo<IBattleManager>().FromComponentInHierarchy().AsCached();
         }

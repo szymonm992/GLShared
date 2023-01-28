@@ -17,9 +17,9 @@ namespace GLShared.Networking.Components
         [SerializeField] protected bool isSender = false;
 
         protected NetworkTransform currentNetworkTransform;
-        protected float timeLastSendingPosition = 0;
+        protected float timeLastSendingPosition;
         protected bool isPlayer = false;
-        protected float entityVelocity = 0;
+        protected float entityVelocity ;
 
         public NetworkEntityType EntityType => objectType;
         public NetworkTransform CurrentNetworkTransform => currentNetworkTransform;
@@ -65,7 +65,7 @@ namespace GLShared.Networking.Components
                     TurretAngleY = 0,
                     TimeStamp = 0d,
                     CurrentSpeed = EntityVelocity,
-                    Username = "OBSTACLE",
+                    Username = "NETWORK_ENTITY",
                 };
             }
         }

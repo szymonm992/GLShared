@@ -11,6 +11,8 @@ namespace GLShared.Networking.Components
     
     public class NetworkEntity : MonoBehaviour, INetworkEntity, IInitializable
     {
+        private const string NETWORK_ENTITY_DEFAULT_VALUE = "NETWORK_ENTITY";
+
         [Inject] protected readonly ISyncManager syncManager;
         [Inject] protected readonly SignalBus signalBus;
 
@@ -33,7 +35,7 @@ namespace GLShared.Networking.Components
 
         protected virtual void Update()
         {
-            if(!isSender || syncRate <= 0)
+            if (!isSender || syncRate <= 0)
             {
                 return;
             }
@@ -44,6 +46,7 @@ namespace GLShared.Networking.Components
                 timeLastSendingPosition = 0;
                 return;
             }
+
             timeLastSendingPosition += Time.deltaTime;
         }
 
@@ -69,7 +72,7 @@ namespace GLShared.Networking.Components
                     TurretAngleY = 0,
                     TimeStamp = 0d,
                     CurrentSpeed = EntityVelocity,
-                    Username = "NETWORK_ENTITY",
+                    Username = NETWORK_ENTITY_DEFAULT_VALUE,
                 };
             }
         }

@@ -8,5 +8,7 @@ namespace GLShared.Networking.Models
     {
         public const string VAR_BATTLE_TYPE = "battleType";
         public const string VAR_PLAYER_VEHICLE = "playerVehicle";
+
+        public const string RPC_PLAYER_INPUTS = "inbattle.playerInputs";
     }
 }

@@ -10,6 +10,8 @@ namespace GLShared.Networking.Components
 {
     public class PlayerEntity : NetworkEntity
     {
+        private const string LOCAL_PLAYER_NAME = "localPlayer";
+
         [Inject] private readonly IPlayerInstaller playerInstaller;
         [Inject] private readonly GameObjectContext context;
         [Inject] private readonly IVehicleController vehicleController;
@@ -41,10 +43,10 @@ namespace GLShared.Networking.Components
                 TurretAngleY = vehicleController.HasTurret ? turretController.Turret.localEulerAngles.y : 0,
                 TimeStamp = 0d,
                 CurrentSpeed = EntityVelocity,
-                Username = playerInstaller.IsPrototypeInstaller ? "localPlayer" : Properties.User.Name,
+                Username = playerInstaller.IsPrototypeInstaller ? LOCAL_PLAYER_NAME : Properties.User.Name,
             };
 
-            playerInput = new(playerInstaller.IsPrototypeInstaller ? "localPlayer" : playerProperties.User.Name, 0, 0,0, true, true, Vector3.zero, false);
+            playerInput = new(playerInstaller.IsPrototypeInstaller ? LOCAL_PLAYER_NAME : playerProperties.User.Name, 0, 0, 0, true, true, Vector3.zero, false);
         }
 
         public void UpdateProperties(PlayerProperties properties)

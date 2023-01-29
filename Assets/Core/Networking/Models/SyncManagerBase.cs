@@ -58,14 +58,14 @@ namespace GLShared.Networking.Models
 
         protected virtual void CreatePlayer(User user, Vector3 spawnPosition, Vector3 spawnEulerAngles, out PlayerProperties playerProperties)
         {
-            if (!user.ContainsVariable("playerVehicle"))
+            if (!user.ContainsVariable(NetworkConsts.VAR_PLAYER_VEHICLE))
             {
                 Debug.LogError("User does not contain 'playerVehicle' variable");
                 playerProperties = null;
                 return;
             }
             
-            var vehicleName = user.GetVariable("playerVehicle").Value.ToString();
+            var vehicleName = user.GetVariable(NetworkConsts.VAR_PLAYER_VEHICLE).Value.ToString();
             playerProperties = GetPlayerInitData(user, vehicleName, spawnPosition, spawnEulerAngles);
 
             if (playerProperties == null)

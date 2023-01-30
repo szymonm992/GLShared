@@ -12,9 +12,9 @@ namespace GLShared.General.Models
     {
         [Inject] private readonly Factory playerFactory;
         [Inject] private readonly SignalBus signalBus;
+
         public class Factory : PlaceholderFactory<PlayerEntity, PlayerProperties, PlayerEntity>
         {
-
         }
 
         public class PlayerInstaller : Installer

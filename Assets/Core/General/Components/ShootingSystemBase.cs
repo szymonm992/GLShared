@@ -10,6 +10,8 @@ namespace GLShared.General.Components
 {
     public abstract class ShootingSystemBase : MonoBehaviour, IInitializable, IShootingSystem
     {
+        protected const string DEFAULT_SHELL_ID = "0";
+
         [Inject] protected readonly IPlayerInputProvider inputProvider;
         [Inject] protected readonly SignalBus signalBus;
         [Inject] protected readonly PlayerEntity playerEntity;

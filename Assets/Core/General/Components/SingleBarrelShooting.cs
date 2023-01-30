@@ -35,7 +35,7 @@ namespace GLShared.General.Components
             signalBus.Fire(new PlayerSignals.OnPlayerShot()
             {
                 Username = playerEntity.Properties.User.Name,
-                ShellId = "0",
+                ShellId = DEFAULT_SHELL_ID,
             });
 
             AfterShotCallback(reloadTime);

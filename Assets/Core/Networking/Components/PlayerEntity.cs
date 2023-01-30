@@ -41,14 +41,14 @@ namespace GLShared.Networking.Components
             {
                 Position = transform.position,
                 EulerAngles = transform.eulerAngles,
-                GunAngleX = vehicleController.HasTurret ? turretController.Gun.localEulerAngles.x : 0,
-                TurretAngleY = vehicleController.HasTurret ? turretController.Turret.localEulerAngles.y : 0,
+                GunAngleX = vehicleController.HasTurret ? turretController.Gun.localEulerAngles.x : 0f,
+                TurretAngleY = vehicleController.HasTurret ? turretController.Turret.localEulerAngles.y : 0f,
                 TimeStamp = 0d,
                 CurrentSpeed = EntityVelocity,
                 Username = playerInstaller.IsPrototypeInstaller ? LOCAL_PLAYER_NAME : Properties.User.Name,
             };
 
-            playerInput = new(playerInstaller.IsPrototypeInstaller ? LOCAL_PLAYER_NAME : playerProperties.User.Name, 0, 0, 0, true, true, Vector3.zero, false);
+            playerInput = new (playerInstaller.IsPrototypeInstaller ? LOCAL_PLAYER_NAME : playerProperties.User.Name, 0f, 0f, 0f, true, true, Vector3.zero, false);
         }
 
         public void UpdateProperties(PlayerProperties properties)
@@ -113,7 +113,7 @@ namespace GLShared.Networking.Components
             }
             else
             {
-                return isSender ? vehicleController.CurrentSpeed : Properties.IsInitialized ? currentNetworkTransform.CurrentSpeed : 0;
+                return isSender ? vehicleController.CurrentSpeed : Properties.IsInitialized ? currentNetworkTransform.CurrentSpeed : 0f;
             }
         }
     }

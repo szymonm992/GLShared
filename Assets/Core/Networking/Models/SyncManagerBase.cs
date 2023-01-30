@@ -14,6 +14,7 @@ namespace GLShared.Networking.Models
     {
         [Inject] protected readonly SignalBus signalBus;
         [Inject] protected readonly IVehiclesDatabase vehicleDatabase;
+        [Inject] protected readonly IShellsDatabase shellsDatabase;
         [Inject] protected readonly PlayerSpawner playerSpawner;
         [Inject] protected readonly SmartFoxConnection smartFox;
 
@@ -43,9 +44,12 @@ namespace GLShared.Networking.Models
 
         }
 
-        public void TryCreateShell(User user, int shellId, Vector3 spawnPosition, Vector3 spawnEulerAngles)
+        public void TryCreateShell(string username, string shellId)
         {
-            
+            if (connectedPlayers.ContainsKey(username) && connectedPlayers[username].ShootingSystem != null)
+            {
+                CreateShell(username, shellId, connectedPlayers[username].ShootingSystem.ShellSpawnPosition, connectedPlayers[username].ShootingSystem.ShellSpawnEulerAngles);
+            }
         }
 
         public void TryCreatePlayer(User user, Vector3 spawnPosition, Vector3 spawnEulerAngles)
@@ -81,9 +85,10 @@ namespace GLShared.Networking.Models
             spawnedPlayersAmount++;
         }
 
-        protected virtual void CreateShell(User user, Vector3 spawnPosition, Vector3 spawnEulerAngles)
+        protected virtual void CreateShell(string username, string shellId, Vector3 spawnPosition, Vector3 spawnEulerAngles)
         {
-
+            var shellPrefab = shellsDatabase.GetShellInfo(shellId);
+            Debug.Log($"Player {username} has shot a shell");
         }
 
         protected virtual PlayerProperties GetPlayerInitData(User user, string vehicleName,

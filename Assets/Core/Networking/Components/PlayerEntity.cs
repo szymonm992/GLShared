@@ -18,6 +18,7 @@ namespace GLShared.Networking.Components
         [Inject] private readonly IPlayerInputProvider inputProvider;
         [Inject(Optional = true)] private readonly ISyncInterpolator syncInterpolator;
         [Inject(Optional = true)] private readonly ITurretController turretController;
+        [Inject(Optional = true)] private readonly IShootingSystem shootingSystem;
 
         private bool isLocalPlayer;
         private PlayerProperties playerProperties;
@@ -27,6 +28,7 @@ namespace GLShared.Networking.Components
         public PlayerProperties Properties => playerProperties;
         public PlayerInput Input => playerInput;
         public IPlayerInputProvider InputProvider => inputProvider;
+        public IShootingSystem ShootingSystem => shootingSystem;
         public string Username => currentNetworkTransform.Username;
 
         [Inject]

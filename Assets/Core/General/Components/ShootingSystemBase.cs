@@ -12,19 +12,22 @@ namespace GLShared.General.Components
     {
         protected const string DEFAULT_SHELL_ID = "0";
 
-        [Inject] protected readonly IPlayerInputProvider inputProvider;
         [Inject] protected readonly SignalBus signalBus;
         [Inject] protected readonly PlayerEntity playerEntity;
         [Inject] protected readonly ITurretController turretController;
+        [Inject] protected readonly IPlayerInputProvider inputProvider;
 
         protected float currentReloadTimer = 0;
         protected bool isReloading = true;
+        protected Vector3 shellSpawnPosition;
+        protected Vector3 shellSpawnEulerAngles;
 
         public bool ShootkingKeyPressed { get; set; }
+        public Vector3 ShellSpawnEulerAngles => shellSpawnEulerAngles;
+        public Vector3 ShellSpawnPosition => shellSpawnPosition;
 
         public virtual void Initialize()
         {
-            
         }
 
         protected virtual void Update()

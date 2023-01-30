@@ -24,7 +24,7 @@ namespace GLShared.Networking.Components
         protected NetworkTransform currentNetworkTransform;
         protected float timeLastSendingPosition;
         protected bool isPlayer = false;
-        protected float entityVelocity ;
+        protected float entityVelocity;
 
         public NetworkEntityType EntityType => objectType;
         public NetworkTransform CurrentNetworkTransform => currentNetworkTransform;

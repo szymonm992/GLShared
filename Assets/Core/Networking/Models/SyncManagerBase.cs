@@ -79,7 +79,6 @@ namespace GLShared.Networking.Models
                 return;
             }
 
-
             string vehicleName = user.GetVariable(NetworkConsts.VAR_PLAYER_VEHICLE).Value.ToString();
             playerProperties = GetPlayerInitData(username, vehicleName, spawnPosition, spawnEulerAngles);
 
@@ -108,7 +107,9 @@ namespace GLShared.Networking.Models
             var prefabEntity = shellProperties.ShellContext.gameObject.GetComponent<ShellEntity>();//this references only to prefab
             var shellEntity = shellSpawner.Spawn(prefabEntity, shellProperties);
 
-            shells.Add(shellId, shellEntity);
+            //TODO: consider whether having this in dictionary makes any sense
+            //TODO: Generate an unique id for shell (cuz shellid is repetitive) we need to generate some index
+            //shells.Add(shellId, shellEntity);
 
             Debug.Log($"Player {username} has shot a shell");
         }

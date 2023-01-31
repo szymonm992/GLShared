@@ -37,6 +37,7 @@ namespace GLShared.General.Components
         {
             var newShell = shellFactory.Create(prefab, properties);
             newShell.transform.SetLocalPositionAndRotation(properties.SpawnPosition, properties.SpawnRotation);
+            Debug.Log(properties.SpawnPosition.x + "|" + properties.SpawnPosition.y + "|" + properties.SpawnPosition.x);
 
             signalBus.Fire(new ShellSignals.OnShellSpawned()
             {

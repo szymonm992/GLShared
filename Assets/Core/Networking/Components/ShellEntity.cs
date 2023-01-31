@@ -9,6 +9,7 @@ namespace GLShared.Networking.Components
     public class ShellEntity : NetworkEntity
     {
         [Inject] private readonly IShellController shellController;
+        [Inject] private readonly GameObjectContext context;
         [Inject(Optional = true)] private readonly ISyncInterpolator syncInterpolator;
 
         private ShellProperties shellProperties;
@@ -19,7 +20,7 @@ namespace GLShared.Networking.Components
         [Inject]
         public void Construct(ShellProperties propertiesAtPrefab)
         {
-            propertiesAtPrefab.ShellContext = shellProperties.ShellContext;
+            propertiesAtPrefab.ShellContext = context;
             UpdateProperties(propertiesAtPrefab);
 
             currentNetworkTransform = new()

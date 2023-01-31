@@ -45,11 +45,11 @@ namespace GLShared.Networking.Models
 
         }
 
-        public void TryCreateShell(string username, string shellId)
+        public void TryCreateShell(string username, string shellId, Vector3 spawnPosition, Vector3 spawnEulerAngles)
         {
             if (connectedPlayers.ContainsKey(username) && connectedPlayers[username].ShootingSystem != null)
             {
-                CreateShell(username, shellId, connectedPlayers[username].ShootingSystem.ShellSpawnPosition, connectedPlayers[username].ShootingSystem.ShellSpawnEulerAngles);
+                CreateShell(username, shellId, spawnPosition, spawnEulerAngles);
             }
         }
 
@@ -80,7 +80,7 @@ namespace GLShared.Networking.Models
             }
 
 
-            var vehicleName = user.GetVariable(NetworkConsts.VAR_PLAYER_VEHICLE).Value.ToString();
+            string vehicleName = user.GetVariable(NetworkConsts.VAR_PLAYER_VEHICLE).Value.ToString();
             playerProperties = GetPlayerInitData(username, vehicleName, spawnPosition, spawnEulerAngles);
 
             if (playerProperties == null)

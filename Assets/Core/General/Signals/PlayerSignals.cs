@@ -1,5 +1,6 @@
 using GLShared.General.Interfaces;
 using GLShared.General.Models;
+using UnityEngine;
 
 namespace GLShared.General.Signals
 {
@@ -32,6 +33,8 @@ namespace GLShared.General.Signals
         {
             public string Username { get; set; }
             public string ShellId { get; set; }
+            public Vector3 ShellSpawnPosition { get; set; }
+            public Vector3 ShellSpawnEulerAngles { get; set; }
         }
 
         public class OnBattleTimeChanged

@@ -36,6 +36,8 @@ namespace GLShared.General.Components
             {
                 Username = playerEntity.Properties.Username,
                 ShellId = DEFAULT_SHELL_ID,
+                ShellSpawnPosition = shellSpawnPosition,
+                ShellSpawnEulerAngles = shellSpawnEulerAngles,
             });
 
             AfterShotCallback(reloadTime);

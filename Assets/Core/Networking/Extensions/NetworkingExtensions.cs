@@ -7,22 +7,42 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Jobs;
+using Sfs2X.Entities;
 
 namespace GLShared.Networking.Extensions
 {
     public static class NetworkingExtensions
     {
         #region ISFS Object
-        public static ISFSObject ToISFSOBject(this PlayerProperties properties)
+        public static ISFSObject ToISFSOBject(this PlayerProperties properties, string id)
         {
             ISFSObject data = new SFSObject();
+
             data.PutUtfString("username", properties.Username);
+            data.PutUtfString("id", id);
             data.PutFloat("spawnPositionX", properties.SpawnPosition.x);
             data.PutFloat("spawnPositionY", properties.SpawnPosition.y);
             data.PutFloat("spawnPositionZ", properties.SpawnPosition.z);
             data.PutFloat("spawnRotationX", properties.SpawnRotation.eulerAngles.x);
             data.PutFloat("spawnRotationY", properties.SpawnRotation.eulerAngles.y);
             data.PutFloat("spawnRotationZ", properties.SpawnRotation.eulerAngles.z);
+
+            return data;
+        }
+
+        public static ISFSObject ToISFSOBject(this ShellProperties properties, string id)
+        {
+            ISFSObject data = new SFSObject();
+
+            data.PutUtfString("username", properties.Username);
+            data.PutUtfString("id", id);
+            data.PutFloat("spawnPositionX", properties.SpawnPosition.x);
+            data.PutFloat("spawnPositionY", properties.SpawnPosition.y);
+            data.PutFloat("spawnPositionZ", properties.SpawnPosition.z);
+            data.PutFloat("spawnRotationX", properties.SpawnRotation.eulerAngles.x);
+            data.PutFloat("spawnRotationY", properties.SpawnRotation.eulerAngles.y);
+            data.PutFloat("spawnRotationZ", properties.SpawnRotation.eulerAngles.z);
+
             return data;
         }
 

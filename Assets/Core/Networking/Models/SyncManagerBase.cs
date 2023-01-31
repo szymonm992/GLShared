@@ -132,7 +132,7 @@ namespace GLShared.Networking.Models
                     ShellId = shellData.ShellId,
                     SpawnPosition = spawnPosition,
                     SpawnRotation = Quaternion.Euler(spawnEulerAngles.x, spawnEulerAngles.y, spawnEulerAngles.z),
-                    User = smartFox.Connection.UserManager.GetUserByName(username),
+                    Username = username,
                 };
             }
 

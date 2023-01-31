@@ -23,5 +23,6 @@ namespace GLShared.Networking.Models
         public const string RPC_BATTLE_TIMER = "inbattle.battleTimer";
         public const string RPC_SEND_GAME_STATE = "inbattle.sendGameStage";
         public const string RPC_PLAYER_SYNC = "inbattle.playerSync";
+        public const string RPC_SHELL_SPAWNED = "inbattle.shellSpawned";
     }
 }

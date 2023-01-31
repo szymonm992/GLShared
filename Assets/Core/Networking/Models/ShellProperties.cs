@@ -10,7 +10,7 @@ namespace GLShared.General.Models
         public Vector3 SpawnPosition { get; set; }
         public Quaternion SpawnRotation { get; set; }
         public string ShellId { get; set; }
-        public User User { get; set; }
+        public string Username { get; set; }
         public bool IsInitialized { get; set; } = false;
     }
 }

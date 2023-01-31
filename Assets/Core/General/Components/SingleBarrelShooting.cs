@@ -1,7 +1,6 @@
 using GLShared.General.Signals;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 namespace GLShared.General.Components
 {
@@ -31,6 +30,9 @@ namespace GLShared.General.Components
         protected void SingleShotLogic()
         {
             isReloading = true;
+
+            shellSpawnPosition = turretController.Gun.position;
+            shellSpawnEulerAngles = turretController.Gun.eulerAngles;
 
             signalBus.Fire(new PlayerSignals.OnPlayerShot()
             {

@@ -16,7 +16,7 @@ namespace GLShared.Networking.Extensions
         public static ISFSObject ToISFSOBject(this PlayerProperties properties)
         {
             ISFSObject data = new SFSObject();
-            data.PutUtfString("username", properties.User.Name);
+            data.PutUtfString("username", properties.Username);
             data.PutFloat("spawnPositionX", properties.SpawnPosition.x);
             data.PutFloat("spawnPositionY", properties.SpawnPosition.y);
             data.PutFloat("spawnPositionZ", properties.SpawnPosition.z);

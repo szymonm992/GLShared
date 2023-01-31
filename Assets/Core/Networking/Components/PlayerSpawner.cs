@@ -1,12 +1,10 @@
 using GLShared.General.Models;
 using GLShared.General.Signals;
 using GLShared.Networking.Components;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-namespace GLShared.General.Models
+namespace GLShared.General.Components
 {
     public class PlayerSpawner : MonoBehaviour
     {

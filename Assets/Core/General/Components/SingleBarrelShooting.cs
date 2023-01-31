@@ -34,7 +34,7 @@ namespace GLShared.General.Components
 
             signalBus.Fire(new PlayerSignals.OnPlayerShot()
             {
-                Username = playerEntity.Properties.User.Name,
+                Username = playerEntity.Properties.Username,
                 ShellId = DEFAULT_SHELL_ID,
             });
 

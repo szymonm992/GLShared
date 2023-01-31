@@ -16,10 +16,11 @@ namespace GLShared.Networking.Models
         [Inject] protected readonly IVehiclesDatabase vehicleDatabase;
         [Inject] protected readonly IShellsDatabase shellsDatabase;
         [Inject] protected readonly PlayerSpawner playerSpawner;
+        [Inject] protected readonly ShellSpawner shellSpawner;
         [Inject] protected readonly SmartFoxConnection smartFox;
 
         protected readonly Dictionary<string, PlayerEntity> connectedPlayers = new();
-        protected readonly Dictionary<string, NetworkEntity> shells = new();
+        protected readonly Dictionary<string, ShellEntity> shells = new();
 
         protected int spawnedPlayersAmount;
         protected double currentServerTime;
@@ -52,25 +53,35 @@ namespace GLShared.Networking.Models
             }
         }
 
-        public void TryCreatePlayer(User user, Vector3 spawnPosition, Vector3 spawnEulerAngles)
+        public void TryCreatePlayer(string username, Vector3 spawnPosition, Vector3 spawnEulerAngles)
         {
-            if (!connectedPlayers.ContainsKey(user.Name))
+            if (!connectedPlayers.ContainsKey(username))
             {
-                CreatePlayer(user, spawnPosition, spawnEulerAngles, out _);
+                CreatePlayer(username, spawnPosition, spawnEulerAngles, out _);
             }
         }
 
-        protected virtual void CreatePlayer(User user, Vector3 spawnPosition, Vector3 spawnEulerAngles, out PlayerProperties playerProperties)
+        protected virtual void CreatePlayer(string username, Vector3 spawnPosition, Vector3 spawnEulerAngles, out PlayerProperties playerProperties)
         {
-            if (!user.ContainsVariable(NetworkConsts.VAR_PLAYER_VEHICLE))
+            var user = smartFox.Connection.UserManager.GetUserByName(username);
+
+            if (user == null)
             {
-                Debug.LogError("User does not contain 'playerVehicle' variable");
+                Debug.LogError($"User '{username}' has not been found in User Manager");
                 playerProperties = null;
                 return;
             }
-            
+
+            if (!user.ContainsVariable(NetworkConsts.VAR_PLAYER_VEHICLE))
+            {
+                Debug.LogError($"User does not contain '{NetworkConsts.VAR_PLAYER_VEHICLE}' variable");
+                playerProperties = null;
+                return;
+            }
+
+
             var vehicleName = user.GetVariable(NetworkConsts.VAR_PLAYER_VEHICLE).Value.ToString();
-            playerProperties = GetPlayerInitData(user, vehicleName, spawnPosition, spawnEulerAngles);
+            playerProperties = GetPlayerInitData(username, vehicleName, spawnPosition, spawnEulerAngles);
 
             if (playerProperties == null)
             {
@@ -81,19 +92,50 @@ namespace GLShared.Networking.Models
             var prefabEntity = playerProperties.PlayerContext.gameObject.GetComponent<PlayerEntity>();//this references only to prefab
             var playerEntity = playerSpawner.Spawn(prefabEntity, playerProperties);
 
-            connectedPlayers.Add(user.Name, playerEntity);
+            connectedPlayers.Add(username, playerEntity);
             spawnedPlayersAmount++;
         }
 
         protected virtual void CreateShell(string username, string shellId, Vector3 spawnPosition, Vector3 spawnEulerAngles)
         {
-            var shellPrefab = shellsDatabase.GetShellInfo(shellId);
+            var shellProperties = GetShellInitData(username, shellId, spawnPosition, spawnEulerAngles);
+
+            if (shellProperties == null)
+            {
+                Debug.LogError("Could not create an init shell data from given parameters");
+            }
+
+            var prefabEntity = shellProperties.ShellContext.gameObject.GetComponent<ShellEntity>();//this references only to prefab
+            var shellEntity = shellSpawner.Spawn(prefabEntity, shellProperties);
+
+            shells.Add(shellId, shellEntity);
+
             Debug.Log($"Player {username} has shot a shell");
         }
 
-        protected virtual PlayerProperties GetPlayerInitData(User user, string vehicleName,
+        protected virtual PlayerProperties GetPlayerInitData(string username, string vehicleName,
             Vector3 spawnPosition, Vector3 spawnEulerAngles)
         {
+            return null;
+        }
+
+        protected ShellProperties GetShellInitData(string username, string shellId, 
+            Vector3 spawnPosition, Vector3 spawnEulerAngles)
+        {
+            var shellData = shellsDatabase.GetShellInfo(shellId);
+
+            if (shellData != null)
+            {
+                return new()
+                {
+                    ShellContext = shellData.ShellPrefab,
+                    ShellId = shellData.ShellId,
+                    SpawnPosition = spawnPosition,
+                    SpawnRotation = Quaternion.Euler(spawnEulerAngles.x, spawnEulerAngles.y, spawnEulerAngles.z),
+                    User = smartFox.Connection.UserManager.GetUserByName(username),
+                };
+            }
+
             return null;
         }
 

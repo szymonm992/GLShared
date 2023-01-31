@@ -11,7 +11,7 @@ namespace GLShared.General.Models
         public Quaternion SpawnRotation { get; set; }
         public string PlayerVehicleName { get; set; }
         public bool IsLocal { get; set; }
-        public User User { get; set; }
+        public string Username { get; set; }
         public bool IsInitialized { get; set; } = false;
     }
 }

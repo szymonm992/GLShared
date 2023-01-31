@@ -45,10 +45,10 @@ namespace GLShared.Networking.Components
                 TurretAngleY = vehicleController.HasTurret ? turretController.Turret.localEulerAngles.y : 0f,
                 TimeStamp = 0d,
                 CurrentSpeed = EntityVelocity,
-                Username = playerInstaller.IsPrototypeInstaller ? LOCAL_PLAYER_NAME : Properties.User.Name,
+                Username = playerInstaller.IsPrototypeInstaller ? LOCAL_PLAYER_NAME : Properties.Username,
             };
 
-            playerInput = new (playerInstaller.IsPrototypeInstaller ? LOCAL_PLAYER_NAME : playerProperties.User.Name, 0f, 0f, 0f, true, true, Vector3.zero, false);
+            playerInput = new (playerInstaller.IsPrototypeInstaller ? LOCAL_PLAYER_NAME : playerProperties.Username, 0f, 0f, 0f, true, true, Vector3.zero, false);
         }
 
         public void UpdateProperties(PlayerProperties properties)
@@ -94,7 +94,7 @@ namespace GLShared.Networking.Components
         {
             if (!playerInstaller.IsPrototypeInstaller)
             {
-                if (OnPlayerInitialized.PlayerProperties.User.Name == playerProperties.User.Name)
+                if (OnPlayerInitialized.PlayerProperties.Username == playerProperties.Username)
                 {
                     playerProperties.IsInitialized = true;
                 }

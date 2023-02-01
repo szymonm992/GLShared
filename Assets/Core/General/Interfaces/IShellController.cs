@@ -8,5 +8,6 @@ namespace GLShared.General.Interfaces
     public interface IShellController : IInitializable
     {
         public string OwnerUsername { get; }
+        public float Velocity { get; }
     }
 }

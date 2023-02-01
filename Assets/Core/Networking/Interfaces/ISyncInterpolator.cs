@@ -7,6 +7,6 @@ namespace GLShared.Networking.Interfaces
 {
     public interface ISyncInterpolator
     {
-        void ProcessCurrentNetworkTransform(NetworkTransform nTransform);
+        void ProcessCurrentNetworkTransform(INetworkTransform nTransform);
     }
 }

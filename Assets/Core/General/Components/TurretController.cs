@@ -73,7 +73,7 @@ namespace GLShared.General.Components
 
                 turret.localRotation = Quaternion.Euler(0.0f, localAngleY, 0.0f);
 
-                playerEntity.CurrentNetworkTransform.Update(this);
+                playerEntity.CurrentTransform.Update(this);
             }
 
         }
@@ -107,9 +107,8 @@ namespace GLShared.General.Components
 
                 gun.localRotation = Quaternion.Euler(localAngleX, 0.0f, 0.0f);
 
-                playerEntity.CurrentNetworkTransform.Update(this);
+                playerEntity.CurrentTransform.Update(this);
             }
-
         }
 
         private void OnLocalPlayerInitialized(PlayerSignals.OnPlayerInitialized OnLocalPlayerInitialized)

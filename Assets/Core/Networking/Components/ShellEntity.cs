@@ -8,14 +8,17 @@ namespace GLShared.Networking.Components
 {
     public class ShellEntity : NetworkEntity
     {
+        private const string SHELL_DEFAULT_ENTITY_NAME = "NETWORK_ENTITY";
         [Inject] private readonly IShellController shellController;
         [Inject] private readonly GameObjectContext context;
         [Inject(Optional = true)] private readonly ISyncInterpolator syncInterpolator;
 
         private ShellProperties shellProperties;
+        private NetworkShellTransform currentNetworkTransform;
 
         public ShellProperties Properties => shellProperties;
-        public string Username => currentNetworkTransform.Username;
+        public string Username => currentNetworkTransform.Identifier;
+        public NetworkShellTransform CurrentTransform => currentNetworkTransform;
 
         [Inject]
         public void Construct(ShellProperties propertiesAtPrefab)
@@ -23,15 +26,13 @@ namespace GLShared.Networking.Components
             propertiesAtPrefab.ShellContext = context;
             UpdateProperties(propertiesAtPrefab);
 
-            currentNetworkTransform = new()
+            currentNetworkTransform = new NetworkShellTransform()
             {
                 Position = transform.position,
                 EulerAngles = transform.eulerAngles,
-                GunAngleX = 0,
-                TurretAngleY = 0,
                 TimeStamp = 0d,
                 CurrentSpeed = EntityVelocity,
-                Username = shellProperties.ShellId,
+                Identifier = shellProperties.ShellId,
             };
         }
 
@@ -44,20 +45,38 @@ namespace GLShared.Networking.Components
         public override void SendSyncPosition()
         {
             base.SendSyncPosition();
+            entityVelocity = shellController.Velocity;
             currentNetworkTransform.Update(transform, EntityVelocity);
-            syncManager.SyncShell(shellController);
+            syncManager.SyncShell(this);
         }
 
-        public override void ReceiveSyncPosition(NetworkTransform newNetworkTransform)
+        public override void ReceiveSyncPosition(INetworkTransform newNetworkTransform)
         {
             if (isSender)
             {
                 return;
             }
 
-            currentNetworkTransform = newNetworkTransform;
+            currentNetworkTransform = (NetworkShellTransform)newNetworkTransform;
             base.ReceiveSyncPosition(currentNetworkTransform);
             syncInterpolator.ProcessCurrentNetworkTransform(currentNetworkTransform);
+        }
+
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            if (currentNetworkTransform == null)
+            {
+                currentNetworkTransform = new NetworkShellTransform()
+                {
+                    Position = transform.position,
+                    EulerAngles = transform.eulerAngles,
+                    TimeStamp = 0d,
+                    CurrentSpeed = EntityVelocity,
+                    Identifier = SHELL_DEFAULT_ENTITY_NAME,
+                };
+            }
         }
     }
 }

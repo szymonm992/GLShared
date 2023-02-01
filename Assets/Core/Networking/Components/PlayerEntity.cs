@@ -23,13 +23,16 @@ namespace GLShared.Networking.Components
         private bool isLocalPlayer;
         private PlayerProperties playerProperties;
         private PlayerInput playerInput;
+        private NetworkTransform currentNetworkTransform;
 
         public bool IsLocalPlayer => isLocalPlayer;
         public PlayerProperties Properties => playerProperties;
         public PlayerInput Input => playerInput;
         public IPlayerInputProvider InputProvider => inputProvider;
         public IShootingSystem ShootingSystem => shootingSystem;
-        public string Username => currentNetworkTransform.Username;
+        
+        public string Username => currentNetworkTransform.Identifier;
+        public NetworkTransform CurrentTransform => currentNetworkTransform;
 
         [Inject]
         public void Construct(PlayerProperties propertiesAtPrefab)
@@ -37,7 +40,7 @@ namespace GLShared.Networking.Components
             propertiesAtPrefab.PlayerContext = context;
             UpdateProperties(propertiesAtPrefab);
 
-            currentNetworkTransform = new()
+            currentNetworkTransform = new NetworkTransform()
             {
                 Position = transform.position,
                 EulerAngles = transform.eulerAngles,
@@ -45,7 +48,7 @@ namespace GLShared.Networking.Components
                 TurretAngleY = vehicleController.HasTurret ? turretController.Turret.localEulerAngles.y : 0f,
                 TimeStamp = 0d,
                 CurrentSpeed = EntityVelocity,
-                Username = playerInstaller.IsPrototypeInstaller ? LOCAL_PLAYER_NAME : Properties.Username,
+                Identifier = playerInstaller.IsPrototypeInstaller ? LOCAL_PLAYER_NAME : Properties.Username,
             };
 
             playerInput = new (playerInstaller.IsPrototypeInstaller ? LOCAL_PLAYER_NAME : playerProperties.Username, 0f, 0f, 0f, true, true, Vector3.zero, false);
@@ -66,14 +69,14 @@ namespace GLShared.Networking.Components
             syncManager.SyncPosition(this);
         }
 
-        public override void ReceiveSyncPosition(NetworkTransform newNetworkTransform)
+        public override void ReceiveSyncPosition(INetworkTransform newNetworkTransform)
         {
             if (isSender)
             {
                 return;
             }
 
-            currentNetworkTransform = newNetworkTransform;
+            currentNetworkTransform = (NetworkTransform)newNetworkTransform;
             base.ReceiveSyncPosition(currentNetworkTransform);
             syncInterpolator.ProcessCurrentNetworkTransform(currentNetworkTransform);
         }
@@ -81,6 +84,20 @@ namespace GLShared.Networking.Components
         public override void Initialize()
         {
             base.Initialize();
+
+            if (currentNetworkTransform == null)
+            {
+                currentNetworkTransform = new NetworkTransform()
+                {
+                    Position = transform.position,
+                    EulerAngles = transform.eulerAngles,
+                    GunAngleX = 0,
+                    TurretAngleY = 0,
+                    TimeStamp = 0d,
+                    CurrentSpeed = EntityVelocity,
+                    Identifier = NETWORK_ENTITY_DEFAULT_VALUE,
+                };
+            }
             signalBus.Subscribe<PlayerSignals.OnPlayerInitialized>(OnPlayerInitialized);
         }
 

@@ -1,13 +1,14 @@
 using GLShared.General.Interfaces;
+using GLShared.Networking.Interfaces;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace GLShared.Networking.Models
 {
-    public class NetworkTransform
+    public class NetworkTransform : INetworkTransform
     {
-        public string Username { get; set; }
+        public string Identifier { get; set; }
         public Vector3 Position { get; set; }
         public Quaternion Rotation => Quaternion.Euler(EulerAngles);
         public float GunAngleX { get; set; }

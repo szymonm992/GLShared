@@ -50,7 +50,7 @@ namespace GLShared.Networking.Extensions
         {
             ISFSObject data = new SFSObject();
 
-            data.PutUtfString("u", transform.Username);
+            data.PutUtfString("u", transform.Identifier);
 
             data.PutFloat("pX", transform.Position.x);
             data.PutFloat("pY", transform.Position.y);
@@ -62,6 +62,34 @@ namespace GLShared.Networking.Extensions
 
             data.PutFloat("gX", transform.GunAngleX);
             data.PutFloat("tY", transform.TurretAngleY);
+
+            data.PutFloat("v", transform.CurrentSpeed);
+
+            data.PutLong("tim", Convert.ToInt64(GeneralHelper.GenerateTimestamp()));
+
+            return data;
+        }
+
+        public static ISFSObject ToISFSOBject(this NetworkTransform transform, string identifier)
+        {
+            var data = ToISFSOBject(transform);
+            data.PutUtfString("id", identifier);
+            return data;
+        }
+
+        public static ISFSObject ToISFSOBject(this NetworkShellTransform transform)
+        {
+            ISFSObject data = new SFSObject();
+
+            data.PutUtfString("id", transform.Identifier);
+
+            data.PutFloat("pX", transform.Position.x);
+            data.PutFloat("pY", transform.Position.y);
+            data.PutFloat("pZ", transform.Position.z);
+
+            data.PutFloat("rX", transform.EulerAngles.x);
+            data.PutFloat("rY", transform.EulerAngles.y);
+            data.PutFloat("rZ", transform.EulerAngles.z);
 
             data.PutFloat("v", transform.CurrentSpeed);
 
@@ -99,7 +127,7 @@ namespace GLShared.Networking.Extensions
             {
                 Position = new Vector3(data.GetFloat("pX"), data.GetFloat("pY"), data.GetFloat("pZ")),
                 EulerAngles = new Vector3(data.GetFloat("rX"), data.GetFloat("rY"), data.GetFloat("rZ")),
-                Username = data.GetUtfString("u"),
+                Identifier = data.GetUtfString("u"),
                 TimeStamp = Convert.ToDouble(data.GetLong("tim")),
                 TurretAngleY = data.GetFloat("tY"),
                 GunAngleX = data.GetFloat("gX"),

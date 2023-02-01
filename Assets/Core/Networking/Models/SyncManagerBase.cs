@@ -32,7 +32,7 @@ namespace GLShared.Networking.Models
         {
         }
 
-        public virtual void SyncPosition(INetworkEntity _)
+        public virtual void SyncPosition(PlayerEntity _)
         {
         }
 
@@ -40,7 +40,7 @@ namespace GLShared.Networking.Models
         {
         }
 
-        public virtual void SyncShell(IShellController _)
+        public virtual void SyncShell(ShellEntity _)
         {
 
         }

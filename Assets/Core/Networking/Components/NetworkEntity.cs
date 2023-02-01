@@ -11,7 +11,7 @@ namespace GLShared.Networking.Components
     
     public class NetworkEntity : MonoBehaviour, INetworkEntity, IInitializable
     {
-        private const string NETWORK_ENTITY_DEFAULT_VALUE = "NETWORK_ENTITY";
+        protected const string NETWORK_ENTITY_DEFAULT_VALUE = "NETWORK_ENTITY";
 
         [Inject] protected readonly ISyncManager syncManager;
         [Inject] protected readonly SignalBus signalBus;
@@ -21,13 +21,12 @@ namespace GLShared.Networking.Components
         [SerializeField][HideInInspector] protected float syncRate = 0.015f;
         
 
-        protected NetworkTransform currentNetworkTransform;
         protected float timeLastSendingPosition;
         protected bool isPlayer = false;
         protected float entityVelocity;
 
         public NetworkEntityType EntityType => objectType;
-        public NetworkTransform CurrentNetworkTransform => currentNetworkTransform;
+        public INetworkTransform CurrentNetworkTransform { get; }
         public float SyncRate => syncRate;
         public bool IsPlayer => isPlayer;
         public bool IsSender => isSender;
@@ -54,27 +53,13 @@ namespace GLShared.Networking.Components
         {
         }
 
-        public virtual void ReceiveSyncPosition(NetworkTransform newNetworkTransform)
+        public virtual void ReceiveSyncPosition(INetworkTransform newNetworkTransform)
         {
         }
 
         public virtual void Initialize()
         {
             isPlayer = (this is PlayerEntity);
-
-            if (currentNetworkTransform == null)
-            {
-                currentNetworkTransform = new()
-                {
-                    Position = transform.position,
-                    EulerAngles = transform.eulerAngles,
-                    GunAngleX = 0,
-                    TurretAngleY = 0,
-                    TimeStamp = 0d,
-                    CurrentSpeed = EntityVelocity,
-                    Username = NETWORK_ENTITY_DEFAULT_VALUE,
-                };
-            }
         }
     }
 }

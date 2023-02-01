@@ -20,10 +20,10 @@ namespace GLShared.General.Interfaces
         void TryCreateShell(string username, string shellId, Vector3 spawnPosition, Vector3 spawnEulerAngles);
 
 
-        void SyncPosition(INetworkEntity networkEntity);
+        void SyncPosition(PlayerEntity playerEntity);
 
         void SyncInputs(PlayerInput playerInput);
 
-        void SyncShell(IShellController shellController);
+        void SyncShell(ShellEntity shellEntity);
     }
 }

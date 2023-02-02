@@ -1,5 +1,6 @@
 using GLShared.General.Interfaces;
 using GLShared.General.Models;
+using GLShared.General.Signals;
 using GLShared.Networking.Interfaces;
 using GLShared.Networking.Models;
 using Zenject;
@@ -77,6 +78,11 @@ namespace GLShared.Networking.Components
                     Identifier = SHELL_DEFAULT_ENTITY_NAME,
                 };
             }
+
+            signalBus.Fire(new ShellSignals.OnShellInitialized()
+            {
+                ShellId = Properties.ShellId,
+            });
         }
     }
 }

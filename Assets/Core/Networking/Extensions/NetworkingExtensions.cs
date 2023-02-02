@@ -70,13 +70,6 @@ namespace GLShared.Networking.Extensions
             return data;
         }
 
-        public static ISFSObject ToISFSOBject(this NetworkTransform transform, string identifier)
-        {
-            var data = ToISFSOBject(transform);
-            data.PutUtfString("id", identifier);
-            return data;
-        }
-
         public static ISFSObject ToISFSOBject(this NetworkShellTransform transform)
         {
             ISFSObject data = new SFSObject();
@@ -123,7 +116,7 @@ namespace GLShared.Networking.Extensions
 
         public static NetworkTransform ToNetworkTransform(this ISFSObject data)
         {
-            NetworkTransform transform = new()
+            return new()
             {
                 Position = new Vector3(data.GetFloat("pX"), data.GetFloat("pY"), data.GetFloat("pZ")),
                 EulerAngles = new Vector3(data.GetFloat("rX"), data.GetFloat("rY"), data.GetFloat("rZ")),
@@ -133,8 +126,18 @@ namespace GLShared.Networking.Extensions
                 GunAngleX = data.GetFloat("gX"),
                 CurrentSpeed = data.GetFloat("v"),
             };
+        }
 
-            return transform;
+        public static NetworkShellTransform ToNetworkShellTransform(this ISFSObject data)
+        {
+            return new()
+            {
+                Position = new Vector3(data.GetFloat("pX"), data.GetFloat("pY"), data.GetFloat("pZ")),
+                EulerAngles = new Vector3(data.GetFloat("rX"), data.GetFloat("rY"), data.GetFloat("rZ")),
+                Identifier = data.GetUtfString("id"),
+                TimeStamp = Convert.ToDouble(data.GetLong("tim")),
+                CurrentSpeed = data.GetFloat("v"),
+            };
         }
 
         public static PlayerInput ToPlayerInput(this ISFSObject data)

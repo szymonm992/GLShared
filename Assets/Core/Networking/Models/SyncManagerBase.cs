@@ -110,7 +110,7 @@ namespace GLShared.Networking.Models
 
             //TODO: consider whether having this in dictionary makes any sense
             //TODO: Generate an unique id for shell (cuz shellid is repetitive) we need to generate some index
-            shells.Add(spawnedShellsAmount.ToString(), shellEntity);
+            shells.Add(shellProperties.ShellNetworkIdentifier, shellEntity);
             spawnedShellsAmount++;
 
             Debug.Log($"Player {username} has shot a shell with id {spawnedShellsAmount}");
@@ -132,7 +132,7 @@ namespace GLShared.Networking.Models
                 return new()
                 {
                     ShellContext = shellData.ShellPrefab,
-                    ShellId = shellData.ShellId,
+                    ShellNetworkIdentifier = spawnedShellsAmount.ToString(),
                     SpawnPosition = spawnPosition,
                     SpawnRotation = Quaternion.Euler(spawnEulerAngles.x, spawnEulerAngles.y, spawnEulerAngles.z),
                     Username = username,

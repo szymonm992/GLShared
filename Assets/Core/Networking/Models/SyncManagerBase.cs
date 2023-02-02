@@ -110,7 +110,7 @@ namespace GLShared.Networking.Models
             var shellEntity = shellSpawner.Spawn(prefabEntity, shellProperties);
 
             spawnedShellsAmount++;
-            shells.Add(shellProperties.ShellId, shellEntity);
+            shells.Add(shellProperties.Identifier, shellEntity);
 
             Debug.Log($"Player {username} has shot a shell of id ({shellProperties.ShellId}) with network id ({shellProperties.Identifier})");
         }

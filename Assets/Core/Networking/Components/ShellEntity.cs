@@ -35,6 +35,11 @@ namespace GLShared.Networking.Components
                 CurrentSpeed = EntityVelocity,
                 Identifier = shellProperties.ShellId,
             };
+
+            signalBus.Fire(new ShellSignals.OnShellInitialized()
+            {
+                ShellId = Properties.ShellId,
+            });
         }
 
         public void UpdateProperties(ShellProperties properties)
@@ -46,6 +51,7 @@ namespace GLShared.Networking.Components
         public override void SendSyncPosition()
         {
             base.SendSyncPosition();
+
             entityVelocity = shellController.Velocity;
             currentNetworkTransform.Update(transform, EntityVelocity);
             syncManager.SyncShell(this);
@@ -78,11 +84,6 @@ namespace GLShared.Networking.Components
                     Identifier = SHELL_DEFAULT_ENTITY_NAME,
                 };
             }
-
-            signalBus.Fire(new ShellSignals.OnShellInitialized()
-            {
-                ShellId = Properties.ShellId,
-            });
         }
     }
 }

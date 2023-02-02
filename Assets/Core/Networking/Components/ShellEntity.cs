@@ -33,12 +33,12 @@ namespace GLShared.Networking.Components
                 EulerAngles = transform.eulerAngles,
                 TimeStamp = 0d,
                 CurrentSpeed = EntityVelocity,
-                Identifier = shellProperties.ShellNetworkIdentifier,
+                Identifier = shellProperties.ShellId,
             };
 
             signalBus.Fire(new ShellSignals.OnShellInitialized()
             {
-                ShellId = Properties.ShellNetworkIdentifier,
+                ShellId = Properties.ShellId,
             });
         }
 

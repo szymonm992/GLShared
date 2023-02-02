@@ -30,12 +30,12 @@ namespace GLShared.Networking.Extensions
             return data;
         }
 
-        public static ISFSObject ToISFSOBject(this ShellProperties properties, string id)
+        public static ISFSObject ToISFSOBject(this ShellProperties properties, string shellId, string identifier)
         {
             ISFSObject data = new SFSObject();
 
             data.PutUtfString("username", properties.Username);
-            data.PutUtfString("id", id);
+            data.PutUtfString("id", shellId+","+identifier);
             data.PutFloat("spawnPositionX", properties.SpawnPosition.x);
             data.PutFloat("spawnPositionY", properties.SpawnPosition.y);
             data.PutFloat("spawnPositionZ", properties.SpawnPosition.z);

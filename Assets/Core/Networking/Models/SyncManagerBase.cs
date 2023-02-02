@@ -103,6 +103,7 @@ namespace GLShared.Networking.Models
             if (shellProperties == null)
             {
                 Debug.LogError("Could not create an init shell data from given parameters");
+                return;
             }
 
             var prefabEntity = shellProperties.ShellContext.gameObject.GetComponent<ShellEntity>();//this references only to prefab
@@ -110,7 +111,7 @@ namespace GLShared.Networking.Models
 
             //TODO: consider whether having this in dictionary makes any sense
             //TODO: Generate an unique id for shell (cuz shellid is repetitive) we need to generate some index
-            shells.Add(shellProperties.ShellNetworkIdentifier, shellEntity);
+            shells.Add(shellProperties.ShellId, shellEntity);
             spawnedShellsAmount++;
 
             Debug.Log($"Player {username} has shot a shell with id {spawnedShellsAmount}");
@@ -132,10 +133,11 @@ namespace GLShared.Networking.Models
                 return new()
                 {
                     ShellContext = shellData.ShellPrefab,
-                    ShellNetworkIdentifier = spawnedShellsAmount.ToString(),
+                    ShellId = shellId,
                     SpawnPosition = spawnPosition,
                     SpawnRotation = Quaternion.Euler(spawnEulerAngles.x, spawnEulerAngles.y, spawnEulerAngles.z),
                     Username = username,
+                    Identifier = spawnedShellsAmount.ToString(),
                 };
             }
 

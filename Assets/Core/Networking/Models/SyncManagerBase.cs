@@ -50,7 +50,7 @@ namespace GLShared.Networking.Models
         {
             if (connectedPlayers.ContainsKey(username) && connectedPlayers[username].ShootingSystem != null)
             {
-                CreateShell(username, shellId, identifier, spawnPosition, spawnEulerAngles);
+                CreateShell(username, shellId, identifier, spawnPosition, spawnEulerAngles, out _);
             }
         }
 
@@ -96,9 +96,9 @@ namespace GLShared.Networking.Models
             spawnedPlayersAmount++;
         }
 
-        protected virtual void CreateShell(string username, string shellId, string identifier, Vector3 spawnPosition, Vector3 spawnEulerAngles)
+        protected virtual void CreateShell(string username, string shellId, string identifier, Vector3 spawnPosition, Vector3 spawnEulerAngles, out ShellProperties shellProperties)
         {
-            var shellProperties = GetShellInitData(username, shellId, identifier, spawnPosition, spawnEulerAngles);
+            shellProperties = GetShellInitData(username, shellId, identifier, spawnPosition, spawnEulerAngles);
 
             if (shellProperties == null)
             {
@@ -109,12 +109,10 @@ namespace GLShared.Networking.Models
             var prefabEntity = shellProperties.ShellContext.gameObject.GetComponent<ShellEntity>();//this references only to prefab
             var shellEntity = shellSpawner.Spawn(prefabEntity, shellProperties);
 
-            //TODO: consider whether having this in dictionary makes any sense
-            //TODO: Generate an unique id for shell (cuz shellid is repetitive) we need to generate some index
-            shells.Add(shellProperties.ShellId, shellEntity);
             spawnedShellsAmount++;
+            shells.Add(shellProperties.ShellId, shellEntity);
 
-            Debug.Log($"Player {username} has shot a shell with id {spawnedShellsAmount}");
+            Debug.Log($"Player {username} has shot a shell of id ({shellProperties.ShellId}) with network id ({shellProperties.Identifier})");
         }
 
         protected virtual PlayerProperties GetPlayerInitData(string username, string vehicleName,

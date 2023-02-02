@@ -46,11 +46,11 @@ namespace GLShared.Networking.Models
 
         }
 
-        public void TryCreateShell(string username, string shellId, Vector3 spawnPosition, Vector3 spawnEulerAngles)
+        public void TryCreateShell(string username, string shellId, string identifier, Vector3 spawnPosition, Vector3 spawnEulerAngles)
         {
             if (connectedPlayers.ContainsKey(username) && connectedPlayers[username].ShootingSystem != null)
             {
-                CreateShell(username, shellId, spawnPosition, spawnEulerAngles);
+                CreateShell(username, shellId, identifier, spawnPosition, spawnEulerAngles);
             }
         }
 
@@ -96,9 +96,9 @@ namespace GLShared.Networking.Models
             spawnedPlayersAmount++;
         }
 
-        protected virtual void CreateShell(string username, string shellId, Vector3 spawnPosition, Vector3 spawnEulerAngles)
+        protected virtual void CreateShell(string username, string shellId, string identifier, Vector3 spawnPosition, Vector3 spawnEulerAngles)
         {
-            var shellProperties = GetShellInitData(username, shellId, spawnPosition, spawnEulerAngles);
+            var shellProperties = GetShellInitData(username, shellId, identifier, spawnPosition, spawnEulerAngles);
 
             if (shellProperties == null)
             {
@@ -123,7 +123,7 @@ namespace GLShared.Networking.Models
             return null;
         }
 
-        protected ShellProperties GetShellInitData(string username, string shellId, 
+        protected ShellProperties GetShellInitData(string username, string shellId, string identifier,
             Vector3 spawnPosition, Vector3 spawnEulerAngles)
         {
             var shellData = shellsDatabase.GetShellInfo(shellId);
@@ -137,7 +137,7 @@ namespace GLShared.Networking.Models
                     SpawnPosition = spawnPosition,
                     SpawnRotation = Quaternion.Euler(spawnEulerAngles.x, spawnEulerAngles.y, spawnEulerAngles.z),
                     Username = username,
-                    Identifier = spawnedShellsAmount.ToString(),
+                    Identifier = identifier,
                 };
             }
 

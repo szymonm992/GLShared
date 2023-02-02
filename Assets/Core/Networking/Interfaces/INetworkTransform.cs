@@ -11,6 +11,7 @@ namespace GLShared.Networking.Interfaces
         float CurrentSpeed { get; }
         double TimeStamp { get; }
         Vector3 EulerAngles { get; }
+        Quaternion Rotation { get; }
 
         abstract void Update(Transform transform, float speed);
     }

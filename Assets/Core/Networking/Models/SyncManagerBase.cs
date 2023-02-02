@@ -23,6 +23,7 @@ namespace GLShared.Networking.Models
         protected readonly Dictionary<string, ShellEntity> shells = new();
 
         protected int spawnedPlayersAmount;
+        protected int spawnedShellsAmount;
         protected double currentServerTime;
 
         public int SpawnedPlayersAmount => spawnedPlayersAmount;
@@ -109,9 +110,10 @@ namespace GLShared.Networking.Models
 
             //TODO: consider whether having this in dictionary makes any sense
             //TODO: Generate an unique id for shell (cuz shellid is repetitive) we need to generate some index
-            //shells.Add(shellId, shellEntity);
+            shells.Add(spawnedShellsAmount.ToString(), shellEntity);
+            spawnedShellsAmount++;
 
-            Debug.Log($"Player {username} has shot a shell");
+            Debug.Log($"Player {username} has shot a shell with id {spawnedShellsAmount}");
         }
 
         protected virtual PlayerProperties GetPlayerInitData(string username, string vehicleName,

@@ -8,7 +8,9 @@ namespace GLShared.General.Installers
     {
         public override void InstallBindings()
         {
-            Container.BindInitializableExecutionOrder<ShellEntity>(+10);
+            Container.BindInitializableExecutionOrder<IShellController>(+10);
+            Container.BindInitializableExecutionOrder<ShellEntity>(+20);
+            
         }
     }
 }

@@ -96,9 +96,9 @@ namespace GLShared.Networking.Models
             spawnedPlayersAmount++;
         }
 
-        protected virtual void CreateShell(string username, string shellId, int identifier, Vector3 spawnPosition, Vector3 spawnEulerAngles, out ShellProperties shellProperties)
+        protected virtual void CreateShell(string username, string databaseId, int sceneId, Vector3 spawnPosition, Vector3 spawnEulerAngles, out ShellProperties shellProperties)
         {
-            shellProperties = GetShellInitData(username, shellId, identifier, spawnPosition, spawnEulerAngles);
+            shellProperties = GetShellInitData(username, databaseId, sceneId, spawnPosition, spawnEulerAngles);
 
             if (shellProperties == null)
             {
@@ -110,7 +110,7 @@ namespace GLShared.Networking.Models
             var shellEntity = shellSpawner.Spawn(prefabEntity, shellProperties);
 
             spawnedShellsAmount++;
-            shells.Add(identifier, shellEntity);
+            shells.Add(sceneId, shellEntity);
 
             Debug.Log($"Player {username} has shot a shell of id ({shellProperties.DatabaseId}) with network id ({shellProperties.ShellSceneIdentifier})");
         }

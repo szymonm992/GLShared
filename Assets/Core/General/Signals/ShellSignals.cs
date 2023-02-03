@@ -12,7 +12,7 @@ namespace GLShared.General.Signals
 
         public class OnShellInitialized
         {
-            public int ShellId { get; set; }
+            public int SceneId { get; set; }
         }
     }
 }

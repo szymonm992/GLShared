@@ -35,11 +35,6 @@ namespace GLShared.Networking.Components
                 CurrentSpeed = EntityVelocity,
                 Identifier = shellProperties.ShellSceneIdentifier.ToString(),
             };
-
-            signalBus.Fire(new ShellSignals.OnShellInitialized()
-            {
-                SceneId = Properties.ShellSceneIdentifier,
-            });
         }
 
         public void UpdateProperties(ShellProperties properties)

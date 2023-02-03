@@ -9,11 +9,6 @@ namespace GLShared.General.Signals
         {
             public ShellProperties ShellProperties { get; set; }
         }
-
-        public class OnShellInitialized
-        {
-            public int SceneId { get; set; }
-        }
     }
 }
 

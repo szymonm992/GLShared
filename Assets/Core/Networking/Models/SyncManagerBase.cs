@@ -1,6 +1,7 @@
 using GLShared.General.Components;
 using GLShared.General.Interfaces;
 using GLShared.General.Models;
+using GLShared.General.Signals;
 using GLShared.Networking.Components;
 using GLShared.Networking.Interfaces;
 using Sfs2X.Entities;
@@ -44,6 +45,19 @@ namespace GLShared.Networking.Models
         public virtual void SyncShell(ShellEntity _)
         {
 
+        }
+
+        public virtual void TryDestroyingShell(int sceneIdentifier)
+        {
+            if (shells.ContainsKey(sceneIdentifier))
+            {
+                shells.Remove(sceneIdentifier);
+
+                signalBus.Fire(new ShellSignals.OnShellDestroyed()
+                {
+                    ShellSceneId = sceneIdentifier,
+                });
+            }
         }
 
         public void TryCreateShell(string username, string databaseId, int sceneIdentifier, Vector3 spawnPosition, Vector3 spawnEulerAngles)

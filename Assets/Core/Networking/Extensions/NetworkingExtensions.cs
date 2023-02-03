@@ -34,7 +34,7 @@ namespace GLShared.Networking.Extensions
         {
             ISFSObject data = new SFSObject();
 
-            data.PutUtfString("username", properties.Username);
+            data.PutUtfString("owner", properties.Username);
             data.PutUtfString("dbId", properties.DatabaseId);
             data.PutInt("id", properties.ShellSceneIdentifier);
 

@@ -38,7 +38,7 @@ namespace GLShared.Networking.Components
 
             signalBus.Fire(new ShellSignals.OnShellInitialized()
             {
-                ShellId = Properties.DatabaseId,
+                ShellId = Properties.ShellSceneIdentifier,
             });
         }
 

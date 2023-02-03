@@ -51,12 +51,12 @@ namespace GLShared.Networking.Models
         {
             if (shells.ContainsKey(sceneIdentifier))
             {
-                shells.Remove(sceneIdentifier);
-
                 signalBus.Fire(new ShellSignals.OnShellDestroyed()
                 {
                     ShellSceneId = sceneIdentifier,
                 });
+
+                shells.Remove(sceneIdentifier);
             }
         }
 

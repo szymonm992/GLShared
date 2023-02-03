@@ -20,7 +20,7 @@ namespace GLShared.Networking.Models
         [Inject] protected readonly SmartFoxConnection smartFox;
 
         protected readonly Dictionary<string, PlayerEntity> connectedPlayers = new();
-        protected readonly Dictionary<string, ShellEntity> shells = new();
+        protected readonly Dictionary<int, ShellEntity> shells = new();
 
         protected int spawnedPlayersAmount;
         protected int spawnedShellsAmount;
@@ -46,11 +46,11 @@ namespace GLShared.Networking.Models
 
         }
 
-        public void TryCreateShell(string username, string shellId, string identifier, Vector3 spawnPosition, Vector3 spawnEulerAngles)
+        public void TryCreateShell(string username, string databaseId, int sceneIdentifier, Vector3 spawnPosition, Vector3 spawnEulerAngles)
         {
             if (connectedPlayers.ContainsKey(username) && connectedPlayers[username].ShootingSystem != null)
             {
-                CreateShell(username, shellId, identifier, spawnPosition, spawnEulerAngles, out _);
+                CreateShell(username, databaseId, sceneIdentifier, spawnPosition, spawnEulerAngles, out _);
             }
         }
 
@@ -96,7 +96,7 @@ namespace GLShared.Networking.Models
             spawnedPlayersAmount++;
         }
 
-        protected virtual void CreateShell(string username, string shellId, string identifier, Vector3 spawnPosition, Vector3 spawnEulerAngles, out ShellProperties shellProperties)
+        protected virtual void CreateShell(string username, string shellId, int identifier, Vector3 spawnPosition, Vector3 spawnEulerAngles, out ShellProperties shellProperties)
         {
             shellProperties = GetShellInitData(username, shellId, identifier, spawnPosition, spawnEulerAngles);
 
@@ -112,7 +112,7 @@ namespace GLShared.Networking.Models
             spawnedShellsAmount++;
             shells.Add(identifier, shellEntity);
 
-            Debug.Log($"Player {username} has shot a shell of id ({shellProperties.ShellId}) with network id ({shellProperties.Identifier})");
+            Debug.Log($"Player {username} has shot a shell of id ({shellProperties.DatabaseId}) with network id ({shellProperties.ShellSceneIdentifier})");
         }
 
         protected virtual PlayerProperties GetPlayerInitData(string username, string vehicleName,
@@ -121,21 +121,21 @@ namespace GLShared.Networking.Models
             return null;
         }
 
-        protected ShellProperties GetShellInitData(string username, string shellId, string identifier,
+        protected ShellProperties GetShellInitData(string username, string databaseId, int sceneIdentifier,
             Vector3 spawnPosition, Vector3 spawnEulerAngles)
         {
-            var shellData = shellsDatabase.GetShellInfo(shellId);
+            var shellData = shellsDatabase.GetShellInfo(databaseId);
 
             if (shellData != null)
             {
                 return new()
                 {
                     ShellContext = shellData.ShellPrefab,
-                    ShellId = shellId,
+                    DatabaseId = databaseId,
                     SpawnPosition = spawnPosition,
                     SpawnRotation = Quaternion.Euler(spawnEulerAngles.x, spawnEulerAngles.y, spawnEulerAngles.z),
                     Username = username,
-                    Identifier = identifier,
+                    ShellSceneIdentifier = sceneIdentifier,
                 };
             }
 

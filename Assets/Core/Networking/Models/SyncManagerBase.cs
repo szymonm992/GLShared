@@ -125,8 +125,6 @@ namespace GLShared.Networking.Models
 
             spawnedShellsAmount++;
             shells.Add(sceneId, shellEntity);
-
-            Debug.Log($"Player {username} has shot a shell of id ({shellProperties.DatabaseId}) with network id ({shellProperties.ShellSceneIdentifier})");
         }
 
         protected virtual PlayerProperties GetPlayerInitData(string username, string vehicleName,

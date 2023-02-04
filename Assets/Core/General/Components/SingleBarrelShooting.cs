@@ -1,6 +1,5 @@
 using GLShared.General.Signals;
 using UnityEngine;
-using Zenject;
 
 namespace GLShared.General.Components
 {

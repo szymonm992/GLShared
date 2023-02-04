@@ -10,6 +10,8 @@ namespace GLShared.General.Components
         public override void Initialize()
         {
             base.Initialize();
+
+            AfterShotCallback(reloadTime);
         }
 
         protected override void Update()

@@ -3,11 +3,7 @@ using GLShared.General.Models;
 using GLShared.Networking.Models;
 using Sfs2X.Entities.Data;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Unity.Jobs;
-using Sfs2X.Entities;
 
 namespace GLShared.Networking.Extensions
 {

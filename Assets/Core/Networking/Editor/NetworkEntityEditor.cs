@@ -8,12 +8,12 @@ namespace GLShared.Networking
     [CanEditMultipleObjects]
     public class NetworkEntityEditor : Editor
     {
-        private SerializedProperty isSenderProperty, syncRateProperty;
+        private SerializedProperty isSenderProperty, tickRateProperty;
 
         protected void OnEnable()
         {
             isSenderProperty = serializedObject.FindProperty("isSender");
-            syncRateProperty = serializedObject.FindProperty("syncRate");
+            tickRateProperty = serializedObject.FindProperty("tickRate");
         }
 
         public override void OnInspectorGUI()
@@ -24,7 +24,7 @@ namespace GLShared.Networking
             if (isSenderProperty.boolValue)
             {
                 EditorGUI.indentLevel++;
-                EditorGUILayout.PropertyField(syncRateProperty);
+                EditorGUILayout.PropertyField(tickRateProperty);
                 EditorGUI.indentLevel--;
             }
 

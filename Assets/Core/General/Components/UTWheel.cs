@@ -95,6 +95,7 @@ namespace GLShared.General.Components
         public override void Initialize()
         {
             base.Initialize();
+
             localRig = GetComponent<Rigidbody>();
             localCollider = GetComponent<MeshCollider>();
 
@@ -105,6 +106,7 @@ namespace GLShared.General.Components
         protected override void AssignPrimaryParameters()
         {
             base.AssignPrimaryParameters();
+
             if (extension == 0f)
             {
                 extension = suspensionTravel;
@@ -180,6 +182,7 @@ namespace GLShared.General.Components
         protected override void ApplyFriction()
         {
             base.ApplyFriction();
+
             if (isGrounded)
             {
                 Vector3 steeringDir = Transform.right;

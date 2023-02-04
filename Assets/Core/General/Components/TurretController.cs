@@ -70,10 +70,7 @@ namespace GLShared.General.Components
                 }
 
                 localAngleY = Mathf.MoveTowardsAngle(localAngleY, desiredLocalAngleY, Time.deltaTime * turretRotationSpeed);
-
                 turret.localRotation = Quaternion.Euler(0.0f, localAngleY, 0.0f);
-
-                playerEntity.CurrentTransform.Update(this);
             }
 
         }
@@ -104,10 +101,7 @@ namespace GLShared.General.Components
                 }
 
                 localAngleX = Mathf.MoveTowardsAngle(localAngleX, desiredAngleX, Time.deltaTime * gunRotationSpeed);
-
                 gun.localRotation = Quaternion.Euler(localAngleX, 0.0f, 0.0f);
-
-                playerEntity.CurrentTransform.Update(this);
             }
         }
 
@@ -135,6 +129,7 @@ namespace GLShared.General.Components
             {
                 RotateTurret();
                 RotateGun();
+                playerEntity.CurrentTransform.Update(this);
             }
 
             CacheControllerRotations();

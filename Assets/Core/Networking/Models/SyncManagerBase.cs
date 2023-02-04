@@ -142,7 +142,7 @@ namespace GLShared.Networking.Models
 
             if (shellData != null)
             {
-                return new()
+                return new ()
                 {
                     ShellContext = shellData.ShellPrefab,
                     DatabaseId = databaseId,

@@ -45,6 +45,10 @@ namespace GLShared.Networking.Extensions
             data.PutFloat("spawnRotationY", properties.SpawnRotation.eulerAngles.y);
             data.PutFloat("spawnRotationZ", properties.SpawnRotation.eulerAngles.z);
 
+            data.PutFloat("targetPosX", properties.TargetingPosition.x);
+            data.PutFloat("taregetPosY", properties.TargetingPosition.y);
+            data.PutFloat("targetPosZ", properties.TargetingPosition.z);
+
             return data;
         }
 

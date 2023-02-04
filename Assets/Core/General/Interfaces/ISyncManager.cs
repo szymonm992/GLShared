@@ -16,7 +16,8 @@ namespace GLShared.General.Interfaces
 
         void TryCreatePlayer(string username, Vector3 spawnPosition, Vector3 spawnEulerAngles);
 
-        void TryCreateShell(string username, string databaseId, int sceneIdentifier, Vector3 spawnPosition, Vector3 spawnEulerAngles);
+        void TryCreateShell(string username, string databaseId, int sceneIdentifier,
+            Vector3 spawnPosition, Vector3 spawnEulerAngles, Vector3 targetingPosition);
 
         void TryDestroyingShell(int sceneIdentifier);
 

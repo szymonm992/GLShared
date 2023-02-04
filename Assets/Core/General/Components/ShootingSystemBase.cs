@@ -11,6 +11,7 @@ namespace GLShared.General.Components
     public abstract class ShootingSystemBase : MonoBehaviour, IInitializable, IShootingSystem
     {
         protected const string DEFAULT_SHELL_ID = "0";
+        protected const float MAX_SHELL_FLIGHT_DISTANCE = 1000f;
 
         [Inject] protected readonly SignalBus signalBus;
         [Inject] protected readonly PlayerEntity playerEntity;
@@ -23,11 +24,21 @@ namespace GLShared.General.Components
         protected Vector3 shellSpawnEulerAngles;
 
         public bool ShootkingKeyPressed { get; set; }
+        
         public Vector3 ShellSpawnEulerAngles => shellSpawnEulerAngles;
         public Vector3 ShellSpawnPosition => shellSpawnPosition;
 
         public virtual void Initialize()
         {
+        }
+
+        public Vector3 GetGunTargetingPosition()
+        {
+            if (Physics.Raycast(new Ray(turretController.Gun.position, turretController.Gun.forward), out RaycastHit hit,  MAX_SHELL_FLIGHT_DISTANCE))
+            {
+                return hit.point;
+            }
+            return turretController.Gun.position + (turretController.Gun.forward * 1000f);
         }
 
         protected virtual void Update()

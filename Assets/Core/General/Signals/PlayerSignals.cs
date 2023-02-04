@@ -35,6 +35,7 @@ namespace GLShared.General.Signals
             public string ShellId { get; set; }
             public Vector3 ShellSpawnPosition { get; set; }
             public Vector3 ShellSpawnEulerAngles { get; set; }
+            public Vector3 TargetingPosition { get; set; }
         }
 
         public class OnBattleTimeChanged

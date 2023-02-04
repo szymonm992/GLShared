@@ -60,11 +60,11 @@ namespace GLShared.Networking.Models
             }
         }
 
-        public void TryCreateShell(string username, string databaseId, int sceneIdentifier, Vector3 spawnPosition, Vector3 spawnEulerAngles)
+        public void TryCreateShell(string username, string databaseId, int sceneIdentifier, Vector3 spawnPosition, Vector3 spawnEulerAngles, Vector3 targetingPosition)
         {
             if (connectedPlayers.ContainsKey(username) && connectedPlayers[username].ShootingSystem != null)
             {
-                CreateShell(username, databaseId, sceneIdentifier, spawnPosition, spawnEulerAngles, out _);
+                CreateShell(username, databaseId, sceneIdentifier, spawnPosition, spawnEulerAngles, targetingPosition, out _);
             }
         }
 
@@ -110,9 +110,9 @@ namespace GLShared.Networking.Models
             spawnedPlayersAmount++;
         }
 
-        protected virtual void CreateShell(string username, string databaseId, int sceneId, Vector3 spawnPosition, Vector3 spawnEulerAngles, out ShellProperties shellProperties)
+        protected virtual void CreateShell(string username, string databaseId, int sceneId, Vector3 spawnPosition, Vector3 spawnEulerAngles, Vector3 targetingPosition, out ShellProperties shellProperties)
         {
-            shellProperties = GetShellInitData(username, databaseId, sceneId, spawnPosition, spawnEulerAngles);
+            shellProperties = GetShellInitData(username, databaseId, sceneId, spawnPosition, spawnEulerAngles, targetingPosition);
 
             if (shellProperties == null)
             {
@@ -136,7 +136,7 @@ namespace GLShared.Networking.Models
         }
 
         protected ShellProperties GetShellInitData(string username, string databaseId, int sceneIdentifier,
-            Vector3 spawnPosition, Vector3 spawnEulerAngles)
+            Vector3 spawnPosition, Vector3 spawnEulerAngles, Vector3 targetingPosition)
         {
             var shellData = shellsDatabase.GetShellInfo(databaseId);
 
@@ -149,7 +149,8 @@ namespace GLShared.Networking.Models
                     SpawnPosition = spawnPosition,
                     SpawnRotation = Quaternion.Euler(spawnEulerAngles.x, spawnEulerAngles.y, spawnEulerAngles.z),
                     Username = username,
-                    ShellSceneIdentifier = sceneIdentifier,
+                    ShellSceneIdentifier = sceneIdentifier, 
+                    TargetingPosition = targetingPosition,
                 };
             }
 

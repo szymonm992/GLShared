@@ -8,6 +8,9 @@ namespace GLShared.General.Interfaces
     {
         Vector3 ShellSpawnEulerAngles { get; }
         Vector3 ShellSpawnPosition { get; }
+        
         bool ShootkingKeyPressed { get; set; }
+
+        Vector3 GetGunTargetingPosition();
     }
 }

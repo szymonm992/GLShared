@@ -21,6 +21,7 @@ namespace GLShared.General.Components
             }
 
             base.Update();
+
             if (ShootkingKeyPressed && !isReloading)
             {
                 SingleShotLogic();
@@ -40,6 +41,7 @@ namespace GLShared.General.Components
                 ShellId = DEFAULT_SHELL_ID,
                 ShellSpawnPosition = shellSpawnPosition,
                 ShellSpawnEulerAngles = shellSpawnEulerAngles,
+                TargetingPosition = GetGunTargetingPosition(),
             });
 
             AfterShotCallback(reloadTime);

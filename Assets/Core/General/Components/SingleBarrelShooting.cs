@@ -42,7 +42,7 @@ namespace GLShared.General.Components
                 ShellId = DEFAULT_SHELL_ID,
                 ShellSpawnPosition = shellSpawnPosition,
                 ShellSpawnEulerAngles = shellSpawnEulerAngles,
-                TargetingPosition = GetGunTargetingPosition(),
+                TargetingProperties = GetGunTargetingPosition(),
             });
 
             AfterShotCallback(reloadTime);

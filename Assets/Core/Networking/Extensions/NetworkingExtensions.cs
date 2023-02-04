@@ -37,13 +37,14 @@ namespace GLShared.Networking.Extensions
             data.PutFloat("spawnPositionX", properties.SpawnPosition.x);
             data.PutFloat("spawnPositionY", properties.SpawnPosition.y);
             data.PutFloat("spawnPositionZ", properties.SpawnPosition.z);
+
             data.PutFloat("spawnRotationX", properties.SpawnRotation.eulerAngles.x);
             data.PutFloat("spawnRotationY", properties.SpawnRotation.eulerAngles.y);
             data.PutFloat("spawnRotationZ", properties.SpawnRotation.eulerAngles.z);
 
-            data.PutFloat("targetPosX", properties.TargetingPosition.x);
-            data.PutFloat("taregetPosY", properties.TargetingPosition.y);
-            data.PutFloat("targetPosZ", properties.TargetingPosition.z);
+            data.PutFloat("targetPosX", properties.TargetingProperties.point.x);
+            data.PutFloat("taregetPosY", properties.TargetingProperties.point.y);
+            data.PutFloat("targetPosZ", properties.TargetingProperties.point.z);
 
             return data;
         }
@@ -149,6 +150,5 @@ namespace GLShared.Networking.Extensions
                 new Vector3(data.GetFloat("camX"), data.GetFloat("camY"), data.GetFloat("camZ")), data.GetBool("shtK"));
             return input;
         }
-        
     }
 }

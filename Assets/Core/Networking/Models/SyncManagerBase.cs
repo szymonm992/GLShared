@@ -60,11 +60,11 @@ namespace GLShared.Networking.Models
             }
         }
 
-        public void TryCreateShell(string username, string databaseId, int sceneIdentifier, Vector3 spawnPosition, Vector3 spawnEulerAngles, Vector3 targetingPosition)
+        public void TryCreateShell(string username, string databaseId, int sceneIdentifier, Vector3 spawnPosition, Vector3 spawnEulerAngles, (Vector3, float) targetingProperties)
         {
             if (connectedPlayers.ContainsKey(username) && connectedPlayers[username].ShootingSystem != null)
             {
-                CreateShell(username, databaseId, sceneIdentifier, spawnPosition, spawnEulerAngles, targetingPosition, out _);
+                CreateShell(username, databaseId, sceneIdentifier, spawnPosition, spawnEulerAngles, targetingProperties, out _);
             }
         }
 
@@ -110,9 +110,9 @@ namespace GLShared.Networking.Models
             spawnedPlayersAmount++;
         }
 
-        protected virtual void CreateShell(string username, string databaseId, int sceneId, Vector3 spawnPosition, Vector3 spawnEulerAngles, Vector3 targetingPosition, out ShellProperties shellProperties)
+        protected virtual void CreateShell(string username, string databaseId, int sceneId, Vector3 spawnPosition, Vector3 spawnEulerAngles, (Vector3, float) targetingProperties, out ShellProperties shellProperties)
         {
-            shellProperties = GetShellInitData(username, databaseId, sceneId, spawnPosition, spawnEulerAngles, targetingPosition);
+            shellProperties = GetShellInitData(username, databaseId, sceneId, spawnPosition, spawnEulerAngles, targetingProperties);
 
             if (shellProperties == null)
             {
@@ -134,7 +134,7 @@ namespace GLShared.Networking.Models
         }
 
         protected ShellProperties GetShellInitData(string username, string databaseId, int sceneIdentifier,
-            Vector3 spawnPosition, Vector3 spawnEulerAngles, Vector3 targetingPosition)
+            Vector3 spawnPosition, Vector3 spawnEulerAngles, (Vector3, float) targetingProperties)
         {
             var shellData = shellsDatabase.GetShellInfo(databaseId);
 
@@ -148,7 +148,7 @@ namespace GLShared.Networking.Models
                     SpawnRotation = Quaternion.Euler(spawnEulerAngles.x, spawnEulerAngles.y, spawnEulerAngles.z),
                     Username = username,
                     ShellSceneIdentifier = sceneIdentifier, 
-                    TargetingPosition = targetingPosition,
+                    TargetingProperties = targetingProperties,
                 };
             }
 

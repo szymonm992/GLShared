@@ -11,6 +11,6 @@ namespace GLShared.General.Interfaces
         
         bool ShootkingKeyPressed { get; set; }
 
-        Vector3 GetGunTargetingPosition();
+        (Vector3, float) GetGunTargetingPosition();
     }
 }

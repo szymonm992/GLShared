@@ -9,7 +9,7 @@ using GLShared.Networking.Models;
 namespace GLShared.Networking.Components
 {
     
-    public class NetworkEntity : MonoBehaviour, INetworkEntity, IInitializable
+    public class NetworkEntity : MonoBehaviour, INetworkEntity
     {
         protected const string NETWORK_ENTITY_DEFAULT_VALUE = "NETWORK_ENTITY";
 
@@ -59,7 +59,6 @@ namespace GLShared.Networking.Components
 
         public virtual void Initialize()
         {
-
         }
     }
 }

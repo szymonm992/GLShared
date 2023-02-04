@@ -1,9 +1,9 @@
 using GLShared.Networking.Enums;
-using GLShared.Networking.Models;
+using Zenject;
 
 namespace GLShared.Networking.Interfaces
 {
-    public interface INetworkEntity
+    public interface INetworkEntity : IInitializable
     {
         NetworkEntityType EntityType { get; }
         bool IsSender { get; }

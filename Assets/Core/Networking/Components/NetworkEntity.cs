@@ -28,7 +28,7 @@ namespace GLShared.Networking.Components
         public NetworkEntityType EntityType => objectType;
         public INetworkTransform CurrentNetworkTransform { get; }
         public float SyncRate => syncRate;
-        public bool IsPlayer => isPlayer;
+
         public bool IsSender => isSender;
         public float EntityVelocity => entityVelocity;
 
@@ -59,7 +59,7 @@ namespace GLShared.Networking.Components
 
         public virtual void Initialize()
         {
-            isPlayer = (this is PlayerEntity);
+
         }
     }
 }

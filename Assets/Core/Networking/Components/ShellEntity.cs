@@ -10,6 +10,7 @@ namespace GLShared.Networking.Components
     public class ShellEntity : NetworkEntity
     {
         private const string SHELL_DEFAULT_ENTITY_NAME = "NETWORK_ENTITY";
+
         [Inject] private readonly IShellController shellController;
         [Inject] private readonly GameObjectContext context;
         [Inject(Optional = true)] private readonly ISyncInterpolator syncInterpolator;

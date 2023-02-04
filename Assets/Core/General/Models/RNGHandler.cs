@@ -1,6 +1,4 @@
 using GLShared.General.Interfaces;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace GLShared.General.Models
@@ -23,7 +21,7 @@ namespace GLShared.General.Models
 
             float standardNormalDistribution = u * Mathf.Sqrt(-2f * Mathf.Log(S) / S);
 
-            float mean = (minimumValue + maximumValue) / 2f;
+            float mean = (minimumValue + maximumValue) * 0.5f;
             float sigma = (maximumValue - mean) / 3f;
 
             return Mathf.Clamp(standardNormalDistribution * sigma + mean, minimumValue, maximumValue);

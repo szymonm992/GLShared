@@ -45,13 +45,13 @@ namespace GLShared.General.Components
         {
             ShootkingKeyPressed = inputProvider.ShootingKey;
 
-            if (currentReloadTimer > 0f)
+            if (currentReloadTimer > 0.0f)
             {
                 currentReloadTimer -= Time.deltaTime;
             }
             else
             {
-                currentReloadTimer = 0f;
+                currentReloadTimer = 0.0f;
                 isReloading = false;
             }
         }

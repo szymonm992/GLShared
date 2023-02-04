@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f3be5d656c414b46a3dff0ed194b57d, type: 3}
   m_Name: RandomBattleParameters
   m_EditorClassIdentifier: 
-  countdownTime: 4
-  demandedPlayersSpawnedAmount: 2
+  battleStartCountdown: 4
+  battleDurationTime: 900
+  demandedPlayersSpawnedAmount: 4

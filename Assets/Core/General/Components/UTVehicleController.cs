@@ -13,7 +13,7 @@ namespace GLShared.General.Components
 {
     public abstract class UTVehicleController : MonoBehaviour, IVehicleController
     {
-        protected const float CUSTOM_GRAVITY_MAX_HORIZONTAL_ANGLE = 30f;
+        protected const float CUSTOM_GRAVITY_MAX_HORIZONTAL_ANGLE = 27f;
         protected const float CUSTOM_GRAVITY_MAX_VERTICAL_ANGLE = 35f;
 
         private const float IDLER_WHEEL_BUMP_MULTIPLIER = 1.25f;

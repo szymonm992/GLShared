@@ -45,9 +45,9 @@ namespace GLShared.General.Components
                 }
                 else
                 {
-                    (float angle, float maxAngle) anglesPair = horizontalAngle > verticalAngle ?
+                    (float currentOverreachAngle, float maxAllowedAngleInDirection) = horizontalAngle > verticalAngle ?
                         (horizontalAngle, CUSTOM_GRAVITY_MAX_HORIZONTAL_ANGLE): (verticalAngle, CUSTOM_GRAVITY_MAX_HORIZONTAL_ANGLE);
-                    float ratio = (anglesPair.angle / anglesPair.maxAngle);
+                    float ratio = (currentOverreachAngle / maxAllowedAngleInDirection);
 
                     rig.AddForce(Physics.gravity * ratio, ForceMode.Acceleration);
                 }

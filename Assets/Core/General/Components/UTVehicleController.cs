@@ -13,6 +13,9 @@ namespace GLShared.General.Components
 {
     public abstract class UTVehicleController : MonoBehaviour, IVehicleController
     {
+        protected const float CUSTOM_GRAVITY_MAX_HORIZONTAL_ANGLE = 25f;
+        protected const float CUSTOM_GRAVITY_MAX_VERTICAL_ANGLE = 35f;
+
         private const float IDLER_WHEEL_BUMP_MULTIPLIER = 1.25f;
         private const float BRAKE_FORCE_OPPOSITE_INPUT_AND_FORCE_MULTIPLIER = 0.1f;
         private const float BRAKE_FORCE_NO_INPUTS_MULTIPLIER = 0.25f;
@@ -30,7 +33,6 @@ namespace GLShared.General.Components
 
         [SerializeField] protected Transform centerOfMass;
         [SerializeField] protected VehicleType vehicleType = VehicleType.Car;
-        [SerializeField] protected float maxSlopeAngle = 35f;
         [SerializeField] protected AnimationCurve forwardPowerCurve;
         [SerializeField] protected AnimationCurve backwardPowerCurve;
         [SerializeField] protected bool doesGravityDamping = true;
@@ -100,8 +102,8 @@ namespace GLShared.General.Components
         public LayerMask WheelsCollisionDetectionMask => wheelsCollisionDetectionMask;
         public ForceApplyPoint BrakesForceApplyPoint => brakesForceApplyPoint;
         public ForceApplyPoint AccelerationForceApplyPoint => accelerationForceApplyPoint;
-
         public IEnumerable<IPhysicsWheel> AllWheels => allWheels;
+
         public float GetCurrentMaxSpeed()
         {
             return absoluteInputY == 0f ? 0f : (signedInputY > 0f ? currentMaxForwardSpeed : currentMaxBackwardSpeed);
@@ -170,8 +172,8 @@ namespace GLShared.General.Components
 
         protected void CalculateVehicleAngles()
         {
-            verticalAngle = 90f - Vector3.Angle(Vector3.up, transform.forward);
-            horizontalAngle = 90f - Vector3.Angle(Vector3.up, transform.right);
+            verticalAngle = Mathf.Abs(90f - Vector3.Angle(Vector3.up, transform.forward));
+            horizontalAngle = Mathf.Abs(90f - Vector3.Angle(Vector3.up, transform.right));
         }
 
         protected virtual void FixedUpdate()
@@ -210,7 +212,7 @@ namespace GLShared.General.Components
 
         protected void CalculateVehicleMaxVelocity()
         {
-            currentMaxSpeedRatio = 1f - Mathf.Max(Mathf.Min((verticalAngle / maxSlopeAngle), 1f), 0f);
+            currentMaxSpeedRatio = 1f - Mathf.Max(Mathf.Min((verticalAngle / CUSTOM_GRAVITY_MAX_HORIZONTAL_ANGLE), 1f), 0f);
             currentMaxForwardSpeed = currentMaxSpeedRatio * maxForwardSpeed;
             currentMaxBackwardSpeed = currentMaxSpeedRatio * maxBackwardsSpeed;
         }

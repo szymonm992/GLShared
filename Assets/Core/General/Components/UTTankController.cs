@@ -1,0 +1,55 @@
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using Zenject;
+
+namespace GLShared.General.Components
+{
+    public class UTTankController : UTVehicleController
+    {
+        [Inject] private readonly IEnumerable<UTIdlerWheel> idlerWheels;
+
+        public IEnumerable<UTIdlerWheel> IdlerWheels => idlerWheels;
+
+        protected override void FixedUpdate()
+        {
+            if (!runPhysics)
+            {
+                return;
+            }
+
+            base.FixedUpdate();
+            CustomGravityLogic();
+
+            if (!isUpsideDown)
+            {
+                EvaluateDriveParams();
+                Accelerate();
+                Brakes();
+
+                SetCurrentSpeed();
+            }
+        }
+
+        protected override void CustomGravityLogic()
+        {
+            if (!allGroundedWheels.Where(wheel => !wheel.IsIdler).Any())
+            {
+                rig.AddForce(Physics.gravity, ForceMode.Acceleration);
+            }
+            else
+            {
+                float angle = Vector3.Angle(transform.up, -Physics.gravity.normalized);
+
+                if (maxSlopeAngle >= angle)
+                {
+                    rig.AddForce(-transform.up * Physics.gravity.magnitude, ForceMode.Acceleration);
+                }
+                else
+                {
+                    rig.AddForce(Physics.gravity, ForceMode.Acceleration);
+                }
+            }
+        }
+    }
+}

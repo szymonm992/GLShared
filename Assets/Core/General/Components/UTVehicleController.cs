@@ -1,11 +1,9 @@
-using GLShared.General.Components;
 using GLShared.General.Enums;
 using GLShared.General.Interfaces;
 using GLShared.General.Models;
 using GLShared.General.ScriptableObjects;
 using GLShared.General.Signals;
 using GLShared.Networking.Components;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -28,6 +26,7 @@ namespace GLShared.General.Components
         [Inject] protected readonly DiContainer container;
         [Inject] protected readonly PlayerEntity playerEntity;
         [Inject] protected readonly IPlayerInstaller playerInstaller;
+        [Inject(Optional = true)] protected readonly ITurretController turretController;
 
         [SerializeField] protected Transform centerOfMass;
         [SerializeField] protected VehicleType vehicleType = VehicleType.Car;
@@ -46,28 +45,33 @@ namespace GLShared.General.Components
         protected bool hasTurret;
 
         protected float currentSpeed;
+
         protected float absoluteInputY;
         protected float absoluteInputX;
+        protected float signedInputY;
+
         protected float maxForwardSpeed;
         protected float maxBackwardsSpeed;
         protected float currentMaxForwardSpeed;
         protected float currentMaxBackwardSpeed;
         protected float currentSpeedRatio;
-        protected float signedInputY;
-
+        
         protected int allWheelsAmount;
 
         #region Computed variables
         protected bool isBrake;
         protected float inputY;
-        protected float currentMaxSpeedRatio;
+        
         protected float currentDriveForce;
+        protected float maxEngineForwardPower;
+        protected float currentMaxSpeedRatio;
         protected float currentLongitudalGrip;
+
         protected float forwardForce;
         protected float turnForce;
+        
         protected float verticalAngle;
         protected float horizontalAngle;
-        protected float maxEngineForwardPower;
 
         protected bool isUpsideDown = false;
         protected bool isMovingInDirectionOfInput = true;
@@ -116,8 +120,7 @@ namespace GLShared.General.Components
             hasAnyWheels = allAxles.Any() && allAxles.Where(axle => axle.HasAnyWheelPair && axle.HasAnyWheel).Any();
             allWheels = GetAllWheelsInAllAxles().ToArray();
             allWheelsAmount = allWheels.Count();
-
-            hasTurret = container.TryResolve<ITurretController>() != null;
+            hasTurret = turretController != null;
 
             signalBus.Subscribe<PlayerSignals.OnPlayerSpawned>(OnPlayerSpawned);
 
@@ -131,6 +134,7 @@ namespace GLShared.General.Components
                 if (OnPlayerSpawned.PlayerProperties.Username == playerEntity.Username)
                 {
                     gameObject.name = $"({OnPlayerSpawned.PlayerProperties.PlayerVehicleName}) Player '{playerEntity.Username}'";
+
                     signalBus.Fire(new PlayerSignals.OnPlayerInitialized()
                     {
                         PlayerProperties = playerEntity.Properties,
@@ -142,6 +146,7 @@ namespace GLShared.General.Components
             else
             {
                 gameObject.name = $"({OnPlayerSpawned.PlayerProperties.PlayerVehicleName}) Player '{playerEntity.Username}'";
+
                 signalBus.Fire(new PlayerSignals.OnPlayerInitialized()
                 {
                     PlayerProperties = playerEntity.Properties,
@@ -362,7 +367,7 @@ namespace GLShared.General.Components
 
         private void OnDrawGizmos()
         {
-#if UNITY_EDITOR
+            #if UNITY_EDITOR
             if (rig == null)
             {
                 rig = GetComponent<Rigidbody>();
@@ -370,7 +375,7 @@ namespace GLShared.General.Components
 
             Gizmos.color = Color.white;
             Gizmos.DrawSphere(rig.worldCenterOfMass, 0.2f);
-#endif
+            #endif
         }
     }
 }

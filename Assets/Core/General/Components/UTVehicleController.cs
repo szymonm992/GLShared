@@ -73,7 +73,8 @@ namespace GLShared.General.Components
         protected float turnForce;
         
         protected float verticalAngle;
-        protected float horizontalAngle;
+        protected float absVerticalAngle;
+        protected float absHorizontalAngle;
 
         protected bool isUpsideDown = false;
         protected bool isMovingInDirectionOfInput = true;
@@ -94,7 +95,7 @@ namespace GLShared.General.Components
         public float SignedInputY => signedInputY;
         public float MaxForwardSpeed => maxForwardSpeed;
         public float MaxBackwardsSpeed => maxBackwardsSpeed;
-        public float HorizontalAngle => horizontalAngle;
+        public float HorizontalAngle => absHorizontalAngle;
         public bool DoesGravityDamping => doesGravityDamping;
         public bool IsUpsideDown => isUpsideDown;
         public bool HasTurret => hasTurret;
@@ -172,8 +173,10 @@ namespace GLShared.General.Components
 
         protected void CalculateVehicleAngles()
         {
-            verticalAngle = Mathf.Abs(90f - Vector3.Angle(Vector3.up, transform.forward));
-            horizontalAngle = Mathf.Abs(90f - Vector3.Angle(Vector3.up, transform.right));
+            verticalAngle = 90f - Vector3.Angle(Vector3.up, transform.forward);
+            absVerticalAngle = Mathf.Abs(verticalAngle);
+
+            absHorizontalAngle = Mathf.Abs(90f - Vector3.Angle(Vector3.up, transform.right));
         }
 
         protected virtual void FixedUpdate()
@@ -212,9 +215,18 @@ namespace GLShared.General.Components
 
         protected void CalculateVehicleMaxVelocity()
         {
-            currentMaxSpeedRatio = 1f - Mathf.Max(Mathf.Min((verticalAngle / CUSTOM_GRAVITY_MAX_HORIZONTAL_ANGLE), 1f), 0f);
-            currentMaxForwardSpeed = currentMaxSpeedRatio * maxForwardSpeed;
-            currentMaxBackwardSpeed = currentMaxSpeedRatio * maxBackwardsSpeed;
+            currentMaxSpeedRatio = 1f - Mathf.Max(Mathf.Min(absVerticalAngle / CUSTOM_GRAVITY_MAX_VERTICAL_ANGLE, 1f), 0f);
+
+            if (verticalAngle > 0f)
+            {
+                currentMaxForwardSpeed = currentMaxSpeedRatio * maxForwardSpeed;
+                currentMaxBackwardSpeed = (1 + currentMaxSpeedRatio) * maxBackwardsSpeed;
+            }
+            else
+            {
+                currentMaxForwardSpeed = (1 + currentMaxSpeedRatio) * maxForwardSpeed;
+                currentMaxBackwardSpeed = currentMaxSpeedRatio * maxBackwardsSpeed;
+            }
         }
 
         protected void SetCurrentSpeed()
@@ -327,10 +339,10 @@ namespace GLShared.General.Components
 
                         rig.AddForceAtPosition(desiredAccel * (wheel.TireMass * forceMultiplier) * forwardDir, brakesPoint);
                     }
-
                 }
             }
         }
+
         protected virtual void CustomGravityLogic()
         {
         }

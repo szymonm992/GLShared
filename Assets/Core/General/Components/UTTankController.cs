@@ -39,14 +39,14 @@ namespace GLShared.General.Components
             }
             else
             {
-                if (CUSTOM_GRAVITY_MAX_HORIZONTAL_ANGLE >= horizontalAngle && CUSTOM_GRAVITY_MAX_VERTICAL_ANGLE >= verticalAngle)
+                if (CUSTOM_GRAVITY_MAX_HORIZONTAL_ANGLE >= absHorizontalAngle && CUSTOM_GRAVITY_MAX_VERTICAL_ANGLE >= absVerticalAngle)
                 {
                     rig.AddForce(-transform.up * Physics.gravity.magnitude, ForceMode.Acceleration);
                 }
                 else
                 {
-                    (float currentOverreachAngle, float maxAllowedAngleInDirection) = horizontalAngle > verticalAngle ?
-                        (horizontalAngle, CUSTOM_GRAVITY_MAX_HORIZONTAL_ANGLE): (verticalAngle, CUSTOM_GRAVITY_MAX_HORIZONTAL_ANGLE);
+                    (float currentOverreachAngle, float maxAllowedAngleInDirection) = absHorizontalAngle > absVerticalAngle ?
+                        (absHorizontalAngle, CUSTOM_GRAVITY_MAX_HORIZONTAL_ANGLE): (absVerticalAngle, CUSTOM_GRAVITY_MAX_VERTICAL_ANGLE);
                     float ratio = (currentOverreachAngle / maxAllowedAngleInDirection);
 
                     rig.AddForce(Physics.gravity * ratio, ForceMode.Acceleration);

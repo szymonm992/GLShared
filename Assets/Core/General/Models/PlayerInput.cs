@@ -37,12 +37,12 @@ namespace GLShared.General.Models
             ShootingKey = shootingKey;
         }
 
-        public PlayerInput(string username, float horizontal, float vertical, float rawVertical, bool brake)
+        public PlayerInput(string username, float horizontal, float vertical, float rawVertical)//aconstructor for remote clients
         {
+            Username = username;
             Horizontal = horizontal;
             Vertical = vertical;
             RawVertical = rawVertical;
-            Brake = brake;
         }
 
         public void UpdateCameraTarget(Vector3 cameraTargetingPosition)
@@ -60,6 +60,5 @@ namespace GLShared.General.Models
             TurretLockKey = turretLockKey;
             ShootingKey = shootingKey;
         }
-
     }
 }

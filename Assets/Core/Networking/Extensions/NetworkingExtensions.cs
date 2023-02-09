@@ -153,8 +153,7 @@ namespace GLShared.Networking.Extensions
 
         public static PlayerInput ToRemotePlayerInput(this ISFSObject data)
         {
-            PlayerInput input = new(data.GetUtfString("u"), data.GetFloat("hor"), data.GetFloat("ver"), data.GetFloat("rVer"),
-                data.GetBool("brk"));
+            PlayerInput input = new (data.GetUtfString("u"), data.GetFloat("hor"), data.GetFloat("ver"), data.GetFloat("rVer"));
             return input;
         }
     }

@@ -150,5 +150,12 @@ namespace GLShared.Networking.Extensions
                 new Vector3(data.GetFloat("camX"), data.GetFloat("camY"), data.GetFloat("camZ")), data.GetBool("shtK"));
             return input;
         }
+
+        public static PlayerInput ToRemotePlayerInput(this ISFSObject data)
+        {
+            PlayerInput input = new(data.GetUtfString("u"), data.GetFloat("hor"), data.GetFloat("ver"), data.GetFloat("rVer"),
+                data.GetBool("brk"));
+            return input;
+        }
     }
 }

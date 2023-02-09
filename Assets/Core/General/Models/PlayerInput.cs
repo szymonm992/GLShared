@@ -37,6 +37,14 @@ namespace GLShared.General.Models
             ShootingKey = shootingKey;
         }
 
+        public PlayerInput(string username, float horizontal, float vertical, float rawVertical, bool brake)
+        {
+            Horizontal = horizontal;
+            Vertical = vertical;
+            RawVertical = rawVertical;
+            Brake = brake;
+        }
+
         public void UpdateCameraTarget(Vector3 cameraTargetingPosition)
         {
             CameraTargetingPosition = cameraTargetingPosition;

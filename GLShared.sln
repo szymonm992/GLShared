@@ -111,6 +111,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.TestTools.CodeCoverag
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.VisualScripting.Shared.Editor", "Unity.VisualScripting.Shared.Editor.csproj", "{32E91EDF-2E91-1F69-3BFF-0B37EC591791}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{9A3B3896-0D2A-E0B0-F8CF-4BD5CCC923D5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -337,6 +339,10 @@ Global
 		{32E91EDF-2E91-1F69-3BFF-0B37EC591791}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32E91EDF-2E91-1F69-3BFF-0B37EC591791}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32E91EDF-2E91-1F69-3BFF-0B37EC591791}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A3B3896-0D2A-E0B0-F8CF-4BD5CCC923D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A3B3896-0D2A-E0B0-F8CF-4BD5CCC923D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A3B3896-0D2A-E0B0-F8CF-4BD5CCC923D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A3B3896-0D2A-E0B0-F8CF-4BD5CCC923D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

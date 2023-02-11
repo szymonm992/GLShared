@@ -14,6 +14,8 @@ namespace GLShared.General.Installers
 
         public override void InstallBindings()
         {
+            Container.BindInterfacesAndSelfTo<TerrainChecker>().FromNew().AsSingle();
+
             Container.BindInterfacesAndSelfTo<IVehiclesDatabase>().FromInstance(vehiclesDatabase).AsCached();
             Container.BindInterfacesAndSelfTo<IShellsDatabase>().FromInstance(shellsDatabase).AsCached();
 

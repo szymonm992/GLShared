@@ -303,7 +303,7 @@ namespace GLShared.General.Components
 
                                 rig.AddForceAtPosition((forwardForce * wheel.Transform.forward), acceleratePoint);
 
-                                if (absHorizontalAngle < CUSTOM_GRAVITY_MAX_HORIZONTAL_ANGLE)
+                                if (currentFrictionPair.IsDefaultLayer)
                                 {
                                     rig.AddForceAtPosition((turnForce * -wheel.Transform.right), wheel.UpperConstraintPoint);
                                 }
@@ -317,7 +317,7 @@ namespace GLShared.General.Components
                             wheelVelocityLocal = wheel.Transform.InverseTransformDirection(rig.GetPointVelocity(wheel.UpperConstraintPoint));
                             forwardForce = inputY * maxEngineForwardPower * IDLER_WHEEL_BUMP_MULTIPLIER;
 
-                            if (absHorizontalAngle < CUSTOM_GRAVITY_MAX_HORIZONTAL_ANGLE)
+                            if (currentFrictionPair.IsDefaultLayer)
                             {
                                 turnForce = wheelVelocityLocal.x * currentDriveForce;
                                 rig.AddForceAtPosition((turnForce * -wheel.Transform.right), wheel.Transform.position);
@@ -338,7 +338,8 @@ namespace GLShared.General.Components
         {
             if (!allGroundedWheels.Any() 
                 || verticalAngle >= CUSTOM_GRAVITY_MAX_VERTICAL_ANGLE
-                || absHorizontalAngle >= CUSTOM_GRAVITY_MAX_HORIZONTAL_ANGLE)
+                || absHorizontalAngle >= currentFrictionPair.HorizontalAnglesRange.Max 
+                || !currentFrictionPair.IsDefaultLayer)
             {
                 return;
             }
@@ -346,6 +347,7 @@ namespace GLShared.General.Components
             currentLongitudalGrip = isBrake ? 1f : (inputProvider.RawVertical != 0f ?
                (isMovingInDirectionOfInput ? 0f : BRAKE_FORCE_OPPOSITE_INPUT_AND_FORCE_MULTIPLIER)
                : BRAKE_FORCE_NO_INPUTS_MULTIPLIER);
+
 
             if (inputProvider.RawVertical == 0f || isBrake || !isMovingInDirectionOfInput)
             {

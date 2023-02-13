@@ -5,7 +5,7 @@ namespace GLShared.General.ScriptableObjects
     [CreateAssetMenu(fileName = "GameParameters", menuName = "UT/Game settings/GameParameters")]
     public class GameParameters : ScriptableObject
     {
-        [Header("General parameters")][Range(3f, 5f)]
+        [Header("General parameters")][Range(1f, 5f)]
         [SerializeField] private float speedMultiplier = 4f;
 
         [Header("Vehicles wheel parameters")]

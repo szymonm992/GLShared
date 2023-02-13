@@ -10,29 +10,36 @@ namespace GLShared.General.Models
     public class GroundFrictionPair
     {
         [SerializeField] private TerrainLayer[] layers;
-        [SerializeField] private AngleFrictionThreshold[] angleFrictionThresholds;
         [SerializeField] private bool isDefaultLayer = false;
+
+        [Range(0f, 1f)]
+        [SerializeField] private float friction;
+        [Range(0f, 1f)]
+        [SerializeField] private float steeringMultiplier = 1f;
+        [SerializeField] private RangedFloat anglesRange;
+
+        public float Friction => friction;
+        public float SteeringMultiplier => steeringMultiplier;
+        public RangedFloat HorizontalAnglesRange => anglesRange;
+        
 
         public IEnumerable<TerrainLayer> Layers => layers;
         public bool IsDefaultLayer => isDefaultLayer;
 
         public float GetFrictionForAngle(float angle)
         {
-            float friction = 1f;
+            float returnFriction = 1f;
 
-            foreach (var pair in angleFrictionThresholds)
+            if (anglesRange.Min <= angle)
             {
-                if (pair.AnglesRange.Min <= angle)
-                {
-                    friction = pair.Friction;
-                }
-                else
-                {
-                    friction = 0f;
-                }
+                returnFriction = friction;
+            }
+            else
+            {
+                returnFriction = 0f;
             }
 
-            return friction;
+            return returnFriction;
         }
     }
 }

@@ -37,7 +37,7 @@ namespace GLShared.General.Components
                 return;
             }
 
-            currentSteerForce = GetSteerForceMultiplier();
+            currentSteerForce = GetCurrentSteerForce();
 
             if (inputProvider.CombinedInput > 1f)
             {
@@ -70,9 +70,14 @@ namespace GLShared.General.Components
             }
         }
 
-        private float GetSteerForceMultiplier()
+        private float GetCurrentSteerForce()
         {
             var currentPair = suspensionController.CurrentFrictionPair;
+
+            if (currentPair == null)
+            {
+                return vehicleStats.SteerForce;
+            }
 
             if (suspensionController.HorizontalAngle >= currentPair.HorizontalAnglesRange.Max)
             {

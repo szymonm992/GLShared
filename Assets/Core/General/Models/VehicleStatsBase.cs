@@ -12,6 +12,7 @@ namespace GLShared.General.Models
         [SerializeField] protected float mass;
         [SerializeField] protected float drag;
         [SerializeField] protected float angularDrag;
+        [SerializeField] protected float steerForce;
 
         [Header("Combat")]
         [SerializeField] protected float turretRotationSpeed;
@@ -28,6 +29,7 @@ namespace GLShared.General.Models
         public float Mass => mass;
         public float Drag => drag;
         public float AngularDrag => angularDrag;
+        public float SteerForce => steerForce;
         #endregion
 
 

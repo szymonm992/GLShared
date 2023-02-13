@@ -307,7 +307,6 @@ namespace GLShared.General.Components
                                 {
                                     rig.AddForceAtPosition((turnForce * -wheel.Transform.right), wheel.UpperConstraintPoint);
                                 }
-                                
                             }
                         }
                         else
@@ -418,7 +417,6 @@ namespace GLShared.General.Components
             {
                 Debug.Log(terrainLayerName);
                 currentTerrainLayer = terrainLayerName;
-                //currentSideFriction = groundManager.GetFrictionForLayer(currentTerrainLayer, absHorizontalAngle);
                 currentFrictionPair = groundManager.GetPair(currentTerrainLayer);
                 currentSideFriction = currentFrictionPair.GetFrictionForAngle(absHorizontalAngle);
             }

@@ -1,5 +1,6 @@
 using Frontend.Scripts.Interfaces;
 using GLShared.General.Interfaces;
+using GLShared.General.Models;
 using UnityEngine;
 using Zenject;
 
@@ -10,13 +11,11 @@ namespace GLShared.General.Components
         [Inject(Id = "mainRig")] private Rigidbody rig;
         [Inject] private readonly IVehicleController suspensionController;
         [Inject] private readonly IPlayerInputProvider inputProvider;
+        [Inject] private readonly VehicleStatsBase vehicleStats;
 
-        [SerializeField] private float steerForce;
 
         private float steerInput;
         private float currentSteerForce;
-
-        public float SteerForce => steerForce;
 
         public void SetSteeringInput(float input)
         {
@@ -80,7 +79,7 @@ namespace GLShared.General.Components
                 return 0.1f;
             }
 
-            return currentPair.IsDefaultLayer ? steerForce : steerForce * currentPair.SteeringMultiplier;
+            return currentPair.IsDefaultLayer ? vehicleStats.SteerForce : vehicleStats.SteerForce * currentPair.SteeringMultiplier;
         }
     }
 }

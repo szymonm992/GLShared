@@ -1,7 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace GLShared.General.Models
@@ -18,28 +15,21 @@ namespace GLShared.General.Models
         [SerializeField] private float steeringMultiplier = 1f;
         [SerializeField] private RangedFloat anglesRange;
 
-        public float Friction => friction;
-        public float SteeringMultiplier => steeringMultiplier;
         public RangedFloat HorizontalAnglesRange => anglesRange;
-        
-
         public IEnumerable<TerrainLayer> Layers => layers;
         public bool IsDefaultLayer => isDefaultLayer;
+        public float SteeringMultiplier => steeringMultiplier;
 
         public float GetFrictionForAngle(float angle)
         {
-            float returnFriction = 1f;
-
             if (anglesRange.Min <= angle)
             {
-                returnFriction = friction;
+                return friction;
             }
             else
             {
-                returnFriction = 0f;
+                return 0f;
             }
-
-            return returnFriction;
         }
     }
 }

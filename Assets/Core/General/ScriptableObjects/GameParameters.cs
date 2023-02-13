@@ -6,7 +6,7 @@ namespace GLShared.General.ScriptableObjects
     public class GameParameters : ScriptableObject
     {
         [Header("General parameters")][Range(1f, 5f)]
-        [SerializeField] private float speedMultiplier = 4f;
+        [SerializeField] private float speedMultiplier = 3.4f;
 
         [Header("Vehicles wheel parameters")]
         [SerializeField] private float maxWheelDetectionAngle = 75f;

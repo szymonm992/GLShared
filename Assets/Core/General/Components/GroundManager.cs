@@ -1,5 +1,4 @@
 using GLShared.General.Models;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -10,6 +9,7 @@ namespace GLShared.General.Components
     public class GroundManager : MonoBehaviour, IInitializable
     {
         public const float DEFAULT_FRICTION_VALUE = 1f;
+
         [SerializeField] private List<GroundFrictionPair> groundFrictionList;
 
         public void Initialize()

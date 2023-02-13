@@ -39,9 +39,26 @@ namespace GLShared.General.Components
             }
             else
             {
+                if (currentFrictionPair.IsDefaultLayer)
+                {
+                    if (CUSTOM_GRAVITY_MAX_HORIZONTAL_ANGLE >= absHorizontalAngle && CUSTOM_GRAVITY_MAX_VERTICAL_ANGLE >= absVerticalAngle)
+                    {
+                        ApplyNormalizedGravity();
+                    }
+                    else
+                    {
+                        (float currentOverreachAngle, float maxAllowedAngleInDirection) = absHorizontalAngle > absVerticalAngle ?
+                            (absHorizontalAngle, CUSTOM_GRAVITY_MAX_HORIZONTAL_ANGLE) : (absVerticalAngle, CUSTOM_GRAVITY_MAX_VERTICAL_ANGLE);
+                        float ratio = (currentOverreachAngle / maxAllowedAngleInDirection);
+
+                        rig.AddForce(Physics.gravity * ratio, ForceMode.Acceleration);
+                    }
+                }
+
+
                 if (CUSTOM_GRAVITY_MAX_HORIZONTAL_ANGLE >= absHorizontalAngle && CUSTOM_GRAVITY_MAX_VERTICAL_ANGLE >= absVerticalAngle)
                 {
-                    rig.AddForce(-transform.up * Physics.gravity.magnitude, ForceMode.Acceleration);
+                    ApplyNormalizedGravity();
                 }
                 else
                 {
@@ -52,6 +69,11 @@ namespace GLShared.General.Components
                     rig.AddForce(Physics.gravity * ratio, ForceMode.Acceleration);
                 }
             }
+        }
+
+        private void ApplyNormalizedGravity()
+        {
+            rig.AddForce(-transform.up * Physics.gravity.magnitude, ForceMode.Acceleration);
         }
     }
 }

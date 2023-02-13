@@ -1,4 +1,5 @@
 using GLShared.General.Enums;
+using GLShared.General.Models;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
@@ -22,12 +23,17 @@ namespace GLShared.General.Interfaces
         float MaxForwardSpeed { get; }
         float MaxBackwardsSpeed { get; }
         float HorizontalAngle { get; }
+        float CurrentSideFriction { get; }
+
         bool IsUpsideDown { get; }
         bool HasTurret { get; }
-  
+
         LayerMask WheelsCollisionDetectionMask { get; }
         ForceApplyPoint BrakesForceApplyPoint { get; }
         ForceApplyPoint AccelerationForceApplyPoint { get; }
+
+        GroundFrictionPair CurrentFrictionPair { get; }
+
         abstract float GetCurrentMaxSpeed();
         abstract void SetupRigidbody();
 

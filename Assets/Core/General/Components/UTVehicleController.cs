@@ -3,6 +3,7 @@ using GLShared.General.Interfaces;
 using GLShared.General.Models;
 using GLShared.General.ScriptableObjects;
 using GLShared.General.Signals;
+using GLShared.General.Utilities;
 using GLShared.Networking.Components;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,14 +14,14 @@ namespace GLShared.General.Components
 {
     public abstract class UTVehicleController : MonoBehaviour, IVehicleController
     {
-        protected const float CUSTOM_GRAVITY_MAX_HORIZONTAL_ANGLE = 27f;
-        protected const float CUSTOM_GRAVITY_MAX_VERTICAL_ANGLE = 35f;
+        public const float CUSTOM_GRAVITY_MAX_VERTICAL_ANGLE = 35f;
 
         private const float IDLER_WHEEL_BUMP_MULTIPLIER = 1.25f;
         private const float BRAKE_FORCE_OPPOSITE_INPUT_AND_FORCE_MULTIPLIER = 0.1f;
         private const float BRAKE_FORCE_NO_INPUTS_MULTIPLIER = 0.25f;
 
         [Inject(Id = "mainRig")] protected Rigidbody rig;
+        [Inject(Id = "mainTerrain")] protected Terrain terrain;
         [Inject] protected readonly SignalBus signalBus;
         [Inject] protected readonly IEnumerable<IVehicleAxle> allAxles;
         [Inject] protected readonly GameParameters gameParameters;
@@ -28,6 +29,8 @@ namespace GLShared.General.Components
         [Inject] protected readonly VehicleStatsBase vehicleStats;
         [Inject] protected readonly DiContainer container;
         [Inject] protected readonly PlayerEntity playerEntity;
+        [Inject] protected readonly TerrainChecker terrainChecker;
+        [Inject] protected readonly GroundManager groundManager;
         [Inject] protected readonly IPlayerInstaller playerInstaller;
         [Inject(Optional = true)] protected readonly ITurretController turretController;
 
@@ -57,7 +60,7 @@ namespace GLShared.General.Components
         protected float currentMaxForwardSpeed;
         protected float currentMaxBackwardSpeed;
         protected float currentSpeedRatio;
-        
+
         protected int allWheelsAmount;
 
         #region Computed variables
@@ -80,6 +83,10 @@ namespace GLShared.General.Components
         protected bool isMovingInDirectionOfInput = true;
 
         protected Vector3 wheelVelocityLocal;
+        protected GroundFrictionPair currentFrictionPair;
+
+        protected string currentTerrainLayer;
+        protected float currentSideFriction;
         #endregion
 
         protected IEnumerable<IPhysicsWheel> allGroundedWheels;
@@ -87,6 +94,8 @@ namespace GLShared.General.Components
 
         public VehicleType VehicleType => vehicleType;
         public IEnumerable<IVehicleAxle> AllAxles => allAxles;
+        public GroundFrictionPair CurrentFrictionPair => currentFrictionPair;
+
         public bool HasAnyWheels => hasAnyWheels;
         public float CurrentSpeed => currentSpeed;
         public float CurrentSpeedRatio => currentSpeedRatio;
@@ -96,6 +105,8 @@ namespace GLShared.General.Components
         public float MaxForwardSpeed => maxForwardSpeed;
         public float MaxBackwardsSpeed => maxBackwardsSpeed;
         public float HorizontalAngle => absHorizontalAngle;
+        public float CurrentSideFriction => currentSideFriction;
+
         public bool DoesGravityDamping => doesGravityDamping;
         public bool IsUpsideDown => isUpsideDown;
         public bool HasTurret => hasTurret;
@@ -179,6 +190,11 @@ namespace GLShared.General.Components
             absHorizontalAngle = Mathf.Abs(90f - Vector3.Angle(Vector3.up, transform.right));
         }
 
+        protected void ApplySidewaysFriction(float value)
+        {
+            GetGroundedWheelsInAllAxles().ForEach(wheel => wheel.SidewaysTireGripFactor = value);
+        }
+
         protected virtual void FixedUpdate()
         {
             if (!runPhysics)
@@ -186,6 +202,7 @@ namespace GLShared.General.Components
                 return;
             }
 
+            CheckGroundLayer(terrain);
             CalculateVehicleAngles();
             CalculateVehicleMaxVelocity();
 
@@ -285,7 +302,12 @@ namespace GLShared.General.Components
                                 Vector3 acceleratePoint = wheel.ReturnWheelPoint(accelerationForceApplyPoint);
 
                                 rig.AddForceAtPosition((forwardForce * wheel.Transform.forward), acceleratePoint);
-                                rig.AddForceAtPosition((turnForce * -wheel.Transform.right), wheel.UpperConstraintPoint);
+
+                                if (absHorizontalAngle < CUSTOM_GRAVITY_MAX_HORIZONTAL_ANGLE)
+                                {
+                                    rig.AddForceAtPosition((turnForce * -wheel.Transform.right), wheel.UpperConstraintPoint);
+                                }
+                                
                             }
                         }
                         else
@@ -295,8 +317,11 @@ namespace GLShared.General.Components
                             wheelVelocityLocal = wheel.Transform.InverseTransformDirection(rig.GetPointVelocity(wheel.UpperConstraintPoint));
                             forwardForce = inputY * maxEngineForwardPower * IDLER_WHEEL_BUMP_MULTIPLIER;
 
-                            turnForce = wheelVelocityLocal.x * currentDriveForce;
-                            rig.AddForceAtPosition((turnForce * -wheel.Transform.right), wheel.Transform.position);
+                            if (absHorizontalAngle < CUSTOM_GRAVITY_MAX_HORIZONTAL_ANGLE)
+                            {
+                                turnForce = wheelVelocityLocal.x * currentDriveForce;
+                                rig.AddForceAtPosition((turnForce * -wheel.Transform.right), wheel.Transform.position);
+                            }
 
                             if ((float)idler.IdlerSite == inputProvider.RawVertical)
                             {
@@ -311,7 +336,9 @@ namespace GLShared.General.Components
 
         protected void Brakes()
         {
-            if (!allGroundedWheels.Any())
+            if (!allGroundedWheels.Any() 
+                || verticalAngle >= CUSTOM_GRAVITY_MAX_VERTICAL_ANGLE
+                || absHorizontalAngle >= CUSTOM_GRAVITY_MAX_HORIZONTAL_ANGLE)
             {
                 return;
             }
@@ -328,7 +355,7 @@ namespace GLShared.General.Components
                 {
                     if (!wheel.IsIdler)
                     {
-                        Vector3 brakesPoint = wheel.ReturnWheelPoint(brakesForceApplyPoint);
+                        var brakesPoint = wheel.ReturnWheelPoint(brakesForceApplyPoint);
 
                         Vector3 forwardDir = wheel.Transform.forward;
                         Vector3 tireVel = rig.GetPointVelocity(brakesPoint);
@@ -350,6 +377,7 @@ namespace GLShared.General.Components
         protected IEnumerable<IPhysicsWheel> GetGroundedWheelsInAllAxles()
         {
             var result = new List<IPhysicsWheel>();
+
             if (allAxles.Any())
             {
                 foreach (var axle in allAxles)
@@ -366,6 +394,7 @@ namespace GLShared.General.Components
         protected IEnumerable<IPhysicsWheel> GetAllWheelsInAllAxles()
         {
             var result = new List<IPhysicsWheel>();
+
             if (allAxles.Any())
             {
                 foreach (var axle in allAxles)
@@ -377,6 +406,20 @@ namespace GLShared.General.Components
                 }
             }
             return result;
+        }
+
+        private void CheckGroundLayer(Terrain terrain)
+        {
+            var terrainLayerName = terrainChecker.GetLayerName(transform.position, terrain);
+
+            if (currentTerrainLayer != terrainLayerName)
+            {
+                Debug.Log(terrainLayerName);
+                currentTerrainLayer = terrainLayerName;
+                //currentSideFriction = groundManager.GetFrictionForLayer(currentTerrainLayer, absHorizontalAngle);
+                currentFrictionPair = groundManager.GetPair(currentTerrainLayer);
+                currentSideFriction = currentFrictionPair.GetFrictionForAngle(absHorizontalAngle);
+            }
         }
 
         private void OnDrawGizmos()

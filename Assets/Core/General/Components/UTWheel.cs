@@ -189,10 +189,11 @@ namespace GLShared.General.Components
                 Vector3 tireVel = rig.GetPointVelocity(UpperConstraintPoint);
 
                 float steeringVel = Vector3.Dot(steeringDir, tireVel);
-                float desiredVelChange = -steeringVel * sidewaysTireGripFactor;
+                float desiredVelChange = -steeringVel * sidewaysTireGripFactor * vehicleController.CurrentSideFriction;
                 float desiredAccel = desiredVelChange / Time.fixedDeltaTime;
 
                 rig.AddForceAtPosition(desiredAccel * tireMass * steeringDir, UpperConstraintPoint);
+
             }
         }
 

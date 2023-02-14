@@ -5,6 +5,7 @@ using GLShared.General.ScriptableObjects;
 using GLShared.General.Signals;
 using GLShared.General.Utilities;
 using GLShared.Networking.Components;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -50,6 +51,7 @@ namespace GLShared.General.Components
         protected bool hasTurret;
 
         protected float currentSpeed;
+        protected float currentTurningSpeed;
 
         protected float absoluteInputY;
         protected float absoluteInputX;
@@ -98,6 +100,7 @@ namespace GLShared.General.Components
 
         public bool HasAnyWheels => hasAnyWheels;
         public float CurrentSpeed => currentSpeed;
+        public float CurrentTurningSpeed => currentTurningSpeed;
         public float CurrentSpeedRatio => currentSpeedRatio;
         public float AbsoluteInputY => absoluteInputY;
         public float AbsoluteInputX => absoluteInputX;
@@ -249,6 +252,8 @@ namespace GLShared.General.Components
         protected void SetCurrentSpeed()
         {
             currentSpeed = rig.velocity.magnitude * gameParameters.SpeedMultiplier;
+            currentTurningSpeed = MathF.Abs(rig.angularVelocity.y * Mathf.Rad2Deg);
+
             float maxSpeed = GetCurrentMaxSpeed();
             currentSpeedRatio = maxSpeed != 0f ? currentSpeed / maxSpeed : 0f;
         }
@@ -415,7 +420,6 @@ namespace GLShared.General.Components
 
             if (currentTerrainLayer != terrainLayerName)
             {
-                Debug.Log(terrainLayerName);
                 currentTerrainLayer = terrainLayerName;
                 currentFrictionPair = groundManager.GetPair(currentTerrainLayer);
                 currentSideFriction = currentFrictionPair.GetFrictionForAngle(absHorizontalAngle);

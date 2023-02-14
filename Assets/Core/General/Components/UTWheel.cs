@@ -1,13 +1,9 @@
-using System.Linq;
-using GLShared.General.Utilities;
 using UnityEditor;
 using UnityEngine;
 using Zenject;
-using GLShared.General.ScriptableObjects;
 using GLShared.General.Models;
 using GLShared.General.Interfaces;
 using GLShared.General.Enums;
-using Frontend.Scripts;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Burst;

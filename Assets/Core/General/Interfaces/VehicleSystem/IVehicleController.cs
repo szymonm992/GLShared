@@ -19,6 +19,7 @@ namespace GLShared.General.Interfaces
         float SignedInputY { get; }
 
         float CurrentSpeed { get; }
+        float CurrentTurningSpeed { get; }
         float CurrentSpeedRatio { get; }
         float MaxForwardSpeed { get; }
         float MaxBackwardsSpeed { get; }

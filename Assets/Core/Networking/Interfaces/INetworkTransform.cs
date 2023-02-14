@@ -9,10 +9,11 @@ namespace GLShared.Networking.Interfaces
         string Identifier { get; }
         Vector3 Position { get; }
         float CurrentSpeed { get; }
+        float CurrentTurningSpeed { get; }
         double TimeStamp { get; }
         Vector3 EulerAngles { get; }
         Quaternion Rotation { get; }
 
-        abstract void Update(Transform transform, float speed);
+        abstract void Update(Transform transform, float speed, float turnSpeed);
     }
 }

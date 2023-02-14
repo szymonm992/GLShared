@@ -67,6 +67,7 @@ namespace GLShared.Networking.Extensions
             data.PutFloat("tY", transform.TurretAngleY);
 
             data.PutFloat("v", transform.CurrentSpeed);
+            data.PutFloat("rot", transform.CurrentTurningSpeed);
 
             data.PutLong("tim", Convert.ToInt64(GeneralHelper.GenerateTimestamp()));
 
@@ -128,6 +129,7 @@ namespace GLShared.Networking.Extensions
                 TurretAngleY = data.GetFloat("tY"),
                 GunAngleX = data.GetFloat("gX"),
                 CurrentSpeed = data.GetFloat("v"),
+                CurrentTurningSpeed = data.GetFloat("rot"),
             };
         }
 

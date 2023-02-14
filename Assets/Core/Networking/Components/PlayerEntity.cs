@@ -24,7 +24,9 @@ namespace GLShared.Networking.Components
         private PlayerProperties playerProperties;
         private PlayerInput playerInput;
         private NetworkTransform currentNetworkTransform;
+        private float turnSpeed = 0f;
 
+        public float TurnSpeed => turnSpeed;
         public bool IsLocalPlayer => isLocalPlayer;
         public PlayerProperties Properties => playerProperties;
         public PlayerInput Input => playerInput;
@@ -48,6 +50,7 @@ namespace GLShared.Networking.Components
                 TurretAngleY = vehicleController.HasTurret ? turretController.Turret.localEulerAngles.y : 0f,
                 TimeStamp = 0d,
                 CurrentSpeed = EntityVelocity,
+                CurrentTurningSpeed = turnSpeed,
                 Identifier = playerInstaller.IsPrototypeInstaller ? LOCAL_PLAYER_NAME : Properties.Username,
             };
 
@@ -65,7 +68,7 @@ namespace GLShared.Networking.Components
         public override void SendSyncPosition()
         {
             base.SendSyncPosition();
-            currentNetworkTransform.Update(transform, EntityVelocity);
+            currentNetworkTransform.Update(transform, EntityVelocity, turnSpeed);
             syncManager.SyncPosition(this);
         }
 
@@ -95,6 +98,7 @@ namespace GLShared.Networking.Components
                     TurretAngleY = 0,
                     TimeStamp = 0d,
                     CurrentSpeed = EntityVelocity,
+                    CurrentTurningSpeed = turnSpeed,
                     Identifier = NETWORK_ENTITY_DEFAULT_VALUE,
                 };
             }
@@ -105,6 +109,7 @@ namespace GLShared.Networking.Components
         {
             base.Update();
             entityVelocity = GetLocalControllerSpeed();
+            turnSpeed = GetLocalControllerTurnSpeed();
         }
 
         private void OnPlayerInitialized(PlayerSignals.OnPlayerInitialized OnPlayerInitialized)
@@ -131,6 +136,18 @@ namespace GLShared.Networking.Components
             else
             {
                 return isSender ? vehicleController.CurrentSpeed : Properties.IsInitialized ? currentNetworkTransform.CurrentSpeed : 0f;
+            }
+        }
+        
+        private float GetLocalControllerTurnSpeed()
+        {
+            if (playerInstaller.IsPrototypeInstaller)
+            {
+                return vehicleController.CurrentTurningSpeed;
+            }
+            else
+            {
+                return isSender ? vehicleController.CurrentTurningSpeed : Properties.IsInitialized ? currentNetworkTransform.CurrentTurningSpeed : 0f;
             }
         }
     }

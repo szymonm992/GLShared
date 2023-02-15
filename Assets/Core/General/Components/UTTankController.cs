@@ -48,39 +48,24 @@ namespace GLShared.General.Components
                     }
                     else
                     {
-                        //If we overreach maximum angle for default ground, we apply multiplied gravity
-
-                        (float currentOverreachAngle, float maxAllowedAngleInDirection) = absHorizontalAngle > absVerticalAngle ?
-                            (absHorizontalAngle, currentFrictionPair.HorizontalAnglesRange.Max) : (absVerticalAngle, CUSTOM_GRAVITY_MAX_VERTICAL_ANGLE);
-                        float ratio = (currentOverreachAngle / maxAllowedAngleInDirection);
-
-                        rig.AddForce(Physics.gravity * ratio, ForceMode.Acceleration);
+                        ApplyMultipliedGravity();
                     }
                 }
                 else
                 {
-                    //If the ground is not a default ground then we apply multiplied gravity
-                    (float currentOverreachAngle, float maxAllowedAngleInDirection) = absHorizontalAngle > absVerticalAngle ?
-                            (absHorizontalAngle, currentFrictionPair.HorizontalAnglesRange.Max) : (absVerticalAngle, CUSTOM_GRAVITY_MAX_VERTICAL_ANGLE);
-                    float ratio = (currentOverreachAngle / maxAllowedAngleInDirection);
-
-                    rig.AddForce(Physics.gravity * ratio, ForceMode.Acceleration);
+                    ApplyMultipliedGravity();
                 }
-
-                /*
-                if (CUSTOM_GRAVITY_MAX_HORIZONTAL_ANGLE >= absHorizontalAngle && CUSTOM_GRAVITY_MAX_VERTICAL_ANGLE >= absVerticalAngle)
-                {
-                    ApplyNormalizedGravity();
-                }
-                else
-                {
-                    (float currentOverreachAngle, float maxAllowedAngleInDirection) = absHorizontalAngle > absVerticalAngle ?
-                        (absHorizontalAngle, CUSTOM_GRAVITY_MAX_HORIZONTAL_ANGLE): (absVerticalAngle, CUSTOM_GRAVITY_MAX_VERTICAL_ANGLE);
-                    float ratio = (currentOverreachAngle / maxAllowedAngleInDirection);
-
-                    rig.AddForce(Physics.gravity * ratio, ForceMode.Acceleration);
-                }*/
             }
+        }
+
+        private void ApplyMultipliedGravity()
+        {
+            //If the ground is not a default ground then we apply multiplied gravity
+            (float currentOverreachAngle, float maxAllowedAngleInDirection) = absHorizontalAngle > absVerticalAngle ?
+                    (absHorizontalAngle, currentFrictionPair.HorizontalAnglesRange.Max) : (absVerticalAngle, CUSTOM_GRAVITY_MAX_VERTICAL_ANGLE);
+            float ratio = Mathf.Max(currentOverreachAngle / maxAllowedAngleInDirection, 1f);
+
+            rig.AddForce(Physics.gravity * ratio, ForceMode.Acceleration);
         }
     }
 }

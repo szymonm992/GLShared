@@ -6,6 +6,7 @@ namespace GLShared.General.Components
     public class SingleBarrelShooting : ShootingSystemBase
     {
         [SerializeField] private float reloadTime = 5f;
+        [SerializeField] private Transform shellSpawnPivot;
 
         public override void Initialize()
         {
@@ -33,14 +34,13 @@ namespace GLShared.General.Components
         {
             isReloading = true;
 
-            shellSpawnPosition = turretController.Gun.position;
             shellSpawnEulerAngles = turretController.Gun.eulerAngles;
 
             signalBus.Fire(new PlayerSignals.OnPlayerShot()
             {
                 Username = playerEntity.Properties.Username,
                 ShellId = DEFAULT_SHELL_ID,
-                ShellSpawnPosition = shellSpawnPosition,
+                ShellSpawnPosition = shellSpawnPivot.position,
                 ShellSpawnEulerAngles = shellSpawnEulerAngles,
                 TargetingProperties = GetGunTargetingPosition(),
             });

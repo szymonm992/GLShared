@@ -183,8 +183,8 @@ namespace GLShared.General.Components
 
                 if (isOnTopOfAnotherVehicle)
                 {
-                    Vector3 force = lowerRig.velocity * CONTACT_FORCE_MAINTAIN_THRESHOLD;
-                    rig.AddForce(force * rig.mass, ForceMode.Force);
+                    var force = lowerRig.velocity * CONTACT_FORCE_MAINTAIN_THRESHOLD;
+                    rig.AddForceAtPosition(force * rig.mass, hitInfo.Point, ForceMode.Force);
                 }
             }
 

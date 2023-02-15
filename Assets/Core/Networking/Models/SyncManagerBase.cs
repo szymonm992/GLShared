@@ -1,4 +1,5 @@
 using GLShared.General.Components;
+using GLShared.General.Enums;
 using GLShared.General.Interfaces;
 using GLShared.General.Models;
 using GLShared.General.Signals;
@@ -68,15 +69,15 @@ namespace GLShared.Networking.Models
             }
         }
 
-        public void TryCreatePlayer(string username, Vector3 spawnPosition, Vector3 spawnEulerAngles)
+        public void TryCreatePlayer(string username, Team team, Vector3 spawnPosition, Vector3 spawnEulerAngles)
         {
             if (!connectedPlayers.ContainsKey(username))
             {
-                CreatePlayer(username, spawnPosition, spawnEulerAngles, out _);
+                CreatePlayer(username, team, spawnPosition, spawnEulerAngles, out _);
             }
         }
 
-        protected virtual void CreatePlayer(string username, Vector3 spawnPosition, Vector3 spawnEulerAngles, out PlayerProperties playerProperties)
+        protected virtual void CreatePlayer(string username, Team team, Vector3 spawnPosition, Vector3 spawnEulerAngles, out PlayerProperties playerProperties)
         {
             var user = smartFox.Connection.UserManager.GetUserByName(username);
 
@@ -95,7 +96,7 @@ namespace GLShared.Networking.Models
             }
 
             string vehicleName = user.GetVariable(NetworkConsts.VAR_PLAYER_VEHICLE).Value.ToString();
-            playerProperties = GetPlayerInitData(username, vehicleName, spawnPosition, spawnEulerAngles);
+            playerProperties = GetPlayerInitData(username, team, vehicleName, spawnPosition, spawnEulerAngles);
 
             if (playerProperties == null)
             {
@@ -127,7 +128,7 @@ namespace GLShared.Networking.Models
             shells.Add(sceneId, shellEntity);
         }
 
-        protected virtual PlayerProperties GetPlayerInitData(string username, string vehicleName,
+        protected virtual PlayerProperties GetPlayerInitData(string username, Team team, string vehicleName,
             Vector3 spawnPosition, Vector3 spawnEulerAngles)
         {
             return null;

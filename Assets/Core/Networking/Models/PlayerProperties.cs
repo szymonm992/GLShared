@@ -12,6 +12,7 @@ namespace GLShared.General.Models
         public string PlayerVehicleName { get; set; }
         public bool IsLocal { get; set; }
         public string Username { get; set; }
+        public string Team { get; set; }
         public bool IsInitialized { get; set; } = false;
     }
 }

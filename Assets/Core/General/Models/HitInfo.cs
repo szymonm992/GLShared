@@ -1,4 +1,3 @@
-using Frontend.Scripts;
 using UnityEngine;
 
 namespace GLShared.General.Models

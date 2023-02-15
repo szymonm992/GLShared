@@ -42,6 +42,7 @@ namespace GLShared.General.Models
         public virtual float HardPointAbs => 0f;
         public virtual Vector3 TireWorldPosition => Vector3.zero;
         public virtual bool IsIdler => false;
+        public virtual bool IsOnTopOfAnotherVehicle => false;
 
         public virtual Vector3 UpperConstraintPoint
         {

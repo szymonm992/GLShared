@@ -7,11 +7,12 @@ using GLShared.General.Enums;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Burst;
-
 namespace GLShared.General.Components
 {
     public class UTWheel : UTPhysicWheelBase, IInitializable, IPhysicsWheel
     {
+        public const float CONTACT_FORCE_MAINTAIN_THRESHOLD = 0.4f;
+
         [Header("Settings")]
         [SerializeField] protected float spring = 20000f;
         [SerializeField] protected float damper = 3000f;
@@ -48,6 +49,8 @@ namespace GLShared.General.Components
         protected float absGravity;
         protected float finalTravelLength;
         protected float hardPointAbs;
+        protected bool isOnTopOfAnotherVehicle;
+
         protected Rigidbody localRig;
         #endregion
 
@@ -87,6 +90,8 @@ namespace GLShared.General.Components
                     lowerConstraintTransform != null ? LowerConstraintPoint : Vector3.zero;
             }
         }
+
+        public override bool IsOnTopOfAnotherVehicle => isOnTopOfAnotherVehicle;
 
         public override void Initialize()
         {
@@ -171,6 +176,18 @@ namespace GLShared.General.Components
                 return;
             }
 
+
+            if (isGrounded)
+            {
+                isOnTopOfAnotherVehicle = hitInfo.Collider.transform.root.TryGetComponent(out Rigidbody lowerRig);
+
+                if (isOnTopOfAnotherVehicle)
+                {
+                    Vector3 force = lowerRig.velocity * CONTACT_FORCE_MAINTAIN_THRESHOLD;
+                    rig.AddForce(force * rig.mass, ForceMode.Force);
+                }
+            }
+
             rig.AddForceAtPosition(suspensionForce, tirePosition);
             ApplyFriction();
         }
@@ -189,7 +206,6 @@ namespace GLShared.General.Components
                 float desiredAccel = desiredVelChange / Time.fixedDeltaTime;
 
                 rig.AddForceAtPosition(desiredAccel * tireMass * steeringDir, UpperConstraintPoint);
-
             }
         }
 
@@ -211,6 +227,7 @@ namespace GLShared.General.Components
             {
                 tirePos = transform.position - (transform.up * hitInfo.Distance);
                 extension = Vector3.Distance(upperConstraintTransform.position, tirePos) / suspensionTravel;
+
                 if (hardPointAbs < Vector3.Distance(tirePosition, transform.position))
                 {
                     compressionRate = 1f - extension;
@@ -226,6 +243,7 @@ namespace GLShared.General.Components
                 extension = 1f;
                 compressionRate = 0f;
             }
+
             return tirePos;
         }
 

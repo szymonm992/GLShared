@@ -8,6 +8,7 @@ namespace GLShared.General.Interfaces
     {
         Transform Transform { get; }
         bool IsGrounded { get; }
+        bool IsOnTopOfAnotherVehicle { get; }
         HitInfo HitInfo { get; }
         float WheelRadius { get; }
         float TireMass { get; }

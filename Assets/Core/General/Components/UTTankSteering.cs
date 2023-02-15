@@ -8,14 +8,22 @@ namespace GLShared.General.Components
 {
     public class UTTankSteering : MonoBehaviour, IVehicleSteering
     {
+        public const float OVERREACH_MAX_ANGLE_STEER_FORCE = 0.1f;
+        public const float IDLER_TURN_FORCE_MULTIPLIER = 0.3f;
+
         [Inject(Id = "mainRig")] private Rigidbody rig;
         [Inject] private readonly IVehicleController suspensionController;
         [Inject] private readonly IPlayerInputProvider inputProvider;
         [Inject] private readonly VehicleStatsBase vehicleStats;
 
-
+        private float diagonalTurnForceMultiplier;
         private float steerInput;
         private float currentSteerForce;
+
+        public void Initialize()
+        {
+            diagonalTurnForceMultiplier = (1.0f / Mathf.Sqrt(2));
+        }
 
         public void SetSteeringInput(float input)
         {
@@ -41,7 +49,7 @@ namespace GLShared.General.Components
 
             if (inputProvider.CombinedInput > 1f)
             {
-                currentSteerForce *= (1.0f / Mathf.Sqrt(2));
+                currentSteerForce *= diagonalTurnForceMultiplier;
             }
 
             if (!suspensionController.RunPhysics)
@@ -61,9 +69,12 @@ namespace GLShared.General.Components
 
                         if (wheel.IsGrounded)
                         {
-                            float idlerMultiplier = wheel.IsIdler ? 0.3f : 1f;
-                            rig.AddForceAtPosition(invertValue * currentSteerForce * idlerMultiplier * steerInput * rig.transform.right,
-                                wheel.HitInfo.Point, ForceMode.Force);
+                            if (wheel.IsIdler)
+                            {
+                                currentSteerForce *= IDLER_TURN_FORCE_MULTIPLIER;
+                            }
+
+                            rig.AddForceAtPosition(invertValue * currentSteerForce * steerInput * rig.transform.right, wheel.HitInfo.Point, ForceMode.Force);
                         }
                     }
                 }
@@ -81,7 +92,7 @@ namespace GLShared.General.Components
 
             if (suspensionController.HorizontalAngle >= currentPair.HorizontalAnglesRange.Max)
             {
-                return 0.1f;
+                return OVERREACH_MAX_ANGLE_STEER_FORCE;
             }
 
             return currentPair.IsDefaultLayer ? vehicleStats.SteerForce : vehicleStats.SteerForce * currentPair.SteeringMultiplier;

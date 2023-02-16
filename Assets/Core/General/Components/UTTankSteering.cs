@@ -11,7 +11,7 @@ namespace GLShared.General.Components
         public const float OVERREACH_MAX_ANGLE_STEER_FORCE = 0.1f;
         public const float IDLER_TURN_FORCE_MULTIPLIER = 0.3f;
 
-        [Inject(Id = "mainRig")] private Rigidbody rig;
+        [Inject(Id = "mainRig")] private readonly Rigidbody rig;
         [Inject] private readonly IVehicleController suspensionController;
         [Inject] private readonly IPlayerInputProvider inputProvider;
         [Inject] private readonly VehicleStatsBase vehicleStats;

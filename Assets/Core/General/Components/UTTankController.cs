@@ -19,6 +19,7 @@ namespace GLShared.General.Components
             }
 
             base.FixedUpdate();
+
             CustomGravityLogic();
 
             if (!isUpsideDown)

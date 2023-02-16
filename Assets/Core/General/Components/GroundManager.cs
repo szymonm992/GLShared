@@ -37,7 +37,7 @@ namespace GLShared.General.Components
 
         public GroundFrictionPair GetPair(string layerName)
         {
-            if (groundFrictionList.Any())
+            if (groundFrictionList.Any() && layerName != string.Empty)
             {
                 foreach (var pair in groundFrictionList)
                 {

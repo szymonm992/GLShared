@@ -5,7 +5,6 @@ using GLShared.General.ScriptableObjects;
 using GLShared.General.Signals;
 using GLShared.General.Utilities;
 using GLShared.Networking.Components;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -20,6 +19,7 @@ namespace GLShared.General.Components
         private const float IDLER_WHEEL_BUMP_MULTIPLIER = 1.25f;
         private const float BRAKE_FORCE_OPPOSITE_INPUT_AND_FORCE_MULTIPLIER = 0.1f;
         private const float BRAKE_FORCE_NO_INPUTS_MULTIPLIER = 0.25f;
+        private const float CENTER_OF_MASS_GIZMO_RADIUS = 0.2f;
 
         [Inject(Id = "mainRig")] protected Rigidbody rig;
         [Inject(Id = "mainTerrain")] protected Terrain terrain;
@@ -240,11 +240,11 @@ namespace GLShared.General.Components
             if (verticalAngle > 0f)
             {
                 currentMaxForwardSpeed = currentMaxSpeedRatio * maxForwardSpeed;
-                currentMaxBackwardSpeed = (1 + currentMaxSpeedRatio) * maxBackwardsSpeed;
+                currentMaxBackwardSpeed = (1f + currentMaxSpeedRatio) * maxBackwardsSpeed;
             }
             else
             {
-                currentMaxForwardSpeed = (1 + currentMaxSpeedRatio) * maxForwardSpeed;
+                currentMaxForwardSpeed = (1f + currentMaxSpeedRatio) * maxForwardSpeed;
                 currentMaxBackwardSpeed = currentMaxSpeedRatio * maxBackwardsSpeed;
             }
         }
@@ -252,7 +252,7 @@ namespace GLShared.General.Components
         protected void SetCurrentSpeed()
         {
             currentSpeed = rig.velocity.magnitude * gameParameters.SpeedMultiplier;
-            currentTurningSpeed = MathF.Abs(rig.angularVelocity.y * Mathf.Rad2Deg);
+            currentTurningSpeed = Mathf.Abs(rig.angularVelocity.y * Mathf.Rad2Deg);
 
             float maxSpeed = GetCurrentMaxSpeed();
             currentSpeedRatio = maxSpeed != 0f ? currentSpeed / maxSpeed : 0f;
@@ -363,8 +363,8 @@ namespace GLShared.General.Components
                     {
                         var brakesPoint = wheel.ReturnWheelPoint(brakesForceApplyPoint);
 
-                        Vector3 forwardDir = wheel.Transform.forward;
-                        Vector3 tireVel = rig.GetPointVelocity(brakesPoint);
+                        var forwardDir = wheel.Transform.forward;
+                        var tireVel = rig.GetPointVelocity(brakesPoint);
 
                         float steeringVel = Vector3.Dot(forwardDir, tireVel);
                         float desiredVelChange = -steeringVel * currentLongitudalGrip;
@@ -394,6 +394,7 @@ namespace GLShared.General.Components
                     }
                 }
             }
+
             return result;
         }
 
@@ -411,6 +412,7 @@ namespace GLShared.General.Components
                     }
                 }
             }
+
             return result;
         }
 
@@ -422,7 +424,15 @@ namespace GLShared.General.Components
             {
                 currentTerrainLayer = terrainLayerName;
                 currentFrictionPair = groundManager.GetPair(currentTerrainLayer);
-                currentSideFriction = currentFrictionPair.GetFrictionForAngle(absHorizontalAngle);
+
+                if (currentFrictionPair != null)
+                {
+                    currentSideFriction = currentFrictionPair.GetFrictionForAngle(absHorizontalAngle);
+                }
+                else
+                {
+                    currentSideFriction = 1f;
+                }
             }
         }
 
@@ -435,7 +445,7 @@ namespace GLShared.General.Components
             }
 
             Gizmos.color = Color.white;
-            Gizmos.DrawSphere(rig.worldCenterOfMass, 0.2f);
+            Gizmos.DrawSphere(rig.worldCenterOfMass, CENTER_OF_MASS_GIZMO_RADIUS);
             #endif
         }
     }

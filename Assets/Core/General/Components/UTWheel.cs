@@ -42,10 +42,10 @@ namespace GLShared.General.Components
         };
 
         #region Telemetry/readonly
-        protected float previousSuspensionDistance = 0f;
-        protected float normalForce = 0f;
-        protected float extension = 0f;
-        protected float compressionRate = 0f;
+        protected float previousSuspensionDistance;
+        protected float normalForce;
+        protected float extension;
+        protected float compressionRate;
         protected float absGravity;
         protected float finalTravelLength;
         protected float hardPointAbs;
@@ -90,7 +90,6 @@ namespace GLShared.General.Components
                     lowerConstraintTransform != null ? LowerConstraintPoint : Vector3.zero;
             }
         }
-
         public override bool IsOnTopOfAnotherVehicle => isOnTopOfAnotherVehicle;
 
         public override void Initialize()
@@ -119,14 +118,14 @@ namespace GLShared.General.Components
 
             if (upperConstraintTransform != null)
             {
-                Vector3 highestPoint = transform.position + transform.up * hardPointOfTire;
-                upperConstraintTransform.position = highestPoint;
+                //Highest point
+                upperConstraintTransform.position = transform.position + transform.up * hardPointOfTire;
             }
 
             if (lowerConstraintTransform != null)
             {
-                Vector3 lowestPoint = transform.position + transform.up * -finalTravelLength;
-                lowerConstraintTransform.position = lowestPoint;
+                //Lowest point
+                lowerConstraintTransform.position = transform.position + transform.up * -finalTravelLength;
             }
 
             tirePosition = GetTirePosition();
@@ -140,17 +139,15 @@ namespace GLShared.General.Components
             }
 
             base.FixedUpdate();
-            Vector3 newPosition = GetTirePosition();
 
             if (vehicleController.RunPhysics && compressionRate == 1 && vehicleController.DoesGravityDamping)
             {
                 GravityCounterforce();
             }
 
-            tirePosition = Vector3.Lerp(tirePosition, newPosition, Time.deltaTime * Mathf.Max(50f, 100f * vehicleController.CurrentSpeedRatio));
-
-
+            tirePosition = Vector3.Lerp(tirePosition, GetTirePosition(), Time.deltaTime * Mathf.Max(50f, 100f * vehicleController.CurrentSpeedRatio));
             NativeArray<float> result = new(2, Allocator.TempJob);
+
             GetSuspensionForceJob jobData = new()
             {
                 damper = damper,
@@ -198,8 +195,8 @@ namespace GLShared.General.Components
 
             if (isGrounded)
             {
-                Vector3 steeringDir = Transform.right;
-                Vector3 tireVel = rig.GetPointVelocity(UpperConstraintPoint);
+                var steeringDir = Transform.right;
+                var tireVel = rig.GetPointVelocity(UpperConstraintPoint);
 
                 float steeringVel = Vector3.Dot(steeringDir, tireVel);
                 float desiredVelChange = -steeringVel * sidewaysTireGripFactor * vehicleController.CurrentSideFriction;
@@ -213,15 +210,15 @@ namespace GLShared.General.Components
         {
             if (localRig.SweepTest(-transform.up, out hitInfo.rayHit, finalTravelLength))
             {
-                bool canCollide = gameParameters != null ? (hitInfo != null ? hitInfo.CanCollide(gameParameters.MaxWheelDetectionAngle, vehicleController.WheelsCollisionDetectionMask) : false) : false;
-                isGrounded = canCollide;
+                //We're checking if we can collide with this piece of code
+                isGrounded = gameParameters != null && (hitInfo != null && hitInfo.CanCollide(gameParameters.MaxWheelDetectionAngle, vehicleController.WheelsCollisionDetectionMask));
             }
             else
             {
                 isGrounded = false;
             }
 
-            Vector3 tirePos = NotGroundedWheelPosition;
+            var tirePos = NotGroundedWheelPosition;
 
             if (isGrounded)
             {
@@ -347,8 +344,6 @@ namespace GLShared.General.Components
                         Handles.color = isGrounded ? Color.green : Color.red;
                         Handles.DrawLine(tirePosition, tirePosition + transform.forward, 2f);
                     }
-
-
 
                     if (debugSettings.DrawShapeGizmo)
                     {

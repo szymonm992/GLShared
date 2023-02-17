@@ -21,7 +21,7 @@ namespace GLShared.Networking.Models
             this.Position = transform.position;
             this.EulerAngles = transform.eulerAngles;
             this.CurrentSpeed = speed;
-            this.CurrentTurningSpeed = speed;
+            this.CurrentTurningSpeed = turnSpeed;
         }
 
         public void Update(ITurretController turretController)

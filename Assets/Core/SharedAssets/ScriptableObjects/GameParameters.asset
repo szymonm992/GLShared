@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GameParameters
   m_EditorClassIdentifier: 
   speedMultiplier: 3.2
-  maxWheelDetectionAngle: 75
+  maxWheelDetectionAngle: 65
   maxWheelDrivingAngle: 45
   wheelForceDirectionChangeAngle: 45
   airControlAngleThreshold: 15

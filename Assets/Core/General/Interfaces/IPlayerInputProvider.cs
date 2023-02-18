@@ -1,4 +1,3 @@
-
 using GLShared.General.Models;
 
 namespace GLShared.General.Interfaces

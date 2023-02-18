@@ -193,11 +193,6 @@ namespace GLShared.General.Components
             absHorizontalAngle = Mathf.Abs(90f - Vector3.Angle(Vector3.up, transform.right));
         }
 
-        protected void ApplySidewaysFriction(float value)
-        {
-            GetGroundedWheelsInAllAxles().ForEach(wheel => wheel.SidewaysTireGripFactor = value);
-        }
-
         protected virtual void FixedUpdate()
         {
             if (!runPhysics)
@@ -235,7 +230,10 @@ namespace GLShared.General.Components
 
         protected void CalculateVehicleMaxVelocity()
         {
-            currentMaxSpeedRatio = 1f - Mathf.Max(Mathf.Min(absVerticalAngle / CUSTOM_GRAVITY_MAX_VERTICAL_ANGLE, 1f), 0f);
+            //Calculating movement, depending on which direction we are moving
+            currentMaxSpeedRatio = inputProvider.RawVertical > 0 ?
+                Mathf.Abs(1f - verticalAngle / CUSTOM_GRAVITY_MAX_VERTICAL_ANGLE) :
+                1f - (absVerticalAngle / CUSTOM_GRAVITY_MAX_VERTICAL_ANGLE);
 
             if (verticalAngle > 0f)
             {
@@ -284,7 +282,7 @@ namespace GLShared.General.Components
 
             foreach (var axle in allAxles)
             {
-                if (axle.CanDrive && !isBrake && currentSpeed < GetCurrentMaxSpeed())
+                if (axle.CanDrive && !isBrake && currentSpeed <= GetCurrentMaxSpeed())
                 {
                     var groundedWheels = axle.GroundedWheels;
 

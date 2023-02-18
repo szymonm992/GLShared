@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 937f9f118ffa28c449abcdda8eeed27d, type: 3}
   m_Name: GameParameters
   m_EditorClassIdentifier: 
-  speedMultiplier: 3.4
+  speedMultiplier: 3.2
   maxWheelDetectionAngle: 75
   maxWheelDrivingAngle: 45
   wheelForceDirectionChangeAngle: 45

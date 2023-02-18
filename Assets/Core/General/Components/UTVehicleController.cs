@@ -144,35 +144,6 @@ namespace GLShared.General.Components
             maxEngineForwardPower = forwardPowerCurve.keys[0].value;
         }
 
-        private void OnPlayerSpawned(PlayerSignals.OnPlayerSpawned OnPlayerSpawned)
-        {
-            if (!playerInstaller.IsPrototypeInstaller)
-            {
-                if (OnPlayerSpawned.PlayerProperties.Username == playerEntity.Username)
-                {
-                    gameObject.name = $"({OnPlayerSpawned.PlayerProperties.PlayerVehicleName}) Player '{playerEntity.Username}'";
-
-                    signalBus.Fire(new PlayerSignals.OnPlayerInitialized()
-                    {
-                        PlayerProperties = playerEntity.Properties,
-                        InputProvider = inputProvider,
-                        VehicleStats = vehicleStats,
-                    });
-                }
-            }
-            else
-            {
-                gameObject.name = $"({OnPlayerSpawned.PlayerProperties.PlayerVehicleName}) Player '{playerEntity.Username}'";
-
-                signalBus.Fire(new PlayerSignals.OnPlayerInitialized()
-                {
-                    PlayerProperties = playerEntity.Properties,
-                    InputProvider = inputProvider,
-                    VehicleStats = vehicleStats,
-                });
-            }
-        }
-
         public virtual void SetupRigidbody()
         {
             rig.mass = vehicleStats.Mass;
@@ -431,6 +402,35 @@ namespace GLShared.General.Components
                 {
                     currentSideFriction = 1f;
                 }
+            }
+        }
+
+        private void OnPlayerSpawned(PlayerSignals.OnPlayerSpawned OnPlayerSpawned)
+        {
+            if (!playerInstaller.IsPrototypeInstaller)
+            {
+                if (OnPlayerSpawned.PlayerProperties.Username == playerEntity.Username)
+                {
+                    gameObject.name = $"({OnPlayerSpawned.PlayerProperties.PlayerVehicleName}) Player '{playerEntity.Username}'";
+
+                    signalBus.Fire(new PlayerSignals.OnPlayerInitialized()
+                    {
+                        PlayerProperties = playerEntity.Properties,
+                        InputProvider = inputProvider,
+                        VehicleStats = vehicleStats,
+                    });
+                }
+            }
+            else
+            {
+                gameObject.name = $"({OnPlayerSpawned.PlayerProperties.PlayerVehicleName}) Player '{playerEntity.Username}'";
+
+                signalBus.Fire(new PlayerSignals.OnPlayerInitialized()
+                {
+                    PlayerProperties = playerEntity.Properties,
+                    InputProvider = inputProvider,
+                    VehicleStats = vehicleStats,
+                });
             }
         }
 

@@ -7,8 +7,8 @@ PhysicMaterial:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: IdlerMaterial
-  dynamicFriction: 0.4
-  staticFriction: 0.4
-  bounciness: 0.3
+  dynamicFriction: 0.35
+  staticFriction: 0.3
+  bounciness: 0.4
   frictionCombine: 0
   bounceCombine: 3

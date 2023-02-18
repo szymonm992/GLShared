@@ -46,16 +46,11 @@ namespace GLShared.General.Components
                     {
                         //If we dont overreach maximum angle for default ground, we apply normalized gravity
                         rig.AddForce(-transform.up * Physics.gravity.magnitude, ForceMode.Acceleration);
-                    }
-                    else
-                    {
-                        ApplyMultipliedGravity();
+                        return;
                     }
                 }
-                else
-                {
-                    ApplyMultipliedGravity();
-                }
+
+                ApplyMultipliedGravity();
             }
         }
 

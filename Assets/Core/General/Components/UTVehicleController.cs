@@ -16,7 +16,6 @@ namespace GLShared.General.Components
     {
         public const float CUSTOM_GRAVITY_MAX_VERTICAL_ANGLE = 35f;
 
-        private const float IDLER_WHEEL_BUMP_MULTIPLIER = 1.25f;
         private const float BRAKE_FORCE_OPPOSITE_INPUT_AND_FORCE_MULTIPLIER = 0.1f;
         private const float BRAKE_FORCE_NO_INPUTS_MULTIPLIER = 0.25f;
         private const float CENTER_OF_MASS_GIZMO_RADIUS = 0.2f;
@@ -39,6 +38,7 @@ namespace GLShared.General.Components
         [SerializeField] protected VehicleType vehicleType = VehicleType.Car;
         [SerializeField] protected AnimationCurve forwardPowerCurve;
         [SerializeField] protected AnimationCurve backwardPowerCurve;
+        [SerializeField][Range(0f, 3f)] protected float idlerBumpingMultiplier = 0.75f;
         [SerializeField] protected bool doesGravityDamping = true;
         [SerializeField] protected LayerMask wheelsCollisionDetectionMask;
         [SerializeField] protected bool runPhysics = true;
@@ -288,7 +288,7 @@ namespace GLShared.General.Components
                             var idler = (UTIdlerWheel)wheel;
 
                             wheelVelocityLocal = wheel.Transform.InverseTransformDirection(rig.GetPointVelocity(wheel.UpperConstraintPoint));
-                            forwardForce = inputY * maxEngineForwardPower * IDLER_WHEEL_BUMP_MULTIPLIER;
+                            forwardForce = inputY * maxEngineForwardPower * idlerBumpingMultiplier;
 
                             if (currentFrictionPair.IsDefaultLayer)
                             {

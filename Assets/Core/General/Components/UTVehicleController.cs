@@ -229,7 +229,7 @@ namespace GLShared.General.Components
 
         protected bool CheckUpsideDown()
         {
-            return !allGroundedWheels.Any() || transform.up.y <= 0.2f;
+            return transform.up.y <= 0.2f;
         }
 
         protected void EvaluateDriveParams()

@@ -1,8 +1,6 @@
 using GLShared.General.Components;
 using GLShared.General.Enums;
 using GLShared.General.Interfaces;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace GLShared.General.Models
@@ -18,9 +16,10 @@ namespace GLShared.General.Models
         public IPhysicsWheel Wheel => wheel;
         public bool IsIdler => isIdler;
 
-        public virtual void Initialize()
+        public virtual void Initialize(IVehicleAxle axle)
         {
             isIdler = wheel is UTIdlerWheel;
+            wheel.Axle = axle;
         }
     }
 }

@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 using System.Linq;
 using GLShared.General.Interfaces;
-using GLShared.General.Enums;
 using GLShared.General.ScriptableObjects;
 using GLShared.General.Utilities;
+using GLShared.General.Components;
 
 namespace GLShared.General.Models
 {
@@ -72,6 +70,7 @@ namespace GLShared.General.Models
             get => wheelAngle;
             set => this.steerAngle = value;
         }
+        public IVehicleAxle Axle { get; set; }
 
         public virtual void Initialize()
         {

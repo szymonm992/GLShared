@@ -35,6 +35,7 @@ namespace GLShared.General.Components
         protected IEnumerable<IPhysicsWheel> allWheels;
         protected IEnumerable<IPhysicsWheel> groundedWheels;
         protected bool hasAnyWheel = false;
+        protected bool isAxleGrounded;
 
         public abstract IEnumerable<UTAxlePairBase> WheelPairs { get; }
         public IEnumerable<IPhysicsWheel> AllWheels => allWheels;
@@ -44,7 +45,7 @@ namespace GLShared.General.Components
         public bool InvertSteer => invertSteer;
         public bool HasAnyWheelPair => WheelPairs.Any();
         public bool HasAnyWheel => hasAnyWheel;
-
+        public bool IsAxleGrounded => isAxleGrounded;
 
         protected IEnumerable<IPhysicsWheel> GetGroundedWheels()
         {
@@ -62,16 +63,21 @@ namespace GLShared.General.Components
             {
                 foreach (var pair in WheelPairs)
                 {
-                    pair.Initialize();
+                    pair.Initialize(this);
                 }
             }
 
             groundedWheels = GetGroundedWheels();
+            isAxleGrounded = CheckAxleGrounded();
         }
 
         public virtual void SetSteerAngle(float angleLeft, float angleRight)
         {
         }
 
+        protected bool CheckAxleGrounded()
+        {
+            return groundedWheels.Count() == allWheels.Count();
+        }
     }
 }

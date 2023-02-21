@@ -14,11 +14,7 @@ namespace GLShared.General.Components
     {
         public const float CONTACT_FORCE_MAINTAIN_THRESHOLD = 0.4f;
 
-        private const float DAMPER_ON_JUMP_MULTIPLIER = 0.2f;
-        private const float FULLY_COMPRESSED_SPRING_MULTIPLIER = 3f;
-        private const float UNGROUND_TIME_MULTIPLIER = 0.25f; //same as value / 4f
-        private const float JUMP_MINIMUM_SPEED = 30f; 
-        private const float JUMP_UNGROUND_TIME_MIN_THRESHOLD = 0.1f; 
+        private const float FULLY_COMPRESSED_SPRING_MULTIPLIER = 2f;
 
         [Header("Settings")]
         [SerializeField] protected float spring = 220000f;
@@ -32,12 +28,18 @@ namespace GLShared.General.Components
         [SerializeField] protected Transform lowerConstraintTransform;
         [SerializeField] protected Transform notGroundedTransform;
 
+        [Header("Jump effect")]
+        [SerializeField] private float jumpMinimalSpeed = 15f;
+        [SerializeField] private float damperOnJumpMultiplier = 0.25f;
+
         [Range(-3f, 0)]
         [SerializeField] protected float hardPointOfTire = -0.7f;
         [Range(0.1f, 2f)]
         [SerializeField] protected float suspensionTravel = 0.5f;
 
         [SerializeField] private bool enableFallJump = true;
+        [SerializeField] private float ungroundTimeMinThreshold = 0.1f;
+        [SerializeField] private float ungroundTimeMaxThreshold = 1f;
 
         [SerializeField]
         protected UTWheelDebug debugSettings = new()
@@ -134,13 +136,13 @@ namespace GLShared.General.Components
 
             if (upperConstraintTransform != null)
             {
-                //Highest point of wheel
+                //Highest point of wheel.
                 upperConstraintTransform.position = transform.position + transform.up * hardPointOfTire;
             }
 
             if (lowerConstraintTransform != null)
             {
-                //Lowest point of wheel
+                //Lowest point of wheel.
                 lowerConstraintTransform.position = transform.position + transform.up * -finalTravelLength;
             }
 
@@ -164,6 +166,8 @@ namespace GLShared.General.Components
             GetSuspensionForceJob jobData = new ()
             {
                 isGrounded = isGrounded,
+                isAxleGrounded = Axle.IsAxleGrounded,
+
                 damper = currentDamper,
                 spring = currentSpring,
 
@@ -172,16 +176,20 @@ namespace GLShared.General.Components
                 lowerConstraintPoint = LowerConstraintPoint,
                 tirePosition = tirePosition,
 
+                currentSpeed = vehicleController.CurrentSpeed,
+                currentSpeedRatio = vehicleController.CurrentSpeedRatio,
+                currentCompression = compressionRate,
+
                 enableFallJump = enableFallJump,
                 currentUndegroundTime = currentUngroundedTime,
-                currentSpeed = vehicleController.CurrentSpeed,
-                currentCompression = compressionRate,
+                jumpMinimalSpeed = jumpMinimalSpeed,
+                damperOnJumpMultiplier = damperOnJumpMultiplier,
+                ungroundTimeMinThreshold = ungroundTimeMinThreshold,
 
                 result = result,
             };
 
-            JobHandle handle = jobData.Schedule();
-            handle.Complete();
+            jobData.Schedule().Complete();
 
             normalForce = result[0] + tireMass * absGravity;
             previousSuspensionDistance = result[1];
@@ -266,7 +274,7 @@ namespace GLShared.General.Components
 
         private void CalculateUngroundedTime()
         {
-            if (!isGrounded)
+            if (!Axle.IsAxleGrounded && vehicleController.CurrentSpeed > 1f && currentUngroundedTime <= ungroundTimeMaxThreshold)//1 is a threshold value
             {
                 currentUngroundedTime += Time.deltaTime;
             }
@@ -289,6 +297,8 @@ namespace GLShared.General.Components
             [ReadOnly] public Vector3 tirePosition;
             [ReadOnly] public Vector3 lowerConstraintPoint;
             [ReadOnly] public bool isGrounded;
+            [ReadOnly] public bool isAxleGrounded;
+
             [ReadOnly] public bool enableFallJump;
             [ReadOnly] public float spring;
             [ReadOnly] public float damper;
@@ -296,27 +306,28 @@ namespace GLShared.General.Components
             [ReadOnly] public float currentCompression;
 
             [ReadOnly] public float currentUndegroundTime;
+            [ReadOnly] public float ungroundTimeMinThreshold;
+            [ReadOnly] public float damperOnJumpMultiplier;
+            [ReadOnly] public float jumpMinimalSpeed;
+
             [ReadOnly] public float currentSpeed;
+            [ReadOnly] public float currentSpeedRatio;
             [ReadOnly] public float previousSuspensionDistance;
 
             public NativeArray<float> result;
 
             public void Execute()
             {
-                if (enableFallJump && isGrounded && currentSpeed >= JUMP_MINIMUM_SPEED && currentUndegroundTime >= JUMP_UNGROUND_TIME_MIN_THRESHOLD)
+                if (enableFallJump && isGrounded && currentSpeed >= jumpMinimalSpeed && currentUndegroundTime >= ungroundTimeMinThreshold)
                 {
-                    spring *= 1f + currentUndegroundTime * UNGROUND_TIME_MULTIPLIER;
-                    damper *= DAMPER_ON_JUMP_MULTIPLIER;
-                }
-
-                if (currentCompression == 1f)
-                {
-                    spring *= FULLY_COMPRESSED_SPRING_MULTIPLIER;
+                    spring *= (1f + (currentUndegroundTime * currentSpeedRatio));
+                    damper *= damperOnJumpMultiplier;
                 }
 
                 float distance = Vector3.Distance(lowerConstraintPoint, tirePosition);
                 float springForce = spring * distance;
                 float damperForce = damper * ((distance - previousSuspensionDistance) / fixedTime);
+
                 result[0] = springForce + damperForce;
                 result[1] = distance;
             }

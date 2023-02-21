@@ -174,6 +174,7 @@ namespace GLShared.General.Components
                 enableFallJump = enableFallJump,
                 currentUndegroundTime = currentUngroundedTime,
                 currentSpeed = vehicleController.CurrentSpeed,
+                currentCompression = compressionRate,
 
                 result = result,
             };
@@ -281,6 +282,8 @@ namespace GLShared.General.Components
             [ReadOnly] public float spring;
             [ReadOnly] public float damper;
             [ReadOnly] public float fixedTime;
+            [ReadOnly] public float currentCompression;
+
             [ReadOnly] public float currentUndegroundTime;
             [ReadOnly] public float currentSpeed;
             [ReadOnly] public float previousSuspensionDistance;
@@ -293,6 +296,13 @@ namespace GLShared.General.Components
                 {
                     spring *= 1f + currentUndegroundTime / 4f;
                     damper *= 0.2f;
+                }
+                else
+                {
+                    if(currentCompression >= 0.95f)
+                    {
+                        spring *= 3f;
+                    }
                 }
 
                 float distance = Vector3.Distance(lowerConstraintPoint, tirePosition);

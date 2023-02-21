@@ -82,6 +82,7 @@ namespace GLShared.General.Components
 
         protected bool isUpsideDown = false;
         protected bool isMovingInDirectionOfInput = true;
+        protected bool isGrounded;
 
         protected Vector3 wheelVelocityLocal;
         protected GroundFrictionPair currentFrictionPair;
@@ -111,6 +112,7 @@ namespace GLShared.General.Components
 
         public bool DoesGravityDamping => doesGravityDamping;
         public bool IsUpsideDown => isUpsideDown;
+        public bool IsGrounded => isGrounded;
         public bool HasTurret => hasTurret;
         public virtual bool RunPhysics => runPhysics;
         public LayerMask WheelsCollisionDetectionMask => wheelsCollisionDetectionMask;
@@ -175,6 +177,7 @@ namespace GLShared.General.Components
             CalculateVehicleMaxVelocity();
 
             allGroundedWheels = GetGroundedWheelsInAllAxles().ToArray();
+            isGrounded = allGroundedWheels.Any();
             isUpsideDown = CheckUpsideDown();
             isMovingInDirectionOfInput = Mathf.Sign(transform.InverseTransformDirection(rig.velocity).z) == Mathf.Sign(inputProvider.Vertical);
         }
@@ -267,26 +270,28 @@ namespace GLShared.General.Components
                         {
                             if (wheel.HitInfo.NormalAndUpAngle <= gameParameters.MaxWheelDetectionAngle)
                             {
-                                wheelVelocityLocal = wheel.Transform.InverseTransformDirection(rig.GetPointVelocity(wheel.UpperConstraintPoint));
+                                var acceleratePoint = wheel.ReturnWheelPoint(accelerationForceApplyPoint);
+
+                                wheelVelocityLocal = wheel.Transform.InverseTransformDirection(rig.GetPointVelocity(acceleratePoint));
 
                                 forwardForce = inputY * currentDriveForce * Mathf.Max(currentMaxSpeedRatio, 0.6f);
                                 turnForce = wheelVelocityLocal.x * currentDriveForce;
 
-                                var acceleratePoint = wheel.ReturnWheelPoint(accelerationForceApplyPoint);
+                               
 
                                 rig.AddForceAtPosition((forwardForce * wheel.Transform.forward), acceleratePoint);
 
                                 if (currentFrictionPair.IsDefaultLayer)
                                 {
-                                    rig.AddForceAtPosition((turnForce * -wheel.Transform.right), wheel.UpperConstraintPoint);
+                                    rig.AddForceAtPosition((turnForce * -wheel.Transform.right), acceleratePoint);
                                 }
                             }
                         }
                         else
                         {
-                            var idler = (UTIdlerWheel)wheel;
+                            var idler = (UTIdlerWheel) wheel;
 
-                            wheelVelocityLocal = wheel.Transform.InverseTransformDirection(rig.GetPointVelocity(wheel.UpperConstraintPoint));
+                            wheelVelocityLocal = wheel.Transform.InverseTransformDirection(rig.GetPointVelocity(wheel.Transform.position));
                             forwardForce = inputY * maxEngineForwardPower * idlerBumpingMultiplier;
 
                             if (currentFrictionPair.IsDefaultLayer)

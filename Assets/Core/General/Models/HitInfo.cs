@@ -24,7 +24,5 @@ namespace GLShared.General.Models
 			normalAndUpAngle = Vector3.Angle(Vector3.up, normal);
             return normalAndUpAngle;
         }
-
-		
 	}
 }

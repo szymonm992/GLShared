@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,23 +24,6 @@ namespace GLShared.General
             var temp = inputList[i];
             inputList[i] = inputList[j];
             inputList[j] = temp;
-        }
-
-        private static int PartitionInternalList<T>(this List<T> inputList, int left, int right)
-             where T : IComparable, IFormattable, IConvertible, IComparable<T>, IEquatable<T>
-        {
-            int index = left;
-            T pivot = inputList[left];
-            for(int i = left+1; i <= right; i++)
-            {
-                if(inputList[i].CompareTo(pivot) <= 0)
-                {
-                    index++;
-                    inputList.SwapElementsInList(index, i);
-                }
-            }
-            inputList.SwapElementsInList(index, left);
-            return index;
         }
 
         public static float ClampAngle(this float angle, float min, float max)
@@ -110,5 +92,21 @@ namespace GLShared.General
             return (long)((DateTime.UtcNow - epoch).TotalMilliseconds);
         }
 
+        private static int PartitionInternalList<T>(this List<T> inputList, int left, int right)
+             where T : IComparable, IFormattable, IConvertible, IComparable<T>, IEquatable<T>
+        {
+            int index = left;
+            T pivot = inputList[left];
+            for (int i = left + 1; i <= right; i++)
+            {
+                if (inputList[i].CompareTo(pivot) <= 0)
+                {
+                    index++;
+                    inputList.SwapElementsInList(index, i);
+                }
+            }
+            inputList.SwapElementsInList(index, left);
+            return index;
+        }
     }
 }

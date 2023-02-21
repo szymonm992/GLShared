@@ -59,6 +59,7 @@ namespace GLShared.General.Components
             //If the ground is not a default ground then we apply multiplied gravity
             (float currentOverreachAngle, float maxAllowedAngleInDirection) = absHorizontalAngle > absVerticalAngle ?
                     (absHorizontalAngle, currentFrictionPair.HorizontalAnglesRange.Max) : (absVerticalAngle, CUSTOM_GRAVITY_MAX_VERTICAL_ANGLE);
+            //Since we use absolute angles we dont need to Math.Min(0, value) cuz angle will never be negative
             float ratio = Mathf.Max(currentOverreachAngle / maxAllowedAngleInDirection, 1f);
 
             rig.AddForce(Physics.gravity * ratio, ForceMode.Acceleration);

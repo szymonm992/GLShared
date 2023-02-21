@@ -7,6 +7,7 @@ using GLShared.General.Enums;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Burst;
+
 namespace GLShared.General.Components
 {
     public class UTWheel : UTPhysicWheelBase, IInitializable, IPhysicsWheel
@@ -14,9 +15,9 @@ namespace GLShared.General.Components
         public const float CONTACT_FORCE_MAINTAIN_THRESHOLD = 0.4f;
 
         [Header("Settings")]
-        [SerializeField] protected float spring = 20000f;
-        [SerializeField] protected float damper = 3000f;
-        [SerializeField] protected float tireMass = 60f;
+        [SerializeField] protected float spring = 220000f;
+        [SerializeField] protected float damper = 40000f;
+        [SerializeField] protected float tireMass = 650f;
 
         [Range(0, 1f)]
         [SerializeField] protected float forwardTireGripFactor = 1f, sidewaysTireGripFactor = 1f;
@@ -29,6 +30,8 @@ namespace GLShared.General.Components
         [SerializeField] protected float hardPointOfTire = -0.7f;
         [Range(0.1f, 2f)]
         [SerializeField] protected float suspensionTravel = 0.5f;
+
+        [SerializeField] private bool enableFallJump = true;
 
         [SerializeField]
         protected UTWheelDebug debugSettings = new()
@@ -52,6 +55,10 @@ namespace GLShared.General.Components
         protected bool isOnTopOfAnotherVehicle;
 
         protected Rigidbody localRig;
+
+        private float currentSpring;
+        private float currentDamper;
+        private float currentUngroundedTime;
         #endregion
 
         public override float TireMass => tireMass;
@@ -99,6 +106,9 @@ namespace GLShared.General.Components
             localRig = GetComponent<Rigidbody>();
             localCollider = GetComponent<MeshCollider>();
 
+            currentSpring = spring;
+            currentDamper = damper;
+
             AssignPrimaryParameters();
             SetIgnoredColliders();
         }
@@ -133,7 +143,7 @@ namespace GLShared.General.Components
 
         protected override void FixedUpdate()
         {
-            if(vehicleController == null)
+            if (vehicleController == null)
             {
                 return;
             }
@@ -145,17 +155,26 @@ namespace GLShared.General.Components
                 GravityCounterforce();
             }
 
-            tirePosition = Vector3.Lerp(tirePosition, GetTirePosition(), Time.deltaTime * Mathf.Max(50f, 100f * vehicleController.CurrentSpeedRatio));
-            NativeArray<float> result = new(2, Allocator.TempJob);
+            tirePosition = Vector3.Lerp(tirePosition, GetTirePosition(), Time.deltaTime * 100f); //Mathf.Max(50f, 100f * vehicleController.CurrentSpeedRatio));
 
-            GetSuspensionForceJob jobData = new()
+            CalculateUngroundedTime();
+            NativeArray<float> result = new (2, Allocator.TempJob);
+
+            GetSuspensionForceJob jobData = new ()
             {
-                damper = damper,
-                spring = spring,
+                isGrounded = isGrounded,
+                damper = currentDamper,
+                spring = currentSpring,
+
                 previousSuspensionDistance = previousSuspensionDistance,
                 fixedTime = Time.fixedDeltaTime,
                 lowerConstraintPoint = LowerConstraintPoint,
                 tirePosition = tirePosition,
+
+                enableFallJump = enableFallJump,
+                currentUndegroundTime = currentUngroundedTime,
+                currentSpeed = vehicleController.CurrentSpeed,
+
                 result = result,
             };
 
@@ -196,13 +215,13 @@ namespace GLShared.General.Components
             if (isGrounded)
             {
                 var steeringDir = Transform.right;
-                var tireVel = rig.GetPointVelocity(UpperConstraintPoint);
+                var tireVel = rig.GetPointVelocity(Transform.position);
 
                 float steeringVel = Vector3.Dot(steeringDir, tireVel);
                 float desiredVelChange = -steeringVel * sidewaysTireGripFactor * vehicleController.CurrentSideFriction;
                 float desiredAccel = desiredVelChange / Time.fixedDeltaTime;
 
-                rig.AddForceAtPosition(desiredAccel * tireMass * steeringDir, UpperConstraintPoint);
+                rig.AddForceAtPosition(desiredAccel * tireMass * steeringDir, Transform.position);
             }
         }
 
@@ -257,20 +276,50 @@ namespace GLShared.General.Components
         {
             [ReadOnly] public Vector3 tirePosition;
             [ReadOnly] public Vector3 lowerConstraintPoint;
+            [ReadOnly] public bool isGrounded;
+            [ReadOnly] public bool enableFallJump;
             [ReadOnly] public float spring;
             [ReadOnly] public float damper;
             [ReadOnly] public float fixedTime;
+            [ReadOnly] public float currentUndegroundTime;
+            [ReadOnly] public float currentSpeed;
             [ReadOnly] public float previousSuspensionDistance;
 
             public NativeArray<float> result;
 
             public void Execute()
             {
+                if (enableFallJump && isGrounded && currentSpeed >= 30f && currentUndegroundTime > 0.1f)
+                {
+                    spring *= 1f + currentUndegroundTime / 4f;
+                    damper *= 0.2f;
+                }
+
                 float distance = Vector3.Distance(lowerConstraintPoint, tirePosition);
                 float springForce = spring * distance;
                 float damperForce = damper * ((distance - previousSuspensionDistance) / fixedTime);
                 result[0] = springForce + damperForce;
                 result[1] = distance;
+            }
+        }
+
+        private void CalculateUngroundedTime()
+        {
+            if (!isGrounded)
+            {
+                currentUngroundedTime += Time.deltaTime;
+            }
+            else
+            {
+                if (currentUngroundedTime > 0f)
+                {
+                    currentUngroundedTime -= Time.deltaTime;
+                }
+                else
+                {
+                    currentUngroundedTime = 0f;
+                }
+
             }
         }
 

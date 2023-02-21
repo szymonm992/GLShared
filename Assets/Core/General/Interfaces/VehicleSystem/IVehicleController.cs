@@ -27,6 +27,7 @@ namespace GLShared.General.Interfaces
         float CurrentSideFriction { get; }
 
         bool IsUpsideDown { get; }
+        bool IsGrounded { get; }
         bool HasTurret { get; }
 
         LayerMask WheelsCollisionDetectionMask { get; }

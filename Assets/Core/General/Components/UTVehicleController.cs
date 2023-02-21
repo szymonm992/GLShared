@@ -38,7 +38,6 @@ namespace GLShared.General.Components
         [SerializeField] protected AnimationCurve forwardPowerCurve;
         [SerializeField] protected AnimationCurve backwardPowerCurve;
         [SerializeField][Range(0f, 3f)] protected float idlerBumpingMultiplier = 0.75f;
-        [SerializeField] protected bool doesGravityDamping = true;
         [SerializeField] protected LayerMask wheelsCollisionDetectionMask;
         [SerializeField] protected bool runPhysics = true;
 
@@ -110,7 +109,6 @@ namespace GLShared.General.Components
         public float HorizontalAngle => absHorizontalAngle;
         public float CurrentSideFriction => currentSideFriction;
 
-        public bool DoesGravityDamping => doesGravityDamping;
         public bool IsUpsideDown => isUpsideDown;
         public bool IsGrounded => isGrounded;
         public bool HasTurret => hasTurret;

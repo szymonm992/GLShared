@@ -134,13 +134,13 @@ namespace GLShared.General.Components
 
             if (upperConstraintTransform != null)
             {
-                //Highest point
+                //Highest point of wheel
                 upperConstraintTransform.position = transform.position + transform.up * hardPointOfTire;
             }
 
             if (lowerConstraintTransform != null)
             {
-                //Lowest point
+                //Lowest point of wheel
                 lowerConstraintTransform.position = transform.position + transform.up * -finalTravelLength;
             }
 
@@ -155,11 +155,6 @@ namespace GLShared.General.Components
             }
 
             base.FixedUpdate();
-
-            if (vehicleController.RunPhysics && compressionRate == 1 && vehicleController.DoesGravityDamping)
-            {
-                GravityCounterforce();
-            }
 
             tirePosition = Vector3.Lerp(tirePosition, GetTirePosition(), Time.deltaTime * 100f); //Mathf.Max(50f, 100f * vehicleController.CurrentSpeedRatio));
 
@@ -198,7 +193,6 @@ namespace GLShared.General.Components
             {
                 return;
             }
-
 
             if (isGrounded)
             {
@@ -270,14 +264,6 @@ namespace GLShared.General.Components
             return tirePos;
         }
 
-        private void GravityCounterforce()
-        {
-            if (rig.velocity.y < -4f)
-            {
-                rig.AddForce(Vector3.up * Mathf.Min(-rig.velocity.y, 4f), ForceMode.VelocityChange);
-            }
-        }
-
         private void CalculateUngroundedTime()
         {
             if (!isGrounded)
@@ -294,7 +280,6 @@ namespace GLShared.General.Components
                 {
                     currentUngroundedTime = 0f;
                 }
-
             }
         }
 

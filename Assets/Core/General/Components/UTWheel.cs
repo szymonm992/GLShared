@@ -14,6 +14,12 @@ namespace GLShared.General.Components
     {
         public const float CONTACT_FORCE_MAINTAIN_THRESHOLD = 0.4f;
 
+        private const float DAMPER_ON_JUMP_MULTIPLIER = 0.2f;
+        private const float FULLY_COMPRESSED_SPRING_MULTIPLIER = 3f;
+        private const float UNGROUND_TIME_MULTIPLIER = 0.25f; //same as value / 4f
+        private const float JUMP_MINIMUM_SPEED = 30f; 
+        private const float JUMP_UNGROUND_TIME_MIN_THRESHOLD = 0.1f; 
+
         [Header("Settings")]
         [SerializeField] protected float spring = 220000f;
         [SerializeField] protected float damper = 40000f;
@@ -272,6 +278,26 @@ namespace GLShared.General.Components
             }
         }
 
+        private void CalculateUngroundedTime()
+        {
+            if (!isGrounded)
+            {
+                currentUngroundedTime += Time.deltaTime;
+            }
+            else
+            {
+                if (currentUngroundedTime > 0f)
+                {
+                    currentUngroundedTime -= Time.deltaTime;
+                }
+                else
+                {
+                    currentUngroundedTime = 0f;
+                }
+
+            }
+        }
+
         [BurstCompile]
         private struct GetSuspensionForceJob : IJob
         {
@@ -292,17 +318,15 @@ namespace GLShared.General.Components
 
             public void Execute()
             {
-                if (enableFallJump && isGrounded && currentSpeed >= 30f && currentUndegroundTime > 0.1f)
+                if (enableFallJump && isGrounded && currentSpeed >= JUMP_MINIMUM_SPEED && currentUndegroundTime >= JUMP_UNGROUND_TIME_MIN_THRESHOLD)
                 {
-                    spring *= 1f + currentUndegroundTime / 4f;
-                    damper *= 0.2f;
+                    spring *= 1f + currentUndegroundTime * UNGROUND_TIME_MULTIPLIER;
+                    damper *= DAMPER_ON_JUMP_MULTIPLIER;
                 }
-                else
+
+                if (currentCompression == 1f)
                 {
-                    if(currentCompression >= 0.95f)
-                    {
-                        spring *= 3f;
-                    }
+                    spring *= FULLY_COMPRESSED_SPRING_MULTIPLIER;
                 }
 
                 float distance = Vector3.Distance(lowerConstraintPoint, tirePosition);
@@ -310,26 +334,6 @@ namespace GLShared.General.Components
                 float damperForce = damper * ((distance - previousSuspensionDistance) / fixedTime);
                 result[0] = springForce + damperForce;
                 result[1] = distance;
-            }
-        }
-
-        private void CalculateUngroundedTime()
-        {
-            if (!isGrounded)
-            {
-                currentUngroundedTime += Time.deltaTime;
-            }
-            else
-            {
-                if (currentUngroundedTime > 0f)
-                {
-                    currentUngroundedTime -= Time.deltaTime;
-                }
-                else
-                {
-                    currentUngroundedTime = 0f;
-                }
-
             }
         }
 

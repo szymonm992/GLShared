@@ -45,7 +45,7 @@ namespace GLShared.General.Components
         public bool InvertSteer => invertSteer;
         public bool HasAnyWheelPair => WheelPairs.Any();
         public bool HasAnyWheel => hasAnyWheel;
-        public bool IsAxleGrounded => isAxleGrounded;
+        public bool IsAnyWheelInAxleAtContact => isAxleGrounded;
 
         protected IEnumerable<IPhysicsWheel> GetGroundedWheels()
         {
@@ -77,7 +77,7 @@ namespace GLShared.General.Components
 
         protected bool CheckAxleGrounded()
         {
-            return groundedWheels.Count() == allWheels.Count();
+            return groundedWheels.Any();
         }
     }
 }

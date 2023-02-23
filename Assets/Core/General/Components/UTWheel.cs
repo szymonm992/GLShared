@@ -166,7 +166,7 @@ namespace GLShared.General.Components
             GetSuspensionForceJob jobData = new ()
             {
                 isGrounded = isGrounded,
-                isAxleGrounded = Axle.IsAxleGrounded,
+                isAxleGrounded = Axle.IsAnyWheelInAxleAtContact,
 
                 damper = currentDamper,
                 spring = currentSpring,
@@ -274,7 +274,7 @@ namespace GLShared.General.Components
 
         private void CalculateUngroundedTime()
         {
-            if (!Axle.IsAxleGrounded && vehicleController.CurrentSpeed > 1f && currentUngroundedTime <= ungroundTimeMaxThreshold)//1 is a threshold value
+            if (!Axle.IsAnyWheelInAxleAtContact && vehicleController.CurrentSpeed > 1f && currentUngroundedTime <= ungroundTimeMaxThreshold)//1 is a threshold value
             {
                 currentUngroundedTime += Time.deltaTime;
             }

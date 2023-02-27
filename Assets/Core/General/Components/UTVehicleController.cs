@@ -75,8 +75,8 @@ namespace GLShared.General.Components
         protected float forwardForce;
         protected float turnForce;
         
-        protected float verticalAngle;
-        protected float absVerticalAngle;
+        public float verticalAngle;
+        public float absVerticalAngle;
         protected float absHorizontalAngle;
 
         protected bool isUpsideDown = false;
@@ -158,8 +158,8 @@ namespace GLShared.General.Components
         protected void CalculateVehicleAngles()
         {
             verticalAngle = 90f - Vector3.Angle(Vector3.up, transform.forward);
-            absVerticalAngle = Mathf.Abs(verticalAngle);
 
+            absVerticalAngle = Mathf.Abs(verticalAngle);
             absHorizontalAngle = Mathf.Abs(90f - Vector3.Angle(Vector3.up, transform.right));
         }
 

@@ -318,15 +318,18 @@ namespace GLShared.General.Components
 
             public void Execute()
             {
+                float currentSpring = spring;
+                float currentDamper = damper;
+
                 if (enableFallJump && isGrounded && currentSpeed >= jumpMinimalSpeed && currentUndegroundTime >= ungroundTimeMinThreshold)
                 {
-                    spring *= (1f + (currentUndegroundTime * currentSpeedRatio));
-                    damper *= damperOnJumpMultiplier;
+                    currentSpring *= (1f + (currentUndegroundTime * Mathf.Min(1f, Mathf.Max(currentSpeedRatio, 0f))));
+                    currentDamper *= damperOnJumpMultiplier;
                 }
 
                 float distance = Vector3.Distance(lowerConstraintPoint, tirePosition);
-                float springForce = spring * distance;
-                float damperForce = damper * ((distance - previousSuspensionDistance) / fixedTime);
+                float springForce = currentSpring * distance;
+                float damperForce = currentDamper * ((distance - previousSuspensionDistance) / fixedTime);
 
                 result[0] = springForce + damperForce;
                 result[1] = distance;

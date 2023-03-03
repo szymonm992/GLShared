@@ -1,8 +1,9 @@
+using System;
 using UnityEngine;
 
 namespace GLShared.General.Models
 {
-    public class PlayerInput
+    public class PlayerInput : IEquatable<PlayerInput>
     {
         public string Username { get; private set; }
         public float Horizontal { get; private set; }
@@ -59,6 +60,34 @@ namespace GLShared.General.Models
             Brake = brake;
             TurretLockKey = turretLockKey;
             ShootingKey = shootingKey;
+        }
+
+        public bool Equals(PlayerInput other)
+        {
+            if (other is null) return this is null;
+
+            return this.Username == other.Username
+                && Mathf.Approximately(this.Horizontal, other.Horizontal)
+                && Mathf.Approximately(this.Vertical, other.Vertical)
+                && Mathf.Approximately(this.RawVertical, other.RawVertical)
+                && this.Brake == other.Brake
+                && this.TurretLockKey == other.TurretLockKey
+                && this.ShootingKey == other.ShootingKey
+                && Mathf.Approximately(this.CameraTargetingPosition.x, other.CameraTargetingPosition.x)
+                && Mathf.Approximately(this.CameraTargetingPosition.y, other.CameraTargetingPosition.y)
+                && Mathf.Approximately(this.CameraTargetingPosition.z, other.CameraTargetingPosition.z);
+        }
+
+        public static bool operator ==(PlayerInput input1, PlayerInput input2)
+        {
+            if (input1 is null) return input2 is null;
+            return input1.Equals(input2);
+        }
+
+        public static bool operator !=(PlayerInput input1, PlayerInput input2)
+        {
+            if (input1 is null) return !(input2 is null);
+            return !input1.Equals(input2);
         }
     }
 }

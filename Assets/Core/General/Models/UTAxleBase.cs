@@ -1,7 +1,6 @@
 using GLShared.General.Enums;
 using GLShared.General.Interfaces;
 using GLShared.General.Models;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -50,7 +49,7 @@ namespace GLShared.General.Components
 
         protected IEnumerable<IPhysicsWheel> GetGroundedWheels()
         {
-            return allWheels.Where(wheel => wheel.IsGrounded == true);
+            return allWheels.Where(wheel => wheel.IsGrounded);
         }
 
         public abstract IEnumerable<IPhysicsWheel> GetAllWheelsOfAxis(DriveAxisSite axis);

@@ -74,9 +74,9 @@ namespace GLShared.General.Components
 
         protected float forwardForce;
         protected float turnForce;
-        
-        public float verticalAngle;
-        public float absVerticalAngle;
+
+        protected float verticalAngle;
+        protected float absVerticalAngle;
         protected float absHorizontalAngle;
 
         protected bool isUpsideDown = false;
@@ -134,7 +134,7 @@ namespace GLShared.General.Components
             }
 
             hasAnyWheels = allAxles.Any() && allAxles.Where(axle => axle.HasAnyWheelPair && axle.HasAnyWheel).Any();
-            allWheels = GetAllWheelsInAllAxles().ToArray();
+            allWheels = GetAllWheelsInAllAxles();
             allWheelsAmount = allWheels.Count();
             hasTurret = turretController != null;
 

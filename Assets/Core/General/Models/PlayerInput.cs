@@ -27,7 +27,6 @@ namespace GLShared.General.Models
             ShootingKey = shootingKey;
         }
 
-
         public PlayerInput(float horizontal, float vertical, float rawVertical, bool brake, bool turretLockKey, bool shootingKey)
         {
             Horizontal = horizontal;
@@ -38,7 +37,8 @@ namespace GLShared.General.Models
             ShootingKey = shootingKey;
         }
 
-        public PlayerInput(string username, float horizontal, float vertical, float rawVertical)//aconstructor for remote clients
+        //Constructor for remote clients
+        public PlayerInput(string username, float horizontal, float vertical, float rawVertical)
         {
             Username = username;
             Horizontal = horizontal;
@@ -64,7 +64,10 @@ namespace GLShared.General.Models
 
         public bool Equals(PlayerInput other)
         {
-            if (other is null) return this is null;
+            if (other is null)
+            {
+                return this is null;
+            }
 
             return this.Username == other.Username
                 && Mathf.Approximately(this.Horizontal, other.Horizontal)
@@ -80,13 +83,21 @@ namespace GLShared.General.Models
 
         public static bool operator ==(PlayerInput input1, PlayerInput input2)
         {
-            if (input1 is null) return input2 is null;
+            if (input1 is null)
+            {
+                return input2 is null;
+            }
+
             return input1.Equals(input2);
         }
 
         public static bool operator !=(PlayerInput input1, PlayerInput input2)
         {
-            if (input1 is null) return !(input2 is null);
+            if (input1 is null)
+            {
+                return input2 is not null;
+            }
+
             return !input1.Equals(input2);
         }
     }

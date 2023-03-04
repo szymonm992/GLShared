@@ -271,11 +271,8 @@ namespace GLShared.General.Components
                                 var acceleratePoint = wheel.ReturnWheelPoint(accelerationForceApplyPoint);
 
                                 wheelVelocityLocal = wheel.Transform.InverseTransformDirection(rig.GetPointVelocity(acceleratePoint));
-
                                 forwardForce = inputY * currentDriveForce * Mathf.Max(currentMaxSpeedRatio, 0.6f);
                                 turnForce = wheelVelocityLocal.x * currentDriveForce;
-
-                               
 
                                 rig.AddForceAtPosition((forwardForce * wheel.Transform.forward), acceleratePoint);
 

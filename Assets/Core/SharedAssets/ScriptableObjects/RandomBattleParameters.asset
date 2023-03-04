@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   battleStartCountdown: 4
   battleDurationTime: 900
-  demandedPlayersSpawnedAmount: 6
+  demandedPlayersSpawnedAmount: 2

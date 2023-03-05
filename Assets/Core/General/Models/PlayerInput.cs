@@ -81,6 +81,21 @@ namespace GLShared.General.Models
                 && Mathf.Approximately(this.CameraTargetingPosition.z, other.CameraTargetingPosition.z);
         }
 
+        public override bool Equals(object obj)
+        {
+            var other = obj as PlayerInput;
+            if (other is null)
+            {
+                return false;
+            }
+            return this.Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Username, Horizontal, Vertical, RawVertical, Brake, TurretLockKey, ShootingKey, CameraTargetingPosition);
+        }
+
         public static bool operator ==(PlayerInput input1, PlayerInput input2)
         {
             if (input1 is null)

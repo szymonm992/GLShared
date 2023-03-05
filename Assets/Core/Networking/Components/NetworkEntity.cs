@@ -18,28 +18,26 @@ namespace GLShared.Networking.Components
 
         [SerializeField] protected NetworkEntityType objectType;
         [SerializeField] protected bool isSender = false;
-        [SerializeField][HideInInspector] private float tickRate = 66f;
 
-        protected float sendRate = 0;
         protected float timeLastSendingPosition;
         protected bool isPlayer = false;
         protected float entityVelocity;
 
         public NetworkEntityType EntityType => objectType;
         public INetworkTransform CurrentNetworkTransform { get; }
-        public float SendRate => sendRate;
-        public float TickRate => tickRate;
         public bool IsSender => isSender;
         public float EntityVelocity => entityVelocity;
+        public float SendRate => 1.0f / TickRate;
+        public virtual float TickRate => 20.0f;
 
         protected virtual void Update()
         {
-            if (!isSender || sendRate <= 0)
+            if (!isSender || SendRate <= 0)
             {
                 return;
             }
 
-            if (timeLastSendingPosition >= sendRate)
+            if (timeLastSendingPosition >= SendRate)
             {
                 SendSyncPosition();
                 timeLastSendingPosition = 0;
@@ -59,7 +57,6 @@ namespace GLShared.Networking.Components
 
         public virtual void Initialize()
         {
-            sendRate = 1f / tickRate;
         }
     }
 }

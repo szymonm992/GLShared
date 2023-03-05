@@ -10,7 +10,9 @@ namespace GLShared.General.Interfaces
         Transform Turret { get; }
         Transform Gun { get; }
         bool TurretLock { get; }
-        
+        float TargetTurretAngle { get; }
+        float TargetGunAngle { get; }
+
         void RotateTurret();
         void RotateGun();
     }

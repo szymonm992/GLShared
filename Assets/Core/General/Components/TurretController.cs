@@ -26,6 +26,8 @@ namespace GLShared.General.Components
         private float gunRotationSpeed;
         private float gunDepression;
         private float gunElevation;
+        private float desiredLocalAngleY;
+        private float desiredLocalAngleX;
 
         private bool turretLock;
         private bool stabilizeTurret;
@@ -39,8 +41,10 @@ namespace GLShared.General.Components
 
         public Transform Gun => gun;
         public Transform Turret => turret;
-        public bool TurretLock => turretLock; 
-        
+        public bool TurretLock => turretLock;
+        public float TargetTurretAngle => desiredLocalAngleY;
+        public float TargetGunAngle => desiredLocalAngleX;
+
 
         public void Initialize()
         {
@@ -53,7 +57,7 @@ namespace GLShared.General.Components
 
             if (turretDiff != Vector3.zero)
             {
-                float desiredLocalAngleY = Quaternion.LookRotation(turretDiff).eulerAngles.y;
+                desiredLocalAngleY = Quaternion.LookRotation(turretDiff).eulerAngles.y;
 
                 float localAngleY = turret.localRotation.eulerAngles.y;
                 if (stabilizeTurret && previousTurretRotation != null)
@@ -89,8 +93,7 @@ namespace GLShared.General.Components
             {
                 Vector3 gunDiff = turret.InverseTransformVector(gunDesiredDirection);
 
-                var desiredAngleX = Quaternion.LookRotation(gunDiff).eulerAngles.x;
-                desiredAngleX = desiredAngleX.ClampAngle(-gunElevation, gunDepression);
+                desiredLocalAngleX = Quaternion.LookRotation(gunDiff).eulerAngles.x.ClampAngle(-gunElevation, gunDepression);
 
                 float localAngleX = gun.localRotation.eulerAngles.x;
                 if (stabilizeGun && previousGunRotation != null)
@@ -100,7 +103,7 @@ namespace GLShared.General.Components
                     localAngleX = localAngleX.ClampAngle(-gunElevation, gunDepression);
                 }
 
-                localAngleX = Mathf.MoveTowardsAngle(localAngleX, desiredAngleX, Time.deltaTime * gunRotationSpeed);
+                localAngleX = Mathf.MoveTowardsAngle(localAngleX, desiredLocalAngleX, Time.deltaTime * gunRotationSpeed);
                 gun.localRotation = Quaternion.Euler(localAngleX, 0.0f, 0.0f);
             }
         }

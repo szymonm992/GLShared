@@ -9,7 +9,7 @@ namespace GLShared.Networking.Models
         public Vector3 Position { get; set; }
         public float CurrentSpeed { get; set; }
         public float CurrentTurningSpeed { get; }
-        public double TimeStamp { get; set; }
+        public long TimeStamp { get; set; }
         public Vector3 EulerAngles { get; set; }
         public Quaternion Rotation => Quaternion.Euler(EulerAngles);
 

@@ -67,6 +67,9 @@ namespace GLShared.Networking.Extensions
             data.PutFloat("gX", transform.GunAngleX);
             data.PutFloat("tY", transform.TurretAngleY);
 
+            data.PutFloat("tgX", transform.TargetGunAngleX);
+            data.PutFloat("ttY", transform.TargetTurretAngleY);
+
             data.PutFloat("v", transform.CurrentSpeed);
             data.PutFloat("rot", transform.CurrentTurningSpeed);
 
@@ -126,9 +129,11 @@ namespace GLShared.Networking.Extensions
                 Position = new Vector3(data.GetFloat("pX"), data.GetFloat("pY"), data.GetFloat("pZ")),
                 EulerAngles = new Vector3(data.GetFloat("rX"), data.GetFloat("rY"), data.GetFloat("rZ")),
                 Identifier = data.GetUtfString("u"),
-                TimeStamp = Convert.ToDouble(data.GetLong("tim")),
+                TimeStamp = data.GetLong("tim"),
                 TurretAngleY = data.GetFloat("tY"),
                 GunAngleX = data.GetFloat("gX"),
+                TargetTurretAngleY = data.GetFloat("ttY"),
+                TargetGunAngleX = data.GetFloat("tgX"),
                 CurrentSpeed = data.GetFloat("v"),
                 CurrentTurningSpeed = data.GetFloat("rot"),
             };
@@ -141,7 +146,7 @@ namespace GLShared.Networking.Extensions
                 Position = new Vector3(data.GetFloat("pX"), data.GetFloat("pY"), data.GetFloat("pZ")),
                 EulerAngles = new Vector3(data.GetFloat("rX"), data.GetFloat("rY"), data.GetFloat("rZ")),
                 Identifier = data.GetUtfString("id"),
-                TimeStamp = Convert.ToDouble(data.GetLong("tim")),
+                TimeStamp = data.GetLong("tim"),
                 CurrentSpeed = data.GetFloat("v"),
             };
         }

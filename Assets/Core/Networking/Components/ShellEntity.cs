@@ -32,7 +32,7 @@ namespace GLShared.Networking.Components
             {
                 Position = transform.position,
                 EulerAngles = transform.eulerAngles,
-                TimeStamp = 0d,
+                TimeStamp = 0,
                 CurrentSpeed = EntityVelocity,
                 Identifier = shellProperties.ShellSceneIdentifier.ToString(),
             };
@@ -75,7 +75,7 @@ namespace GLShared.Networking.Components
                 {
                     Position = transform.position,
                     EulerAngles = transform.eulerAngles,
-                    TimeStamp = 0d,
+                    TimeStamp = 0,
                     CurrentSpeed = EntityVelocity,
                     Identifier = SHELL_DEFAULT_ENTITY_NAME,
                 };

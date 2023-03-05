@@ -10,7 +10,7 @@ namespace GLShared.Networking.Interfaces
         Vector3 Position { get; }
         float CurrentSpeed { get; }
         float CurrentTurningSpeed { get; }
-        double TimeStamp { get; }
+        long TimeStamp { get; }
         Vector3 EulerAngles { get; }
         Quaternion Rotation { get; }
 

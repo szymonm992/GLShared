@@ -22,13 +22,16 @@ namespace GLShared.Networking.Components
         protected float timeLastSendingPosition;
         protected bool isPlayer = false;
         protected float entityVelocity;
+        protected float tickRate;
 
         public NetworkEntityType EntityType => objectType;
         public INetworkTransform CurrentNetworkTransform { get; }
         public bool IsSender => isSender;
         public float EntityVelocity => entityVelocity;
-        public float SendRate => 1.0f / TickRate;
-        public virtual float TickRate => 20.0f;
+
+        public virtual float DefaultTickRate => 20.0f;
+        public float SendRate => 1.0f / tickRate;
+        public float TickRate => tickRate;
 
         protected virtual void Update()
         {
@@ -57,6 +60,7 @@ namespace GLShared.Networking.Components
 
         public virtual void Initialize()
         {
+            tickRate = DefaultTickRate;
         }
     }
 }

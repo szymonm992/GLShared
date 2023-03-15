@@ -12,8 +12,6 @@ namespace GLShared.General.Components
 {
     public class UTWheel : UTPhysicWheelBase, IInitializable, IPhysicsWheel
     {
-        public const float CONTACT_FORCE_MAINTAIN_THRESHOLD = 0.4f;
-
         private const float FULLY_COMPRESSED_SPRING_MULTIPLIER = 2f;
 
         [Header("Settings")]
@@ -105,6 +103,16 @@ namespace GLShared.General.Components
                     lowerConstraintTransform != null ? LowerConstraintPoint : Vector3.zero;
             }
         }
+        public override Vector3 GroundVelocity
+        {
+            get
+            {
+                return IsGrounded && hitInfo.Collider && hitInfo.Collider.attachedRigidbody
+                    ? hitInfo.Collider.attachedRigidbody.GetPointVelocity(hitInfo.Point)
+                    : Vector3.zero;
+            }
+        }
+
         public override bool IsOnTopOfAnotherVehicle => isOnTopOfAnotherVehicle;
 
         public override void Initialize()
@@ -202,17 +210,6 @@ namespace GLShared.General.Components
                 return;
             }
 
-            if (isGrounded)
-            {
-                isOnTopOfAnotherVehicle = hitInfo.Collider.transform.root.TryGetComponent(out Rigidbody lowerRig);
-
-                if (isOnTopOfAnotherVehicle)
-                {
-                    var force = lowerRig.velocity * CONTACT_FORCE_MAINTAIN_THRESHOLD;
-                    rig.AddForceAtPosition(force * rig.mass, hitInfo.Point, ForceMode.Force);
-                }
-            }
-
             rig.AddForceAtPosition(suspensionForce, tirePosition);
             ApplyFriction();
         }
@@ -221,16 +218,45 @@ namespace GLShared.General.Components
         {
             base.ApplyFriction();
 
+            var lowerRig = hitInfo.Collider.attachedRigidbody;
+            
+
             if (isGrounded)
             {
                 var steeringDir = Transform.right;
                 var tireVel = rig.GetPointVelocity(Transform.position);
+
+                // Moving platform side friction
+                if (lowerRig)
+                {
+                    tireVel -= lowerRig.GetPointVelocity(Transform.position);
+                }
 
                 float steeringVel = Vector3.Dot(steeringDir, tireVel);
                 float desiredVelChange = -steeringVel * sidewaysTireGripFactor * vehicleController.CurrentSideFriction;
                 float desiredAccel = desiredVelChange / Time.fixedDeltaTime;
 
                 rig.AddForceAtPosition(desiredAccel * tireMass * steeringDir, Transform.position);
+            }
+            
+            // Moving platform forward friction
+            if (isGrounded && lowerRig)
+            {
+                var forwardDir = Vector3.Cross(Transform.right, hitInfo.Normal);
+
+                if(Vector3.Dot(forwardDir, lowerRig.velocity.normalized) < 0.0f)
+                {
+                    forwardDir *= -1.0f;
+                }
+
+                var currentContactForce = rig.GetPointVelocity(hitInfo.Point);
+                var lowerRigContactForce = lowerRig.GetPointVelocity(hitInfo.Point);
+
+                var missingVelocity = Vector3.Dot(lowerRigContactForce, forwardDir) - Vector3.Dot(currentContactForce, forwardDir);
+                //missingVelocity *= forwardTireGripFactor;
+
+                var force = forwardDir.normalized * Mathf.Max(missingVelocity, 0.0f);
+                rig.AddForceAtPosition(force, hitInfo.Point, ForceMode.Acceleration);
             }
         }
 

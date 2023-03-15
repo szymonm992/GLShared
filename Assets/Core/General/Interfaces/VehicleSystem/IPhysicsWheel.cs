@@ -21,6 +21,7 @@ namespace GLShared.General.Interfaces
         Vector3 UpperConstraintPoint { get; }
         Vector3 LowerConstraintPoint { get; }
         Vector3 NotGroundedWheelPosition { get; }
+        Vector3 GroundVelocity { get; }
 
         IVehicleAxle Axle { get; set; }
         float SteerAngle { get; set; }

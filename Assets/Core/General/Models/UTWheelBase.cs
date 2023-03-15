@@ -65,6 +65,14 @@ namespace GLShared.General.Models
             }
         }
 
+        public virtual Vector3 GroundVelocity
+        {
+            get
+            {
+                return Vector3.zero;
+            }
+        }
+
         public float SteerAngle
         {
             get => wheelAngle;
